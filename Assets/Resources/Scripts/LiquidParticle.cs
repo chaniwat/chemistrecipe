@@ -7,6 +7,9 @@ namespace chemistrecipe
     public class LiquidParticle : MonoBehaviour
     {
 
+        // TODO Make more accurate liquid (mL per particle)
+        // TODO Kill particle when hit FillableObject (by script or trigger?)
+
         private ParticleSystem part;
         private List<ParticleCollisionEvent> collisionEvents;
 
@@ -25,7 +28,10 @@ namespace chemistrecipe
 
             while (i < numCollisionEvents)
             {
-                targetFillableObject.capacity += .250f;
+                if(targetFillableObject)
+                {
+                    targetFillableObject.capacity += .250f;
+                }
                 i++;
             }
         }
