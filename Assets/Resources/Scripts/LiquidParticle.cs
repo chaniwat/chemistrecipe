@@ -21,18 +21,27 @@ namespace chemistrecipe
 
         void OnParticleCollision(GameObject target)
         {
-            int numCollisionEvents = part.GetCollisionEvents(target, collisionEvents);
+            part.GetCollisionEvents(target, collisionEvents);
 
             FillableObject targetFillableObject = target.GetComponentInParent<FillableObject>();
-            int i = 0;
-
-            while (i < numCollisionEvents)
+            
+            if(targetFillableObject)
             {
-                if(targetFillableObject)
+                Collider targetFillableArea = targetFillableObject.FillableArea;
+
+                ParticleSystem.Particle[] particles = new ParticleSystem.Particle[part.particleCount];
+                part.GetParticles(particles);
+
+                for(int i = 0; i < part.particleCount; i++)
                 {
-                    targetFillableObject.capacity += .250f;
+                    if(targetFillableArea.bounds.Contains(particles[i].position))
+                    {
+                        particles[i].remainingLifetime = 0;
+                        targetFillableObject.capacity += .25f;
+                    }
                 }
-                i++;
+
+                part.SetParticles(particles, part.particleCount);
             }
         }
 

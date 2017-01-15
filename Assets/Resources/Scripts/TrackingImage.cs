@@ -9,40 +9,29 @@ namespace chemistrecipe
     public class TrackingImage : MonoBehaviour, ITrackableEventHandler
     {
 
-        // Models path
-        public const string OBJECT_PATH = "Objects/";
-        // Models load
-        private Dictionary<string, UnityEngine.Object> models = new Dictionary<string, UnityEngine.Object>();
-
+        // Object Manager
+        private ObjectManager objectManager;
         // Tracker
         private TrackableBehaviour mTrackableBehaviour;
-        // Status
-        private TrackableBehaviour.Status tStatus;
-        // State
-        private bool flag = true;
 
         // Initialize
         void Start()
         {
-            // Get and register image tracker
+            // Get object manager
+            objectManager = GameObject.Find("_ObjectManager").GetComponent<ObjectManager>();
+
+            // Subscribe tracking event
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
 
-            // Load models
-            models["musk"] = Resources.Load(OBJECT_PATH + "musk") as UnityEngine.Object;
-            models["beaker"] = Resources.Load(OBJECT_PATH + "beaker") as UnityEngine.Object;
-
             // Attach default child
-            GameObject newObj = (GameObject)Instantiate(models["musk"], transform);
-            newObj.transform.localPosition = new Vector3(0, 0, 0);
-            newObj.transform.localEulerAngles = new Vector3(-90f, 0, 0);
-            newObj.transform.localScale = new Vector3(0.00650444f, 0.00650444f, 0.00650444f);
+            Instantiate(objectManager.getObject(ChemstObject.BOILING_FLASK), transform);
         }
 
-        // Tracker handler (Observer)
+        // Tracking event handler
         public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
         {
             tStatus = newStatus;
@@ -51,15 +40,64 @@ namespace chemistrecipe
                     newStatus == TrackableBehaviour.Status.TRACKED ||
                     newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
             {
-                Debug.Log("detected");
+                onTrackingFound();
             }
             else
             {
-                Debug.Log("lost");
+                onTrackingLost();
             }
         }
 
+        protected void onTrackingFound()
+        {
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Enable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = true;
+            }
+
+            // Enable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = true;
+            }
+
+            Debug.Log(gameObject.name + " Detected");
+        }
+
+        protected void onTrackingLost()
+        {
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Disable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = false;
+            }
+
+            // Disable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = false;
+            }
+
+            Debug.Log(gameObject.name + " Lost");
+        }
+
+        // ---------------------------------------------------------------------------------------
         // Swapping model
+        // Only for debugging
+
+        // Status (Debugging swap model)
+        private TrackableBehaviour.Status tStatus;
+
+        // State
+        private bool flag = true;
+
         public void swapModel()
         {
             // Remove all child
@@ -74,19 +112,14 @@ namespace chemistrecipe
             GameObject newObj;
             if (flag)
             {
-                newObj = (GameObject)Instantiate(models["beaker"], transform);
-                newObj.transform.localScale = new Vector3(0.005766949f, 0.005766949f, 0.005766949f);
+                newObj = (GameObject)Instantiate(objectManager.getObject(ChemstObject.BEAKER), transform);
             }
             else
             {
-                newObj = (GameObject)Instantiate(models["musk"], transform);
-                newObj.transform.localScale = new Vector3(0.00650444f, 0.00650444f, 0.00650444f);
+                newObj = (GameObject)Instantiate(objectManager.getObject(ChemstObject.BOILING_FLASK), transform);
             }
 
-            newObj.transform.localPosition = new Vector3(0, 0, 0);
-            newObj.transform.localEulerAngles = new Vector3(-90f, 0, 0);
-
-            // Hide if can't detect marker
+            // Hide if marker is lost
             if (tStatus == TrackableBehaviour.Status.NOT_FOUND ||
                     tStatus == TrackableBehaviour.Status.UNDEFINED ||
                     tStatus == TrackableBehaviour.Status.UNKNOWN)

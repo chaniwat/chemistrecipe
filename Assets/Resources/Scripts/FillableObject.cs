@@ -7,9 +7,6 @@ namespace chemistrecipe
 {
     public class FillableObject : MonoBehaviour
     {
-
-        // TODO Accumulate liquid flowing (with Liquid Particle)
-
         /* Settings & States */
 
         // Container Setting
@@ -18,6 +15,8 @@ namespace chemistrecipe
         public float maxCapacity = 0.0f;
         [Tooltip("Initial capacity, current capacity (metric: mL)")]
         public float capacity = 0.0f;
+        [Tooltip("Fillable area (Collider3D)")]
+        public Collider FillableArea;
 
         // Container State
         public bool isContainLiquid
@@ -32,28 +31,33 @@ namespace chemistrecipe
         [Tooltip("Liquid Color")]
         public Color liquidColor = Color.white;
 
-        private Liquid liquid
-        {
-            get { return new MockLiquid(liquidName, liquidColor); }
-        }
-
         // Flow Setting
         [Header("Flow Setting")]
-        [Tooltip("Start flow when forward.y < this value")]
+        [Tooltip("Start flow when up.y (y of green axis) < this value")]
         public float startFlowAtY = -0.1f;
-        [Tooltip("Minimum speed flow (mL) per secound (forward.y = startFlowAtY)")]
+        [Tooltip("Minimum speed flow (mL) per secound (up.y (y of green axis) = startFlowAtY)")]
         public float minFlowSpeed = 0.0f;
-        [Tooltip("Maximum speed flow (mL) per secound (forward.y = -1.0f)")]
+        [Tooltip("Maximum speed flow (mL) per secound (up.y (y of green axis) = -1.0f)")]
         public float maxFlowSpeed = 10.0f;
-        [Tooltip("Maxinum flow speed when forward.y <= this value")]
+        [Tooltip("Maxinum flow speed when up.y (y of green axis) <= this value")]
         public float maxFlowSpeedAtY = -1.0f;
 
         // Flow State
-        private bool _isFlowing = false;
         public bool isFlowing
         {
-            get { return _isFlowing; }
+            get
+            {
+                return lEmission.enabled;
+            }
         }
+        private float accumulateCapacity = 0f;
+        private float releaseCapacity = 0.25f;
+
+        // For Debugging
+        [Header("Debugging")]
+        public bool infinityCapacity = false;
+        public TextMesh debugText = null;
+        
 
         /* End Settings & States */
         /* --------------------- */
@@ -62,12 +66,9 @@ namespace chemistrecipe
         // ParticleSystem
         private ParticleSystem lParticle;
         private ParticleSystem.EmissionModule lEmission;
-        private float lEmissionBaseRateMultiplyer;
 
-        // Text
-        private TextMesh tText;
+        /* End Internal */
 
-        // Use this for initialization
         void Start()
         {
             // Setting Particle System
@@ -75,71 +76,62 @@ namespace chemistrecipe
 
             var lParticleMain = lParticle.main;
             lEmission = lParticle.emission;
-            lEmissionBaseRateMultiplyer = lEmission.rateOverTimeMultiplier;
+            lEmission.rateOverTimeMultiplier = 0;
 
-            lParticleMain.startColor = new ParticleSystem.MinMaxGradient(liquid.color, liquid.color);
-
-            // Setting Text
-            tText = GetComponentInChildren<TextMesh>();
-            tText.text = capacity.ToString();
+            lParticleMain.startColor = new ParticleSystem.MinMaxGradient(liquidColor, liquidColor);
         }
 
-        /* End Internal */
-
-        /* For Debugging */
-        [Header("Debugging")]
-        public bool infinityCapacity = false;
-
-        // Update is called once per frame
         void Update()
         {
-            tText.text = capacity.ToString();
+            if(debugText != null)
+            {
+                debugText.text = capacity.ToString();
+            }
 
-            if (!isContainLiquid)
+            if (!isContainLiquid && !infinityCapacity)
             {
                 lEmission.enabled = false;
-                _isFlowing = false;
             }
             else
             {
-                if (transform.forward.y < startFlowAtY)
+                if (transform.up.y <= startFlowAtY && !isFlowing)
                 {
-                    if (!_isFlowing)
-                    {
-                        lEmission.enabled = true;
-                        _isFlowing = true;
-                    }
+                    lEmission.enabled = true;
                 }
-                else
+                else if (transform.up.y > startFlowAtY && isFlowing)
                 {
-                    if (_isFlowing)
-                    {
-                        lEmission.enabled = false;
-                        _isFlowing = false;
-                    }
+                    lEmission.enabled = false;
                 }
+            }
 
-                if (_isFlowing)
-                {
-                    doFlowLiquid();
-                }
+            if (isFlowing)
+            {
+                doFlowLiquid();
             }
         }
 
         protected void doFlowLiquid()
         {
-            float forwardYScale = (transform.forward.y - startFlowAtY) / (maxFlowSpeedAtY - startFlowAtY);
+            float upwardYScale = (transform.up.y - startFlowAtY) / (maxFlowSpeedAtY - startFlowAtY);
 
             if(!infinityCapacity)
             {
-                capacity -= Mathf.Lerp(minFlowSpeed, maxFlowSpeed, forwardYScale) * Time.deltaTime;
+                float reCap = Mathf.Lerp(minFlowSpeed, maxFlowSpeed, upwardYScale) * Time.deltaTime;
+
+                capacity -= reCap;
+                accumulateCapacity += reCap;
             }
+
             if (capacity <= 0)
             {
                 capacity = 0;
             }
 
-            lEmission.rateOverTimeMultiplier = lEmissionBaseRateMultiplyer * forwardYScale;
+            while(accumulateCapacity >= releaseCapacity)
+            {
+                accumulateCapacity -= releaseCapacity;
+                lParticle.Emit(1);
+            }
         }
     }
 }
