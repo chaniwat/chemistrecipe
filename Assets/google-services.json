@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1052049731352",
+    "firebase_url": "https://chemresipe.firebaseio.com",
+    "project_id": "chemresipe",
+    "storage_bucket": "chemresipe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052049731352:android:c652497e5da5a3d9",
+        "android_client_info": {
+          "package_name": "com.chemistRecipe.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052049731352-t8b781a17iflmh63gaaqud6eimseul3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyZ5Og5WjFLbQJUnaRgae2W7INm3f4qKA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052049731352:android:fa58b44bf08e9278",
+        "android_client_info": {
+          "package_name": "com.chemistrecipe.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052049731352-t8b781a17iflmh63gaaqud6eimseul3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyZ5Og5WjFLbQJUnaRgae2W7INm3f4qKA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
