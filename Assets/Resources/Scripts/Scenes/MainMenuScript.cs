@@ -36,7 +36,7 @@ namespace chemistrecipe.scene
         void Start()
         {
             // Load CourseButton Prefab
-            Object prefab = Resources.Load("Prefabs/CourseButton");
+            Object prefab = Resources.Load("Prefabs/UI/CourseButton");
 
             // Set up the Editor before calling into the realtime database.
             FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
