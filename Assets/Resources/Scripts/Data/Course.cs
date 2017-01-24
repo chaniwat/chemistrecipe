@@ -10,6 +10,8 @@ namespace chemistrecipe.data
         public string id;
         public string name;
         public string description;
+        public int diff;
+        public int secounds;
 
         public string assetBundlePath;
         public string markerBundlePath;
