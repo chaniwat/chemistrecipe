@@ -79,6 +79,7 @@ namespace chemistrecipe.scene
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
         }
 
+        // Call when change course
         protected void updateSelectedCourse()
         {
             if(SelectedCourse != null)
@@ -91,6 +92,8 @@ namespace chemistrecipe.scene
 
                 TextCourseName.GetComponent<Text>().text = SelectedCourse.name;
                 TextCourseDescription.GetComponent<Text>().text = SelectedCourse.description;
+
+                // TODO check if selected course's assetBundle is downloaded?
             }
             else
             {
@@ -126,6 +129,12 @@ namespace chemistrecipe.scene
             SelectCoursePanel.SetActive(false);
 
             SelectedCourse = null;
+        }
+
+        // Click by download button
+        public void OnClickDownload()
+        {
+            // TODO Load assetBundle
         }
 
         // Click by play button
