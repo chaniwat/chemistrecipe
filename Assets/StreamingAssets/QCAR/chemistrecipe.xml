@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="bealer2" size="8.000000 7.701334" />
+    <ImageTarget name="beak2" size="8.000000 8.000000" />
+    <ImageTarget name="122" size="8.000000 9.665859" />
     <ImageTarget name="m4" size="12.000000 12.000000" />
     <ImageTarget name="m3" size="12.000000 12.000000" />
     <ImageTarget name="m2" size="12.000000 12.000000" />
