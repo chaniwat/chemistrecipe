@@ -8,7 +8,7 @@ namespace chemistrecipe
     {
 
         // Models path
-        public const string OBJECT_PATH = "Objects/";
+        public const string OBJECT_PATH = "Prefabs/Objects/";
         // Models load
         private Dictionary<ChemstObject, UnityEngine.Object> models = new Dictionary<ChemstObject, UnityEngine.Object>();
 
