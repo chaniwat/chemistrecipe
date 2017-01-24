@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GlobalObject : MonoBehaviour {
 
+    public string id = "NULL";
+
+    // For Testing
     public string message = "NULL";
 
     public static GlobalObject instance;
