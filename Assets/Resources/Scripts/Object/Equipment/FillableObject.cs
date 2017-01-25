@@ -5,9 +5,17 @@ using UnityEngine;
 
 namespace chemistrecipe
 {
-    [RequireComponent(typeof(Collider))] // Require a fillable collider area
+    [ExecuteInEditMode]
+    [RequireComponent(typeof(Collider), typeof(ParticleSystem))] // Require a fillable collider area
     public class FillableObject : MonoBehaviour
     {
+        public enum FlowType
+        {
+            LIQUID,
+            POWDER,
+            SOLID
+        }
+
         #region Settings & States
         
         // Container Setting
@@ -25,34 +33,36 @@ namespace chemistrecipe
             get { return capacity > 0; }
         }
 
-        // Liquid Setting
-        [Header("Liquid Setting")]
-        [Tooltip("Liquid Name (Element)")]
-        public string liquidName = "";
-        [Tooltip("Liquid Color")]
-        public Color liquidColor = Color.white;
-
         // Flow Setting
         [Header("Flow Setting")]
-        [Tooltip("Start flow when up.y (y of green axis) < this value")]
-        public float startFlowAtY = -0.1f;
-        [Tooltip("Minimum speed flow (mL) per secound (up.y (y of green axis) = startFlowAtY)")]
-        public float minFlowSpeed = 0.0f;
-        [Tooltip("Maximum speed flow (mL) per secound (up.y (y of green axis) = -1.0f)")]
-        public float maxFlowSpeed = 10.0f;
-        [Tooltip("Maxinum flow speed when up.y (y of green axis) <= this value")]
-        public float maxFlowSpeedAtY = -1.0f;
+        [Tooltip("Particle System for generate water flow")]
+        public ParticleSystem liquidParticleSystem;
+        [Tooltip("Can it flow?")]
+        public bool enableFlow = true;
+        [Tooltip("How to visual object flow?")]
+        public FlowType flowType = FlowType.LIQUID;
+        [ShowOnly]
+        public float GreenAxisY = 0.0f;
+        [Tooltip("Start flow when GreenAxis.Y < this value")]
+        public float minSpeedFlowAtY = -0.1f;
+        [Tooltip("Maxinum flow speed when GreenAxis.Y <= this value")]
+        public float maxSpeedFlowAtY = -1.0f;
+        [Tooltip("Minimum speed flow (mL) per secound")]
+        public float minimumFlowSpeed = 0.0f;
+        [Tooltip("Maximum speed flow (mL) per secound")]
+        public float maximumFlowSpeed = 10.0f;
+        [Tooltip("Speed of particle (when emitted per object)")]
+        public float particleSpeed = 1.5f;
 
         // Flow State
-        public bool isFlowing
-        {
-            get
-            {
-                return lEmission.enabled;
-            }
-        }
+        public bool isFlowing = false;
         private float accumulateCapacity = 0f;
         private float releaseCapacity = 0.25f;
+
+        // Liquid Setting
+        [Header("Liquid Setting")]
+        [Tooltip("Liquid Color")]
+        public Color liquidColor = Color.white;
 
         // For Debugging
         [Header("Debugging")]
@@ -64,57 +74,88 @@ namespace chemistrecipe
         #region Internal Only
 
         // ParticleSystem
-        private ParticleSystem lParticle;
+        private ParticleSystem.MainModule lParticleMain;
         private ParticleSystem.EmissionModule lEmission;
+
+        // Settings
+        private float oldParticleSpeed = 0f;
+        private Color oldLiquidColor = Color.white;
 
         #endregion
 
         void Start()
         {
-            // Setting Particle System
-            lParticle = GetComponentInChildren<ParticleSystem>();
-
-            var lParticleMain = lParticle.main;
-            lEmission = lParticle.emission;
+            lParticleMain = liquidParticleSystem.main;
+            lEmission = liquidParticleSystem.emission;
             lEmission.rateOverTimeMultiplier = 0; // Disable automatic emitting particle
-
-            lParticleMain.startColor = new ParticleSystem.MinMaxGradient(liquidColor, liquidColor);
         }
 
         void Update()
         {
-            if(debugText != null)
+#if UNITY_EDITOR
+
+            if (Application.isEditor)
+            {
+                Start();
+            }
+
+            // Update GreenAxisY Inspector
+
+            GreenAxisY = transform.up.y;
+#endif
+
+            UpdateProperty();
+
+            if (debugText != null)
             {
                 debugText.text = capacity.ToString();
             }
 
-            if (!isContainLiquid && !infinityCapacity)
+            if (Application.isPlaying)
             {
-                lEmission.enabled = false;
+                if (!isContainLiquid && !infinityCapacity)
+                {
+                    isFlowing = false;
+                }
+                else
+                {
+                    if (transform.up.y <= minSpeedFlowAtY && !isFlowing)
+                    {
+                        isFlowing = true;
+                    }
+                    else if (transform.up.y > minSpeedFlowAtY && isFlowing)
+                    {
+                        isFlowing = false;
+                        accumulateCapacity = 0f; // Reset accumulate
+                    }
+                }
+
+                if (isFlowing && enableFlow)
+                {
+                    flowLiquid();
+                }
             }
-            else
+        }
+
+        private void UpdateProperty()
+        {
+            if(oldParticleSpeed != particleSpeed)
             {
-                if (transform.up.y <= startFlowAtY && !isFlowing)
-                {
-                    lEmission.enabled = true;
-                }
-                else if (transform.up.y > startFlowAtY && isFlowing)
-                {
-                    lEmission.enabled = false;
-                    accumulateCapacity = 0f; // Reset accumulate
-                }
+                lParticleMain.startSpeed = new ParticleSystem.MinMaxCurve(particleSpeed);
+                oldParticleSpeed = particleSpeed;
             }
 
-            if (isFlowing)
+            if(oldLiquidColor != liquidColor)
             {
-                flowLiquid();
+                lParticleMain.startColor = new ParticleSystem.MinMaxGradient(liquidColor);
+                oldLiquidColor = liquidColor;
             }
         }
 
         protected void flowLiquid()
         {
-            float upwardYScale = (transform.up.y - startFlowAtY) / (maxFlowSpeedAtY - startFlowAtY);
-            float releaseCap = Mathf.Lerp(minFlowSpeed, maxFlowSpeed, upwardYScale) * Time.deltaTime;
+            float upwardYScale = (transform.up.y - minSpeedFlowAtY) / (maxSpeedFlowAtY - minSpeedFlowAtY);
+            float releaseCap = Mathf.Lerp(minimumFlowSpeed, maximumFlowSpeed, upwardYScale) * Time.deltaTime;
             accumulateCapacity += releaseCap;
 
             while(accumulateCapacity >= releaseCapacity)
@@ -126,7 +167,7 @@ namespace chemistrecipe
                 
                 accumulateCapacity -= releaseCapacity;
 
-                lParticle.Emit(1);
+                liquidParticleSystem.Emit(1);
             }
 
             if (capacity <= 0)
@@ -134,6 +175,5 @@ namespace chemistrecipe
                 capacity = 0;
             }
         }
-
     }
 }

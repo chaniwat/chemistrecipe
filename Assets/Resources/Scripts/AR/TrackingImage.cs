@@ -5,37 +5,81 @@ using UnityEngine;
 using Vuforia;
 
 namespace chemistrecipe
-{
+{   
     public class TrackingImage : MonoBehaviour, ITrackableEventHandler
     {
 
-        // Object Manager
-        private ObjectManager objectManager;
+        // Settings
+        [Tooltip("FillableObject that attach to this tracking")]
+        public FillableObject attachObject = null;
+        [Tooltip("Can object filp?")]
+        public bool canFilp = true;
+        [Tooltip("Z Offset for centering the object")]
+        public float zOffset = 0.0f;
+
         // Tracker
         private TrackableBehaviour mTrackableBehaviour;
+
+        // Is tracking?
+        private bool tracking = false;
+
+        // Tracking vertical status
+        private bool verticalRotation = false;
 
         // Initialize
         void Start()
         {
-            // Get object manager
-            objectManager = GameObject.Find("_ObjectManager").GetComponent<ObjectManager>();
+            // Register tracking
+            registerTrackable();
 
-            // Subscribe tracking event
+            initializeObject();
+        }
+
+        private void initializeObject()
+        {
+            // Set to default local
+            attachObject.transform.localPosition = Vector3.zero;
+            attachObject.transform.localEulerAngles = Vector3.zero;
+        }
+
+        void Update()
+        {
+            if (tracking)
+            {
+                if (canFilp)
+                {
+                    Vector3 upAxis = transform.up;
+
+                    if (!verticalRotation && upAxis.y <= 0.5f)
+                    {
+                        attachObject.transform.localEulerAngles = new Vector3(90, 0, 0);
+                        attachObject.transform.localPosition = new Vector3(0, 0, zOffset);
+                        verticalRotation = true;
+                    }
+                    else if (verticalRotation && upAxis.y > 0.5f)
+                    {
+                        attachObject.transform.localEulerAngles = Vector3.zero;
+                        attachObject.transform.localPosition = Vector3.zero;
+                        verticalRotation = false;
+                    }
+                }
+            }
+        }
+
+        #region TrackableStateChange
+
+        private void registerTrackable()
+        {
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
-
-            // Attach default child
-            Instantiate(objectManager.getObject(ChemstObject.BOILING_FLASK), transform);
         }
 
         // Tracking event handler
         public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
         {
-            tStatus = newStatus;
-
             if (newStatus == TrackableBehaviour.Status.DETECTED ||
                     newStatus == TrackableBehaviour.Status.TRACKED ||
                     newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
@@ -48,7 +92,31 @@ namespace chemistrecipe
             }
         }
 
+        #endregion
+
+        #region Tracking event handler
+
         protected void onTrackingFound()
+        {
+            Debug.Log(gameObject.name + " Detected");
+            tracking = true;
+
+            enableObject();
+
+            attachObject.GetComponent<FillableObject>().enableFlow = true;
+        }
+
+        protected void onTrackingLost()
+        {
+            Debug.Log(gameObject.name + " Lost");
+            tracking = false;
+
+            disableObject();
+
+            attachObject.GetComponent<FillableObject>().enableFlow = false;
+        }
+
+        protected void enableObject()
         {
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
@@ -56,19 +124,29 @@ namespace chemistrecipe
             // Enable rendering:
             foreach (Renderer component in rendererComponents)
             {
+                // Skipping Particle System
+                if(component.gameObject.GetComponent<ParticleSystem>() != null)
+                {
+                    continue;
+                }
+
                 component.enabled = true;
             }
 
             // Enable colliders:
             foreach (Collider component in colliderComponents)
             {
+                // Skipping Particle System
+                if (component.gameObject.GetComponent<ParticleSystem>() != null)
+                {
+                    continue;
+                }
+
                 component.enabled = true;
             }
-
-            Debug.Log(gameObject.name + " Detected");
         }
 
-        protected void onTrackingLost()
+        protected void disableObject()
         {
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
@@ -76,72 +154,28 @@ namespace chemistrecipe
             // Disable rendering:
             foreach (Renderer component in rendererComponents)
             {
+                // Skipping Particle System
+                if (component.gameObject.GetComponent<ParticleSystem>() != null)
+                {
+                    continue;
+                }
+
                 component.enabled = false;
             }
 
             // Disable colliders:
             foreach (Collider component in colliderComponents)
             {
+                // Skipping Particle System
+                if (component.gameObject.GetComponent<ParticleSystem>() != null)
+                {
+                    continue;
+                }
+
                 component.enabled = false;
             }
-
-            Debug.Log(gameObject.name + " Lost");
         }
 
-        // ---------------------------------------------------------------------------------------
-        // Swapping model
-        // Only for debugging
-
-        // Status (Debugging swap model)
-        private TrackableBehaviour.Status tStatus;
-
-        // State
-        private bool flag = true;
-
-        public void swapModel()
-        {
-            // Remove all child
-            List<GameObject> children = new List<GameObject>();
-            foreach (Transform child in transform)
-            {
-                children.Add(child.gameObject);
-            }
-            children.ForEach(child => Destroy(child));
-
-            // Create new model
-            GameObject newObj;
-            if (flag)
-            {
-                newObj = (GameObject)Instantiate(objectManager.getObject(ChemstObject.BEAKER), transform);
-            }
-            else
-            {
-                newObj = (GameObject)Instantiate(objectManager.getObject(ChemstObject.BOILING_FLASK), transform);
-            }
-
-            // Hide if marker is lost
-            if (tStatus == TrackableBehaviour.Status.NOT_FOUND ||
-                    tStatus == TrackableBehaviour.Status.UNDEFINED ||
-                    tStatus == TrackableBehaviour.Status.UNKNOWN)
-            {
-                Renderer[] rendererComponents = newObj.GetComponentsInChildren<Renderer>(true);
-                Collider[] colliderComponents = newObj.GetComponentsInChildren<Collider>(true);
-
-                // Disable rendering
-                foreach (Renderer component in rendererComponents)
-                {
-                    component.enabled = false;
-                }
-
-                // Disable colliders
-                foreach (Collider component in colliderComponents)
-                {
-                    component.enabled = false;
-                }
-            }
-
-            flag = !flag;
-        }
-
+        #endregion
     }
 }
