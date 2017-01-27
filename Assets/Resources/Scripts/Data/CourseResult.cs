@@ -10,10 +10,25 @@ using UnityEngine.UI;
 
 public class CourseResult : MonoBehaviour {
 
-    public GameObject LeftPanel;
-    public string courseId;
-    public int rankNumber = 1;
+    public static int startRankNumber = 1;
 
+    public GameObject LeftPanel;
+    public GameObject levelText;
+    public GameObject timeText;
+    public GameObject scoreText;
+    public GameObject resultTextHeader;
+    public GameObject resultTextMessage;
+
+    //get these value from previous scene (gameplay scene)
+    public string courseId;
+    public int userScore; // N point from 100
+    public int userTimeUsed; //sec
+
+    //set these value in this class
+    public int userRank; // --> getRank()
+    public int userMedal; //compute from score and time used.    --> getMedal()
+    public string gameResultHeader; // --> getGameResultMessage()
+    public string gameResultMessage;
     // Use this for initialization
     void Start () {
 
@@ -44,8 +59,8 @@ public class CourseResult : MonoBehaviour {
                     // Deserialize JSON into Object
                     Score data = JsonConvert.DeserializeObject<Score>(childSnapshot.GetRawJsonValue());
                     GameObject rankItemText = (GameObject)Instantiate(prefab, LeftPanel.transform);
-                    rankItemText.GetComponent<Text>().text = "    "+rankNumber+"         "+data.name+"      "+data.time+"       "+data.score;
-                    rankNumber++;
+                    rankItemText.GetComponent<Text>().text = "    "+startRankNumber+"         "+data.name+"      "+data.time+"       "+data.score;
+                    startRankNumber++;
                 }
             }
         });
