@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Score {
     public string name;
-    public string time;
-    public string score;
+    public int time;
+    public int score;
+
+    public Score(string name, int time, int score) {
+        this.name = name;
+        this.time = time;
+        this.score = score;
+    }
+    
 }
