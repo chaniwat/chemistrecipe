@@ -1,14 +1,17 @@
-﻿using System.Collections;
+﻿using ChemistRecipe.Experiment;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace chemistrecipe
+namespace ChemistRecipe
 {
     public class LiquidParticle : MonoBehaviour
     {
-
-        // TODO Make more accurate liquid (mL per particle)
-        // TODO Kill particle when hit FillableObject (by script or trigger?)
+        public struct LiquidParticleParam
+        {
+            public Experiment.Material material;
+            public Volume volume;
+        }
 
         private ParticleSystem part;
         private List<ParticleCollisionEvent> collisionEvents;
@@ -23,7 +26,7 @@ namespace chemistrecipe
         {
             part.GetCollisionEvents(target, collisionEvents);
 
-            FillableObject targetFillableObject = target.GetComponentInParent<FillableObject>();
+            FillableEquipment targetFillableObject = target.GetComponentInParent<FillableEquipment>();
             
             if(targetFillableObject)
             {
@@ -36,8 +39,15 @@ namespace chemistrecipe
                 {
                     if(targetFillableArea.bounds.Contains(particles[i].position))
                     {
+                        // Get material of the particle
+                        FillableEquipment sourceFillableObject = part.gameObject.GetComponentInParent<FillableEquipment>();
+                        LiquidParticleParam particleParam = sourceFillableObject.GetParticleData(particles[i]);
+                        
+                        // Fill the other fillable
+                        targetFillableObject.Fill(particleParam.material, particleParam.volume);
+
+                        // Kill particle
                         particles[i].remainingLifetime = 0;
-                        targetFillableObject.capacity += .25f;
                     }
                 }
 

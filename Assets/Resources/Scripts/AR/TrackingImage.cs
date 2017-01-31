@@ -1,74 +1,73 @@
-﻿using System;
+﻿using ChemistRecipe.AppObject;
+using ChemistRecipe.Experiment;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 
-namespace chemistrecipe
+namespace ChemistRecipe.AR
 {   
     public class TrackingImage : MonoBehaviour, ITrackableEventHandler
     {
 
-        // Settings
+        #region Settings
+
         [Tooltip("FillableObject that attach to this tracking")]
-        public FillableObject attachObject = null;
+        public Equipment attachObject = null;
         [Tooltip("Can object filp?")]
         public bool canFilp = true;
         [Tooltip("Z Offset for centering the object")]
         public float zOffset = 0.0f;
 
-        // Tracker
-        private TrackableBehaviour mTrackableBehaviour;
+        #endregion
 
-        // Is tracking?
+        #region Internal vars
+
+        private bool trackingVerticalRotation = false;
+
+        #endregion
+
+        #region Vuforia vars
+
+        private TrackableBehaviour mTrackableBehaviour;
         private bool tracking = false;
 
-        // Tracking vertical status
-        private bool verticalRotation = false;
+        #endregion
 
-        // Initialize
+        #region Initialize tracker
+
         void Start()
         {
-            // Register tracking
-            registerTrackable();
-
+            registerTrackingHandler();
             initializeObject();
         }
-
+        
+        /// <summary>
+        /// Initialize attach object
+        /// </summary>
         private void initializeObject()
-        {
-            // Set to default local
-            attachObject.transform.localPosition = Vector3.zero;
-            attachObject.transform.localEulerAngles = Vector3.zero;
-        }
-
-        void Update()
-        {
-            if (tracking)
+        { 
+            if(attachObject)
             {
-                if (canFilp)
-                {
-                    Vector3 upAxis = transform.up;
-
-                    if (!verticalRotation && upAxis.y <= 0.5f)
-                    {
-                        attachObject.transform.localEulerAngles = new Vector3(90, 0, 0);
-                        attachObject.transform.localPosition = new Vector3(0, 0, zOffset);
-                        verticalRotation = true;
-                    }
-                    else if (verticalRotation && upAxis.y > 0.5f)
-                    {
-                        attachObject.transform.localEulerAngles = Vector3.zero;
-                        attachObject.transform.localPosition = Vector3.zero;
-                        verticalRotation = false;
-                    }
-                }
+                // Set to default local
+                attachObject.transform.localPosition = Vector3.zero;
+                attachObject.transform.localEulerAngles = Vector3.zero;
+            }
+            else
+            {
+                Debug.LogWarning("No object attach to " + gameObject.name);
             }
         }
 
+        #endregion
+
         #region TrackableStateChange
 
-        private void registerTrackable()
+        /// <summary>
+        /// Register the tracking state change handler
+        /// </summary>
+        private void registerTrackingHandler()
         {
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
@@ -77,46 +76,88 @@ namespace chemistrecipe
             }
         }
 
-        // Tracking event handler
+        /// <summary>
+        /// Tracking state change handler
+        /// </summary>
+        /// <param name="previousStatus"></param>
+        /// <param name="newStatus"></param>
         public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
         {
             if (newStatus == TrackableBehaviour.Status.DETECTED ||
                     newStatus == TrackableBehaviour.Status.TRACKED ||
                     newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
             {
-                onTrackingFound();
+                Debug.Log(gameObject.name + " Detected");
+                tracking = true;
+
+                OnTrackingFound();
             }
             else
             {
-                onTrackingLost();
+                Debug.Log(gameObject.name + " Lost");
+                tracking = false;
+
+                OnTrackingLost();
             }
         }
 
         #endregion
 
+        void Update()
+        {
+            if (tracking)
+            {
+                OnTracking();   
+            }
+        }
+
+        private void OnTracking()
+        {
+            if (attachObject)
+            {
+                if (canFilp)
+                {
+                    Vector3 upAxis = transform.up;
+
+                    if (!trackingVerticalRotation && upAxis.y <= 0.5f)
+                    {
+                        attachObject.transform.localEulerAngles = new Vector3(90, 0, 0);
+                        attachObject.transform.localPosition = new Vector3(0, 0, zOffset);
+                        trackingVerticalRotation = true;
+                    }
+                    else if (trackingVerticalRotation && upAxis.y > 0.5f)
+                    {
+                        attachObject.transform.localEulerAngles = Vector3.zero;
+                        attachObject.transform.localPosition = Vector3.zero;
+                        trackingVerticalRotation = false;
+                    }
+                }
+            }
+        }
+
         #region Tracking event handler
 
-        protected void onTrackingFound()
+        protected void OnTrackingFound()
         {
-            Debug.Log(gameObject.name + " Detected");
-            tracking = true;
+            toggleObject(true);
 
-            enableObject();
-
-            attachObject.GetComponent<FillableObject>().enableFlow = true;
+            if (attachObject)
+            {
+                attachObject.GetComponent<FillableEquipment>().enableFlow = true;
+            }
         }
 
-        protected void onTrackingLost()
+        protected void OnTrackingLost()
         {
-            Debug.Log(gameObject.name + " Lost");
-            tracking = false;
+            toggleObject(false);
 
-            disableObject();
-
-            attachObject.GetComponent<FillableObject>().enableFlow = false;
+            if (attachObject)
+            {
+                attachObject.GetComponent<FillableEquipment>().enableFlow = false;
+            }
         }
 
-        protected void enableObject()
+        protected void toggleObject(bool toggleTo)
         {
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
@@ -125,54 +166,24 @@ namespace chemistrecipe
             foreach (Renderer component in rendererComponents)
             {
                 // Skipping Particle System
-                if(component.gameObject.GetComponent<ParticleSystem>() != null)
+                if (attachObject && component.gameObject.GetComponent<ParticleSystem>())
                 {
                     continue;
                 }
 
-                component.enabled = true;
+                component.enabled = toggleTo;
             }
 
             // Enable colliders:
             foreach (Collider component in colliderComponents)
             {
                 // Skipping Particle System
-                if (component.gameObject.GetComponent<ParticleSystem>() != null)
+                if (attachObject && component.gameObject.GetComponent<ParticleSystem>())
                 {
                     continue;
                 }
 
-                component.enabled = true;
-            }
-        }
-
-        protected void disableObject()
-        {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
-
-            // Disable rendering:
-            foreach (Renderer component in rendererComponents)
-            {
-                // Skipping Particle System
-                if (component.gameObject.GetComponent<ParticleSystem>() != null)
-                {
-                    continue;
-                }
-
-                component.enabled = false;
-            }
-
-            // Disable colliders:
-            foreach (Collider component in colliderComponents)
-            {
-                // Skipping Particle System
-                if (component.gameObject.GetComponent<ParticleSystem>() != null)
-                {
-                    continue;
-                }
-
-                component.enabled = false;
+                component.enabled = toggleTo;
             }
         }
 

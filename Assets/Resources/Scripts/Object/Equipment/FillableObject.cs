@@ -1,13 +1,14 @@
 ﻿using chemistrecipe.element;
+using ChemistRecipe.Experiment;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace chemistrecipe
+namespace ChemistRecipe.AppObject
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Collider), typeof(ParticleSystem))] // Require a fillable collider area
-    public class FillableObject : MonoBehaviour
+    public class FillableObject : Equipment
     {
         public enum FlowType
         {
