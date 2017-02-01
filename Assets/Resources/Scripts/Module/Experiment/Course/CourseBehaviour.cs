@@ -285,7 +285,8 @@ namespace ChemistRecipe.Experiment
         {
             get
             {
-                return Application.dataPath + "/StreamingAssets/Bundles/Courses/" + Regex.Replace(CourseScript.Name, @"\s+", "") + PATH_TO_DATASET + DatasetName + ".xml";
+                //return Application.dataPath + "/StreamingAssets/Bundles/Courses/" + Regex.Replace(CourseScript.Name, @"\s+", "") + PATH_TO_DATASET + DatasetName + ".xml";
+                return Application.dataPath + "/StreamingAssets" + PATH_TO_DATASET + DatasetName + ".xml";
             }
         }
 
