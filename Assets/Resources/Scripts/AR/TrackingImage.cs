@@ -10,6 +10,14 @@ namespace ChemistRecipe.AR
 {   
     public class TrackingImage : MonoBehaviour, ITrackableEventHandler
     {
+        [Serializable]
+        public class TrackingImageParam
+        {
+            public bool canFilp = true;
+            public float filpXOffset = 0.0f;
+            public float filpYOffset = 0.0f;
+            public float filpZOffset = 0.0f;
+        }
 
         #region Settings
 
@@ -17,8 +25,12 @@ namespace ChemistRecipe.AR
         public Equipment attachObject = null;
         [Tooltip("Can object filp?")]
         public bool canFilp = true;
+        [Tooltip("X Offset for centering the object")]
+        public float filpXOffset = 0.0f;
+        [Tooltip("Y Offset for centering the object")]
+        public float filpYOffset = 0.0f;
         [Tooltip("Z Offset for centering the object")]
-        public float zOffset = 0.0f;
+        public float filpZOffset = 0.0f;
 
         #endregion
 
@@ -115,6 +127,7 @@ namespace ChemistRecipe.AR
         {
             if (attachObject)
             {
+                // Filp the object
                 if (canFilp)
                 {
                     Vector3 upAxis = transform.up;
@@ -122,7 +135,7 @@ namespace ChemistRecipe.AR
                     if (!trackingVerticalRotation && upAxis.y <= 0.5f)
                     {
                         attachObject.transform.localEulerAngles = new Vector3(90, 0, 0);
-                        attachObject.transform.localPosition = new Vector3(0, 0, zOffset);
+                        attachObject.transform.localPosition = new Vector3(filpXOffset, filpYOffset, filpZOffset);
                         trackingVerticalRotation = true;
                     }
                     else if (trackingVerticalRotation && upAxis.y > 0.5f)
@@ -140,21 +153,11 @@ namespace ChemistRecipe.AR
         protected void OnTrackingFound()
         {
             toggleObject(true);
-
-            if (attachObject)
-            {
-                attachObject.GetComponent<FillableEquipment>().enableFlow = true;
-            }
         }
 
         protected void OnTrackingLost()
         {
             toggleObject(false);
-
-            if (attachObject)
-            {
-                attachObject.GetComponent<FillableEquipment>().enableFlow = false;
-            }
         }
 
         protected void toggleObject(bool toggleTo)
@@ -184,6 +187,12 @@ namespace ChemistRecipe.AR
                 }
 
                 component.enabled = toggleTo;
+            }
+
+            // Toggle enable flowing
+            if (attachObject)
+            {
+                attachObject.GetComponent<FillableEquipment>().enableFlow = toggleTo;
             }
         }
 

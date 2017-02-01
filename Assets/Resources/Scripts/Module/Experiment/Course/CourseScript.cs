@@ -10,11 +10,13 @@ namespace ChemistRecipe.Experiment
     public abstract class CourseScript : MonoBehaviour
     {
         [Serializable]
-        public struct TrackerEquipmentMapping
+        public class TrackerEquipmentMapping
         {
             [ShowOnly]
-            public string trackerName;
-            public Equipment equipmentObject;
+            public string trackerName = "";
+            public Equipment equipmentObject = null;
+            public bool canFilp = true;
+            public float zOffset = 0.0f;
         }
 
         #region Course setting properties
@@ -31,17 +33,37 @@ namespace ChemistRecipe.Experiment
         #region Internal
 
         private CourseBehaviour courseBehaviour;
+        private Dictionary<string, Equipment> equipmentMap = null;
 
         #endregion
 
-        void Start()
+        #region Life-Cycle control by CourseBehaviour
+
+        public void setup()
         {
-            if(!checkCourseBehaviour())
-            {
-                if (Application.isPlaying) ChemistRecipeApp.Exit();
-            }
+            SetupCoruse();
         }
 
+        public void update()
+        {
+            UpdateCoruse();
+        }
+
+        public void restart()
+        {
+            RestartCoruse();
+        }
+
+        public void finish()
+        {
+            FinishCourse();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Check CourseBehaviour component
+        /// </summary>
         public bool checkCourseBehaviour()
         {
             // Check CourseBehaviour
@@ -54,6 +76,9 @@ namespace ChemistRecipe.Experiment
             return true;
         }
 
+        /// <summary>
+        /// Call when need to update the tracker list (load new dataset)
+        /// </summary>
         public void UpdateTrackerList()
         {
             if(checkCourseBehaviour())
@@ -63,12 +88,56 @@ namespace ChemistRecipe.Experiment
                 int counter = 0;
                 foreach (string name in courseBehaviour.DatasetNameList)
                 {
+                    trackersMapping[counter] = new TrackerEquipmentMapping();
                     trackersMapping[counter++].trackerName = name;
                 }
             }
         }
 
-        public Equipment getObjectOfTracker(string name)
+        /// <summary>
+        /// Create a new equipment dictionary (Internal only)
+        /// </summary>
+        protected void createEquipmentDict()
+        {
+            equipmentMap = new Dictionary<string, Equipment>();
+
+            foreach (TrackerEquipmentMapping o in trackersMapping)
+            {
+                if (o.equipmentObject == null) continue;
+                equipmentMap.Add(o.equipmentObject.name, o.equipmentObject);
+            }
+        }
+
+        /// <summary>
+        /// Get all attach equipments
+        /// </summary>
+        public Dictionary<string, Equipment> GetAllEquipment()
+        {
+            if (equipmentMap == null)
+            {
+                createEquipmentDict();
+            }
+
+            return equipmentMap;
+        }
+
+        /// <summary>
+        /// Get equipment by gameObject.name
+        /// </summary>
+        public Equipment GetEquipmentByObjectName(string name)
+        {
+            if (equipmentMap == null)
+            {
+                createEquipmentDict();
+            }
+
+            return equipmentMap[name];
+        }
+
+        /// <summary>
+        /// Get the attach object (equipment) of tracker
+        /// </summary>
+        public Equipment GetTrackerAttachObject(string name)
         {
             foreach(TrackerEquipmentMapping o in trackersMapping)
             {
@@ -81,8 +150,33 @@ namespace ChemistRecipe.Experiment
             return null;
         }
 
-        public abstract void SetupCoruse();
-        public abstract void FinishCourse();
+        /// <summary>
+        /// Get the parameter setting (TrackingImage's property) of tracker
+        /// </summary>
+        public TrackingImage.TrackingImageParam GetTrackerParameter(string name)
+        {
+            TrackingImage.TrackingImageParam param = new TrackingImage.TrackingImageParam();
+
+            foreach (TrackerEquipmentMapping o in trackersMapping)
+            {
+                if (o.trackerName == name)
+                {
+                    param.canFilp = o.canFilp;
+                    param.filpZOffset = o.zOffset;
+
+                    break;
+                }
+            }
+
+            return param;
+        }
+
+        protected abstract void SetupCoruse();
+        protected abstract void UpdateCoruse();
+        protected abstract void RestartCoruse();
+        protected abstract void FinishCourse();
+
+        // TODO register raycasting camera hit gameObject handler
 
     }
 }

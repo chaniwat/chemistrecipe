@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace ChemistRecipe
 {
-    public class LiquidParticle : MonoBehaviour
+    public class FlowParticle : MonoBehaviour
     {
-        public struct LiquidParticleParam
+        public struct FlowParticleParam
         {
             public Experiment.Material material;
             public Volume volume;
@@ -41,7 +41,7 @@ namespace ChemistRecipe
                     {
                         // Get material of the particle
                         FillableEquipment sourceFillableObject = part.gameObject.GetComponentInParent<FillableEquipment>();
-                        LiquidParticleParam particleParam = sourceFillableObject.GetParticleData(particles[i]);
+                        FlowParticleParam particleParam = sourceFillableObject.GetParticleData(particles[i]);
                         
                         // Fill the other fillable
                         targetFillableObject.Fill(particleParam.material, particleParam.volume);

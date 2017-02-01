@@ -51,9 +51,11 @@ namespace ChemistRecipe.Experiment
                 return totalCapacity;
             }
         }
-        public bool isContainLiquid
+        public bool isContainMaterial
         {
-            get { return currentCapacity > 0; }
+            get {
+                return _Materials.Count > 0;
+            }
         }
 
         // Flow variable, struct
@@ -99,7 +101,7 @@ namespace ChemistRecipe.Experiment
         {
             get
             {
-                if (!isContainLiquid && !infinityCapacity)
+                if (!isContainMaterial)
                 {
                     return false;
                 }
@@ -141,14 +143,20 @@ namespace ChemistRecipe.Experiment
         private ParticleSystem.EmissionModule lEmission;
 
         // Pour buffer
-        private Dictionary<uint, LiquidParticle.LiquidParticleParam> pourBuffer;
+        private Dictionary<uint, FlowParticle.FlowParticleParam> pourBuffer;
         private uint pourCounter = 0;
 
         #endregion
 
         #region Action handler
 
+        /// <summary>
+        /// Called before check should pouring in Update()
+        /// </summary>
         public Action OnBeforeUpdate;
+        /// <summary>
+        /// Called after check should pouring in Update()
+        /// </summary>
         public Action OnAfterUpdate;
         public Action OnBeforePour;
         public Action OnAfterPour;
@@ -179,7 +187,7 @@ namespace ChemistRecipe.Experiment
         /// <summary>
         /// Is the name of material contain in the fillable equipment.
         /// </summary>
-        public bool containMaterial(string materialName)
+        public bool ContainMaterial(string materialName)
         {
             return getMaterial(materialName) != null;
         }
@@ -216,7 +224,7 @@ namespace ChemistRecipe.Experiment
         /// <summary>
         /// Get Volume of the material.
         /// </summary>
-        public Volume getVolumeOfMaterial(string materialName)
+        public Volume GetVolumeOfMaterial(string materialName)
         {
             Material mat = getMaterial(materialName);
             if (mat != null)
@@ -260,7 +268,7 @@ namespace ChemistRecipe.Experiment
 
         #region Get pour buffer
 
-        public LiquidParticle.LiquidParticleParam GetParticleData(ParticleSystem.Particle particle)
+        public FlowParticle.FlowParticleParam GetParticleData(ParticleSystem.Particle particle)
         {
             return pourBuffer[particle.randomSeed];
         }
@@ -277,7 +285,7 @@ namespace ChemistRecipe.Experiment
             if (OnBeforeFill != null) OnBeforeFill(material, volume);
 
             // Add volume if exist, if not then add new material and volume to it
-            Volume oldVolume = getVolumeOfMaterial(material.name);
+            Volume oldVolume = GetVolumeOfMaterial(material.name);
             if (oldVolume != null)
             {
                 oldVolume.volume += volume.volume;
@@ -285,11 +293,6 @@ namespace ChemistRecipe.Experiment
             else
             {
                 _Materials.Add(material, volume);
-            }
-
-            foreach (KeyValuePair<Material, Volume> pair in _Materials)
-            {
-                Debug.Log(pair.Key.name + ":" + pair.Value.volume);
             }
 
             if (OnAfterFill != null) OnAfterFill(material, volume);
@@ -321,7 +324,7 @@ namespace ChemistRecipe.Experiment
             ParticleSystem.EmitParams param = new ParticleSystem.EmitParams();
             param.randomSeed = pourCounter;
             liquidParticleSystem.Emit(param, 1);
-            pourBuffer.Add(pourCounter++, new LiquidParticle.LiquidParticleParam() { material = pair.Key, volume = new Volume(releaseCapacity, pair.Value.metric) });
+            pourBuffer.Add(pourCounter++, new FlowParticle.FlowParticleParam() { material = pair.Key, volume = new Volume(releaseCapacity, pair.Value.metric) });
 
             if (OnAfterPour != null) OnAfterPour();
         }
@@ -331,6 +334,8 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         public void Stir()
         {
+            // TODO DO UPDATE SPIN (OR ROTATE) SPEED (for multipler mixing)
+
             if(OnStir != null) OnStir();
         }
 
@@ -340,7 +345,7 @@ namespace ChemistRecipe.Experiment
         void Start()
         {
             // Initial pour buffer
-            pourBuffer = new Dictionary<uint, LiquidParticle.LiquidParticleParam>();
+            pourBuffer = new Dictionary<uint, FlowParticle.FlowParticleParam>();
 
             // Initial materials
             _Materials = new Dictionary<Material, Volume>();

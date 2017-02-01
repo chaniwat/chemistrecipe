@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.UI;
 using Vuforia;
 
 namespace ChemistRecipe.Experiment
@@ -11,6 +12,13 @@ namespace ChemistRecipe.Experiment
     [ExecuteInEditMode]
     public class CourseBehaviour : MonoBehaviour
     {
+        public enum DatasetExistance
+        {
+            NOT_CHECK,
+            FOUND,
+            NOT_FOUND
+        }
+
         public string DatasetName;
         public CourseScript CourseScript;
         public Dictionary<string, TrackingImage> trackers;
@@ -28,6 +36,13 @@ namespace ChemistRecipe.Experiment
 
         #endregion
 
+        #region Course variables
+
+        public Text timerText;
+        private float runTimer = 0;
+
+        #endregion
+
         /// <summary>
         /// Unity Awake()
         /// Call before Start() (At first)
@@ -35,9 +50,7 @@ namespace ChemistRecipe.Experiment
         void Awake()
         {
             checkCourseScript();
-
             mVuforiaArController = VuforiaARController.Instance;
-            
             mVuforiaArController.RegisterVuforiaInitializedCallback(() =>
             {
                 if(CheckDataset())
@@ -50,14 +63,14 @@ namespace ChemistRecipe.Experiment
                     Application.Quit();
                 }
             });
-
             mVuforiaArController.RegisterVuforiaStartedCallback(() =>
             {
                 ObjectTracker objectTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
 
                 _Dataset = objectTracker.CreateDataSet();
 
-                if (_Dataset.Load(PathToDataset, VuforiaUnity.StorageType.STORAGE_ABSOLUTE))
+                //if (_Dataset.Load(PathToDataset, VuforiaUnity.StorageType.STORAGE_ABSOLUTE))
+                if (_Dataset.Load(DatasetName))
                 {
                     objectTracker.Stop();  // stop tracker so that we can add new dataset
 
@@ -99,9 +112,14 @@ namespace ChemistRecipe.Experiment
 
                             // Attach object to the child of tracker (from coursescript)
                             Equipment equipment = null;
-                            if (equipment = CourseScript.getObjectOfTracker(tb.TrackableName))
+                            if (equipment = CourseScript.GetTrackerAttachObject(tb.TrackableName))
                             {
                                 ti.attachObject = equipment;
+                                TrackingImage.TrackingImageParam param = CourseScript.GetTrackerParameter(tb.TrackableName);
+                                ti.canFilp = param.canFilp;
+                                ti.filpXOffset = param.filpXOffset;
+                                ti.filpYOffset = param.filpYOffset;
+                                ti.filpZOffset = param.filpZOffset;
                                 equipment.transform.SetParent(tb.transform);
                             }
                         }
@@ -120,7 +138,11 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Start()
         {
+            checkCourseScript();
+
+            if (!ChemistRecipeApp.isPlaying) return;
             
+            CourseScript.setup();
         }
 
         /// <summary>
@@ -129,7 +151,20 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Update()
         {
-            checkCourseScript();
+            if (ChemistRecipeApp.isEditing)
+            {
+                checkCourseScript();
+            }
+
+            if (!ChemistRecipeApp.isPlaying) return;
+
+            runTimer += Time.deltaTime;
+
+            int minute = (int)(runTimer / 60);
+            float second = runTimer - (minute * 60);
+            timerText.text = minute.ToString("00") + "." + second.ToString("00.00");
+
+            CourseScript.update();
         }
 
         /// <summary>
@@ -144,7 +179,7 @@ namespace ChemistRecipe.Experiment
         /// <summary>
         /// Check CourseScript is attach to component, exit app if not
         /// </summary>
-        public void checkCourseScript()
+        protected void checkCourseScript()
         {
             if (CourseScript == null)
             {
@@ -180,7 +215,14 @@ namespace ChemistRecipe.Experiment
             {
                 if (oldDatasetName != DatasetName)
                 {
+                    /*
                     if (!DataSet.Exists(PathToDataset, VuforiaUnity.StorageType.STORAGE_ABSOLUTE))
+                    {
+                        Debug.LogError("Dataset not found!");
+                        return false;
+                    }
+                    */
+                    if (!DataSet.Exists(DatasetName))
                     {
                         Debug.LogError("Dataset not found!");
                         return false;
@@ -194,7 +236,10 @@ namespace ChemistRecipe.Experiment
             return true;
         }
 
-        public void loadDatasetNameList()
+        /// <summary>
+        /// Load trackers name list
+        /// </summary>
+        public void loadTrackerNameList()
         {
             if (needDatasetNameListRefresh)
             {
@@ -219,7 +264,10 @@ namespace ChemistRecipe.Experiment
             }
         }
 
-        public void resetDatasetNameList()
+        /// <summary>
+        /// Clear all trackers name list
+        /// </summary>
+        public void resetTrackerNameList()
         {
             if (needDatasetNameListRefresh)
             {
@@ -237,18 +285,13 @@ namespace ChemistRecipe.Experiment
         {
             get
             {
-                return Application.dataPath + "/Bundles/Courses/" + Regex.Replace(CourseScript.Name, @"\s+", "") + PATH_TO_DATASET + DatasetName + ".xml";
+                return Application.dataPath + "/StreamingAssets/Bundles/Courses/" + Regex.Replace(CourseScript.Name, @"\s+", "") + PATH_TO_DATASET + DatasetName + ".xml";
             }
         }
 
         #endregion
 
-        public enum DatasetExistance
-        {
-            NOT_CHECK,
-            FOUND,
-            NOT_FOUND
-        }
+        // TODO raycasting camera hit gameObject call CourseScript handler (for instruction message or additional UI prompt-up)
 
     }
 }

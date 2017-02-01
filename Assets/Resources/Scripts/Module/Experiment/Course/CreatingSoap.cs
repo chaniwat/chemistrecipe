@@ -141,7 +141,7 @@ namespace ChemistRecipe.Experiment
         {
             #region If Have Water + Sodium Hydroxide and its Temp > 25c, cool it down over time
 
-            if (equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+            if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
             {
                 Volume vol = equipment.Materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
                 vol.tempature -= 0.25f * Time.deltaTime;
@@ -154,10 +154,10 @@ namespace ChemistRecipe.Experiment
         {
             #region If equipment contain Sodium Hydroxide and Water, mixed it!
 
-            if (equipment.containMaterial(SODIUM_HYDROXIDE) && equipment.containMaterial(WATER))
+            if (equipment.ContainMaterial(SODIUM_HYDROXIDE) && equipment.ContainMaterial(WATER))
             {
                 // Mixed material
-                if (!equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+                if (!equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
                 {
                     equipment.Fill(new Material(MIXED_WATER_SODIUM_HYDROXIDE, Type.LIQUID), new Volume(11f, 26f, Volume.Metric.mL));
                 }
@@ -171,7 +171,7 @@ namespace ChemistRecipe.Experiment
                 // Reduce material volume
                 //
                 // Sodium Hydroxide
-                Volume sh = equipment.getVolumeOfMaterial(SODIUM_HYDROXIDE);
+                Volume sh = equipment.GetVolumeOfMaterial(SODIUM_HYDROXIDE);
                 sh.volume -= 1f;
                 if (sh.volume <= 0)
                 {
@@ -179,7 +179,7 @@ namespace ChemistRecipe.Experiment
                 }
 
                 // Water
-                Volume wa = equipment.getVolumeOfMaterial(WATER);
+                Volume wa = equipment.GetVolumeOfMaterial(WATER);
                 wa.volume -= 10f;
                 if (wa.volume <= 0)
                 {
@@ -191,10 +191,10 @@ namespace ChemistRecipe.Experiment
 
             #region If Have Water + Sodium Hydroxide with Coconut Oil
 
-            if (equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && equipment.containMaterial(COCONUT_OIL))
+            if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && equipment.ContainMaterial(COCONUT_OIL))
             {
                 // Mixed material
-                if (!equipment.containMaterial(SOAP_LIQUID))
+                if (!equipment.ContainMaterial(SOAP_LIQUID))
                 {
                     equipment.Fill(new Material(SOAP_LIQUID, Type.LIQUID), new Volume(29.5f, Volume.Metric.mL));
                 }
@@ -206,7 +206,7 @@ namespace ChemistRecipe.Experiment
                 // Reduce material volume
                 //
                 // Sodium Hydroxide
-                Volume sh = equipment.getVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+                Volume sh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
                 sh.volume -= 5f;
                 if (sh.volume <= 0)
                 {
@@ -214,7 +214,7 @@ namespace ChemistRecipe.Experiment
                 }
 
                 // Water
-                Volume wa = equipment.getVolumeOfMaterial(COCONUT_OIL);
+                Volume wa = equipment.GetVolumeOfMaterial(COCONUT_OIL);
                 wa.volume -= 13f;
                 if (wa.volume <= 0)
                 {
