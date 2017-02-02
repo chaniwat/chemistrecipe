@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using UnityEngine;
 
-namespace chemistrecipe.experiment.model
+namespace ChemistRecipe.Experiment
 {
+    [Serializable]
     public class Volume
     {
         public enum Metric {
@@ -14,7 +13,7 @@ namespace chemistrecipe.experiment.model
         }
 
         public float volume;
-        public float tempature;
+        public float tempature = 25f;
         public Metric metric;
         
         public Volume(float volume, float tempature, Metric metric)
@@ -23,6 +22,9 @@ namespace chemistrecipe.experiment.model
             this.tempature = tempature;
             this.metric = metric;
         }
-        public Volume(float volume, Metric metric) : this(volume, 25f, metric) { }
+        public Volume(float volume, Metric metric) : this(volume, 25f, metric)
+        { }
+        public Volume() : this(0, Metric.ANY)
+        { }
     }
 }

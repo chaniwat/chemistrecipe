@@ -1,13 +1,12 @@
-﻿using chemistrecipe.experiment.model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace chemistrecipe.experiment.course
+namespace ChemistRecipe.Experiment
 {
-    class CreatingSoap : MonoBehaviour, ICourse
-    {
+    class CreatingSoap : MonoBehaviour {
+
         #region Unity Scene GameObject
 
         public GameObject time_text_obj;
@@ -57,36 +56,36 @@ namespace chemistrecipe.experiment.course
 
             // Beaker 1000mL with water 150mL
             e1 = new Beaker1000mL();
-            e1.fill(new model.Material(WATER, MaterialType.LIQUID), new Volume(150, Volume.Metric.mL));
-            e1.StirFunc = () =>
+            e1.Fill(new Material(WATER, Type.LIQUID), new Volume(150, Volume.Metric.mL));
+            e1.OnStir = () =>
             {
                 HandleStirBeaker_1(e1);
             };
-            e1.UpdateFunc = () =>
+            e1.OnBeforeUpdate = () =>
             {
                 HandleUpdateBeaker_1(e1);
             };
 
             // Beaker 1000mL with sodium_hydroxide 15g
             e2 = new Beaker1000mL();
-            e2.fill(new model.Material(SODIUM_HYDROXIDE, MaterialType.POWDER), new Volume(15, Volume.Metric.g));
-            e2.StirFunc = () =>
+            e2.Fill(new Material(SODIUM_HYDROXIDE, Type.POWDER), new Volume(15, Volume.Metric.g));
+            e2.OnStir = () =>
             {
                 HandleStirBeaker_1(e2);
             };
-            e2.UpdateFunc = () =>
+            e2.OnBeforeUpdate = () =>
             {
                 HandleUpdateBeaker_1(e2);
             };
 
             // Beaker 1000mL with coconut_oil 450mL
             e3 = new Beaker1000mL();
-            e3.fill(new model.Material(COCONUT_OIL, MaterialType.LIQUID), new Volume(450, Volume.Metric.mL));
-            e3.StirFunc = () =>
+            e3.Fill(new Material(COCONUT_OIL, Type.LIQUID), new Volume(450, Volume.Metric.mL));
+            e3.OnStir = () =>
             {
                 HandleStirBeaker_1(e3);
             };
-            e3.UpdateFunc = () =>
+            e3.OnBeforeUpdate = () =>
             {
                 HandleUpdateBeaker_1(e3);
             };
@@ -104,7 +103,7 @@ namespace chemistrecipe.experiment.course
 
             // e1 element list
             string e1_mat_lists_string = "";
-            foreach(KeyValuePair<model.Material, Volume> pair in e1.materials)
+            foreach(KeyValuePair<Material, Volume> pair in e1.Materials)
             {
                 Volume vol = pair.Value;
                 e1_mat_lists_string += String.Format("{0} : {1} {2} {3}c\n", pair.Key.name, vol.volume, vol.metric, vol.tempature);
@@ -113,7 +112,7 @@ namespace chemistrecipe.experiment.course
 
             // e2 element list
             string e2_mat_lists_string = "";
-            foreach (KeyValuePair<model.Material, Volume> pair in e2.materials)
+            foreach (KeyValuePair<Material, Volume> pair in e2.Materials)
             {
                 Volume vol = pair.Value;
                 e2_mat_lists_string += String.Format("{0} : {1} {2} {3}c\n", pair.Key.name, vol.volume, vol.metric, vol.tempature);
@@ -122,7 +121,7 @@ namespace chemistrecipe.experiment.course
 
             // e3 element list
             string e3_mat_lists_string = "";
-            foreach (KeyValuePair<model.Material, Volume> pair in e3.materials)
+            foreach (KeyValuePair<Material, Volume> pair in e3.Materials)
             {
                 Volume vol = pair.Value;
                 e3_mat_lists_string += String.Format("{0} : {1} {2} {3}c\n", pair.Key.name, vol.volume, vol.metric, vol.tempature);
@@ -133,61 +132,8 @@ namespace chemistrecipe.experiment.course
 
             #region Course Update
 
-            e1.Update();
-            e2.Update();
-            e3.Update();
-
             #endregion
         }
-
-        #region Command Handler
-
-        public void e1Stir()
-        {
-            e1.Stir();
-        }
-
-        public void e2Stir()
-        {
-            e2.Stir();
-        }
-
-        public void e3Stir()
-        {
-            e3.Stir();
-        }
-
-        public void e1PourToe2()
-        {
-            e1.pour(e2);
-        }
-
-        public void e1PourToe3()
-        {
-            e1.pour(e3);
-        }
-
-        public void e2PourToe1()
-        {
-            e2.pour(e1);
-        }
-
-        public void e2PourToe3()
-        {
-            e2.pour(e3);
-        }
-
-        public void e3PourToe1()
-        {
-            e3.pour(e1);
-        }
-
-        public void e3PourToe2()
-        {
-            e3.pour(e2);
-        }
-
-        #endregion
 
         #region QUICK REGION
 
@@ -195,9 +141,9 @@ namespace chemistrecipe.experiment.course
         {
             #region If Have Water + Sodium Hydroxide and its Temp > 25c, cool it down over time
 
-            if (equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+            if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
             {
-                Volume vol = equipment.materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
+                Volume vol = equipment.Materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
                 vol.tempature -= 0.25f * Time.deltaTime;
             }
 
@@ -208,16 +154,16 @@ namespace chemistrecipe.experiment.course
         {
             #region If equipment contain Sodium Hydroxide and Water, mixed it!
 
-            if (equipment.containMaterial(SODIUM_HYDROXIDE) && equipment.containMaterial(WATER))
+            if (equipment.ContainMaterial(SODIUM_HYDROXIDE) && equipment.ContainMaterial(WATER))
             {
                 // Mixed material
-                if (!equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+                if (!equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
                 {
-                    equipment.fill(new model.Material(MIXED_WATER_SODIUM_HYDROXIDE, MaterialType.LIQUID), new Volume(11f, 26f, Volume.Metric.mL));
+                    equipment.Fill(new Material(MIXED_WATER_SODIUM_HYDROXIDE, Type.LIQUID), new Volume(11f, 26f, Volume.Metric.mL));
                 }
                 else
                 {
-                    Volume vol = equipment.materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
+                    Volume vol = equipment.Materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
                     vol.volume += 11f;
                     vol.tempature += 1f;
                 }
@@ -225,7 +171,7 @@ namespace chemistrecipe.experiment.course
                 // Reduce material volume
                 //
                 // Sodium Hydroxide
-                Volume sh = equipment.getVolumeOfMaterial(SODIUM_HYDROXIDE);
+                Volume sh = equipment.GetVolumeOfMaterial(SODIUM_HYDROXIDE);
                 sh.volume -= 1f;
                 if (sh.volume <= 0)
                 {
@@ -233,7 +179,7 @@ namespace chemistrecipe.experiment.course
                 }
 
                 // Water
-                Volume wa = equipment.getVolumeOfMaterial(WATER);
+                Volume wa = equipment.GetVolumeOfMaterial(WATER);
                 wa.volume -= 10f;
                 if (wa.volume <= 0)
                 {
@@ -245,22 +191,22 @@ namespace chemistrecipe.experiment.course
 
             #region If Have Water + Sodium Hydroxide with Coconut Oil
 
-            if (equipment.containMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && equipment.containMaterial(COCONUT_OIL))
+            if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && equipment.ContainMaterial(COCONUT_OIL))
             {
                 // Mixed material
-                if (!equipment.containMaterial(SOAP_LIQUID))
+                if (!equipment.ContainMaterial(SOAP_LIQUID))
                 {
-                    equipment.fill(new model.Material(SOAP_LIQUID, MaterialType.LIQUID), new Volume(29.5f, Volume.Metric.mL));
+                    equipment.Fill(new Material(SOAP_LIQUID, Type.LIQUID), new Volume(29.5f, Volume.Metric.mL));
                 }
                 else
                 {
-                    equipment.materials[equipment.getMaterial(SOAP_LIQUID)].volume += 11f;
+                    equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 11f;
                 }
 
                 // Reduce material volume
                 //
                 // Sodium Hydroxide
-                Volume sh = equipment.getVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+                Volume sh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
                 sh.volume -= 5f;
                 if (sh.volume <= 0)
                 {
@@ -268,7 +214,7 @@ namespace chemistrecipe.experiment.course
                 }
 
                 // Water
-                Volume wa = equipment.getVolumeOfMaterial(COCONUT_OIL);
+                Volume wa = equipment.GetVolumeOfMaterial(COCONUT_OIL);
                 wa.volume -= 13f;
                 if (wa.volume <= 0)
                 {

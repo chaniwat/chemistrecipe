@@ -1,19 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using UnityEngine;
 
-namespace chemistrecipe
+namespace ChemistRecipe
 {
     public static class ChemistRecipeApp
     {
+        public static bool isPlaying
+        {
+            get
+            {
+                return Application.isPlaying;
+            }
+        }
+
+        public static bool isEditing
+        {
+            get
+            {
+                #if UNITY_EDITOR
+                if (Application.isEditor && !Application.isPlaying)
+                {
+                    return true;
+                }
+                #endif
+
+                return false;
+            }
+        }
+
         public static void Exit()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-#else
+            #else
             Application.Quit();
-#endif
+            #endif
         }
     }
 }

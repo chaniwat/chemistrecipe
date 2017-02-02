@@ -11,13 +11,13 @@ namespace chemistrecipe
         {
             switch (chemstObject)
             {
+                case ChemstObject.BOTTLE:
+                    {
+                        return "Bottle";
+                    }
                 case ChemstObject.BEAKER:
                     {
-                        return "beaker";
-                    }
-                case ChemstObject.BOILING_FLASK:
-                    {
-                        return "Boiling Flask";
+                        return "Beaker";
                     }
             }
 
@@ -27,7 +27,7 @@ namespace chemistrecipe
 
     public enum ChemstObject
     {
-        BOILING_FLASK,
-        BEAKER
+        BEAKER,
+        BOTTLE
     }
 }

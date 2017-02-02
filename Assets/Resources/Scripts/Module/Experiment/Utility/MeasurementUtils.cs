@@ -1,16 +1,13 @@
-﻿using chemistrecipe.experiment.model;
+﻿using ChemistRecipe.Experiment;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace chemistrecipe.experiment.utility
+namespace Chemistrecipe.Experiment.Utility
 {
     public static class MeasurementUtils
     {
         public static Volume convertToGram(Volume litreVolume)
         {
-            if(litreVolume.metric != Volume.Metric.mL)
+            if(litreVolume.metric != Volume.Metric.ANY && litreVolume.metric != Volume.Metric.mL)
             {
                 throw new Exception("Invalid metric");
             }
@@ -20,7 +17,7 @@ namespace chemistrecipe.experiment.utility
 
         public static Volume convertToMiliLitre(Volume gramVolume)
         {
-            if (gramVolume.metric != Volume.Metric.g)
+            if (gramVolume.metric != Volume.Metric.ANY && gramVolume.metric != Volume.Metric.g)
             {
                 throw new Exception("Invalid metric");
             }

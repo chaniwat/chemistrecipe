@@ -6,10 +6,9 @@ namespace chemistrecipe
 {
     public class ObjectManager : MonoBehaviour
     {
-
         // Models path
         public const string OBJECT_PATH = "Prefabs/Objects/";
-        // Models load
+        // Models loaded
         private Dictionary<ChemstObject, UnityEngine.Object> models = new Dictionary<ChemstObject, UnityEngine.Object>();
 
         public UnityEngine.Object getObject(ChemstObject chemstObject)
@@ -21,6 +20,5 @@ namespace chemistrecipe
 
             return models[chemstObject];
         }
-
     }
 }
