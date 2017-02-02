@@ -231,7 +231,7 @@ public static class Poly2Mesh {
 		Mesh msh = new Mesh();
 		msh.vertices = vertexList.ToArray();
 		msh.triangles = indices;
-		//msh.uv = uv;
+		msh.uv = uv;
 		msh.RecalculateNormals();
 		msh.RecalculateBounds();
 		Profiler.EndSample();

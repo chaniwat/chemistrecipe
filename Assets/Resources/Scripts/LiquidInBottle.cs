@@ -192,6 +192,20 @@ public class LiquidInBottle
 
         Mesh oMesh = new Mesh();
         oMesh.CombineMeshes(combine);
+
+        // Recalculate verties to match object
+        List<Vector3> combineVerties = new List<Vector3>();
+
+        foreach (Vector3 vertex in oMesh.vertices)
+        {
+            Vector3 vecTest = transform.InverseTransformPoint(vertex);
+            combineVerties.Add(vecTest);
+        }
+
+        oMesh.vertices = combineVerties.ToArray();
+        oMesh.RecalculateBounds();
+        oMesh.RecalculateNormals();
+
         return oMesh;
     }
 

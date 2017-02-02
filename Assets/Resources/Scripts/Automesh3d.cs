@@ -28,8 +28,8 @@ public class Automesh3d : MonoBehaviour
                 float sin = Mathf.Sin(radian);
 
                 float currentYi = 50f * floor;
-                float additionalRadius = 50 * (currentYi / 50);
-                Vector3 newDirection = new Vector3((1 * cos - 0 * sin) * (50), currentYi, (1 * sin + 0 * cos) * (50));
+                float radius = generateRadiusForTest(currentYi);
+                Vector3 newDirection = new Vector3((1 * cos - 0 * sin) * radius, currentYi, (1 * sin + 0 * cos) * radius);
 
                 if (sVerties[counter] == null)
                 {
@@ -50,8 +50,6 @@ public class Automesh3d : MonoBehaviour
 
     void Update()
     {
-        List<Mesh> meshes = new List<Mesh>();
-
         // Generate circle for cylinder (current Y position)
         Vector3[] cVerties = new Vector3[degCount];
         for (int counter = 0; counter < degCount; counter++)
@@ -61,13 +59,30 @@ public class Automesh3d : MonoBehaviour
             float cos = Mathf.Cos(radian);
             float sin = Mathf.Sin(radian);
 
-            float additionalRadius = 50 * (currentY / 50);
-            Vector3 newDirection = new Vector3((1 * cos - 0 * sin) * (50), currentY, (1 * sin + 0 * cos) * (50));
+            float radius = generateRadiusForTest(currentY);
+            Vector3 newDirection = new Vector3((1 * cos - 0 * sin) * radius, currentY, (1 * sin + 0 * cos) * radius);
 
             cVerties[counter] = newDirection;
         }
 
+        Destroy(mf.mesh);
         mf.mesh = meshGenerator.GenerateMesh(transform, cVerties);
+    }
+
+    private float generateRadiusForTest(float y)
+    {
+        if (y <= 50f)
+        {
+            return 50f + (50f * (y / 50f));
+        }
+        else if (y <= 100f)
+        {
+            return 150f - (50f * (y / 50f));
+        }
+        else
+        {
+            return 50f;
+        }
     }
 
 }
