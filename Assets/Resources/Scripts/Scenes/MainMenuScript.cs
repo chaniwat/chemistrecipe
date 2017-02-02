@@ -33,11 +33,12 @@ namespace chemistrecipe.scene
         // Constant
         private Course SelectedCourse;
         private string defaulDescription;
+        private string courseURL;
 
         void Start()
         {
             // Load CourseButton Prefab
-            Object prefab = Resources.Load("Prefabs/CourseButton");
+            Object prefab = Resources.Load("Prefabs/UI/CourseButton");
 
             // Set up the Editor before calling into the realtime database.
             FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
@@ -88,6 +89,7 @@ namespace chemistrecipe.scene
                 StarLevel.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponentInChildren<Text>().enabled = true;
+                PrintButton.GetComponent<Button>().interactable = true;
                 TextScore.GetComponent<Text>().enabled = true;
                 TextCourseName.GetComponent<Text>().enabled = true;
 
@@ -101,6 +103,7 @@ namespace chemistrecipe.scene
                 StarLevel.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponentInChildren<Text>().enabled = false;
+                PrintButton.GetComponent<Button>().interactable = false;
                 TextScore.GetComponent<Text>().enabled = false;
                 TextCourseName.GetComponent<Text>().enabled = false;
 
@@ -135,7 +138,9 @@ namespace chemistrecipe.scene
         // Click by download button
         public void OnClickDownload()
         {
-            // TODO Load assetBundle
+            string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FCreating%20Soap.pdf?alt=media&token=62e31e95-1eb8-4a15-8477-aca9d00f6401";
+            Application.OpenURL(url);
+            Debug.Log("Downloading url");
         }
 
         // Click by play button
