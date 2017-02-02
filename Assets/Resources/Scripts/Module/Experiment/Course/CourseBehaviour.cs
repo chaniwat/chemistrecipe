@@ -184,6 +184,15 @@ namespace ChemistRecipe.Experiment
         }
 
         /// <summary>
+        /// Restart course
+        /// </summary>
+        public void RestartCourse()
+        {
+            runTimer = 0;
+            CourseScript.restart();
+        }
+
+        /// <summary>
         /// Check CourseScript is attach to component, exit app if not
         /// </summary>
         protected void checkCourseScript()

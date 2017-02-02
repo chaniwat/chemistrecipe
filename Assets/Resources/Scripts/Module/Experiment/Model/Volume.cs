@@ -22,6 +22,8 @@ namespace ChemistRecipe.Experiment
             this.tempature = tempature;
             this.metric = metric;
         }
+        public Volume(Volume vol) : this(vol.volume, vol.tempature, vol.metric)
+        { }
         public Volume(float volume, Metric metric) : this(volume, 25f, metric)
         { }
         public Volume() : this(0, Metric.ANY)

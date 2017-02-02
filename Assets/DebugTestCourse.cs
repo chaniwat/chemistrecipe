@@ -20,7 +20,7 @@ public class DebugTestCourse : MonoBehaviour {
 	void Update ()
     {
         string totalText = "";
-        string[] equipmentNames = new string[] { "TestBeaker", "Bottle", "Bottle (1)" };
+        string[] equipmentNames = new string[] { "Beaker_Water", "Plate_Sodium_Hydroxide", "Bottle_Coconut_Oil" };
 
         FillableEquipment equipment;
         foreach (string name in equipmentNames)

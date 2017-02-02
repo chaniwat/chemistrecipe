@@ -8,11 +8,13 @@ public class SceneController : MonoBehaviour {
     public Canvas sidebarCanvas;
     public Canvas checkListCanvas;
     public Canvas canvas;
+    public Canvas debugCanvas;
 
     public Button menuButton;
     public Button resumeButton;
     public Button checkListButton;
     public Button saveCheckListButton;
+    public Button restartCourseButton;
     // Use this for initialization
     void Start () {
         SetupUI();
@@ -24,6 +26,7 @@ public class SceneController : MonoBehaviour {
         resumeButton.onClick.AddListener(HideSidebar);
         checkListButton.onClick.AddListener(ShowCheckList);
         saveCheckListButton.onClick.AddListener(HideCheckList);
+        restartCourseButton.onClick.AddListener(HideSidebar);
         sidebarCanvas.GetComponent<Canvas>().enabled = false;
         checkListCanvas.GetComponent<Canvas>().enabled = false;
     }
@@ -32,12 +35,14 @@ public class SceneController : MonoBehaviour {
     {
         sidebarCanvas.GetComponent<Canvas>().enabled = true;
         canvas.GetComponent<Canvas>().enabled = false;
+        debugCanvas.enabled = false;
     }
 
     void HideSidebar()
     {
         sidebarCanvas.GetComponent<Canvas>().enabled = false;
         canvas.GetComponent<Canvas>().enabled = true;
+        debugCanvas.enabled = true;
     }
 
     void ShowCheckList()
@@ -50,5 +55,6 @@ public class SceneController : MonoBehaviour {
     {
         checkListCanvas.GetComponent<Canvas>().enabled = false;
         canvas.GetComponent<Canvas>().enabled = true;
+        debugCanvas.enabled = true;
     }
 }

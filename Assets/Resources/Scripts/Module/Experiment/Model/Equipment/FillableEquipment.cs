@@ -1,4 +1,5 @@
 ﻿using Chemistrecipe.Experiment.Utility;
+using ChemistRecipe.Mechanism;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,10 @@ namespace ChemistRecipe.Experiment
             public Volume volume;
         }
 
+        // Model Setting
+        [Header("Model Setting")]
+        public float scale = 1f;
+
         // Container Setting
         [Header("Container Setting")]
         [Tooltip("Max capacity to store materials")]
@@ -27,6 +32,8 @@ namespace ChemistRecipe.Experiment
         public Volume.Metric metric = Volume.Metric.ANY;
         [Tooltip("Fillable area (Collider3D)")]
         public Collider FillableArea;
+        [Tooltip("Liquid Mesh (Liquid Generator)")]
+        public LiquidMeshFillable LiquidMesh;
         [Tooltip("Initial material of this container")]
         public MaterialVolumeMapping[] initialMaterials;
 
@@ -305,26 +312,29 @@ namespace ChemistRecipe.Experiment
         {
             if(OnBeforePour != null) OnBeforePour();
 
-            // Get first of contain material
-            KeyValuePair<Material, Volume> pair = _Materials.First();
-
-            // If not infinity capacity, reduce volume
-            if (!infinityCapacity)
+            if(_Materials.Count > 0)
             {
-                pair.Value.volume -= releaseCapacity;
+                // Get first of contain material
+                KeyValuePair<Material, Volume> pair = _Materials.First();
 
-                // If volume below zero, remove material
-                if (pair.Value.volume <= 0f)
+                // If not infinity capacity, reduce volume
+                if (!infinityCapacity)
                 {
-                    _Materials.Remove(pair.Key);
-                }
-            }
+                    pair.Value.volume -= releaseCapacity;
 
-            // Emit particle (water drop) & Add to buffer for seaching custom data per-particle
-            ParticleSystem.EmitParams param = new ParticleSystem.EmitParams();
-            param.randomSeed = pourCounter;
-            liquidParticleSystem.Emit(param, 1);
-            pourBuffer.Add(pourCounter++, new FlowParticle.FlowParticleParam() { material = pair.Key, volume = new Volume(releaseCapacity, pair.Value.metric) });
+                    // If volume below zero, remove material
+                    if (pair.Value.volume <= 0f)
+                    {
+                        _Materials.Remove(pair.Key);
+                    }
+                }
+
+                // Emit particle (water drop) & Add to buffer for seaching custom data per-particle
+                ParticleSystem.EmitParams param = new ParticleSystem.EmitParams();
+                param.randomSeed = pourCounter;
+                liquidParticleSystem.Emit(param, 1);
+                pourBuffer.Add(pourCounter++, new FlowParticle.FlowParticleParam() { material = pair.Key, volume = new Volume(releaseCapacity, pair.Value.metric) });
+            }
 
             if (OnAfterPour != null) OnAfterPour();
         }
@@ -339,28 +349,19 @@ namespace ChemistRecipe.Experiment
             if(OnStir != null) OnStir();
         }
 
+        #endregion
+
         /// <summary>
         /// Start()
         /// </summary>
         void Start()
         {
-            // Initial pour buffer
-            pourBuffer = new Dictionary<uint, FlowParticle.FlowParticleParam>();
-
-            // Initial materials
-            _Materials = new Dictionary<Material, Volume>();
-            if(initialMaterials.Length > 0)
-            {
-                foreach (MaterialVolumeMapping pair in initialMaterials)
-                {
-                    _Materials.Add(pair.material, pair.volume);
-                }
-            }
-
             // Setting default PS
             lParticleMain = liquidParticleSystem.main;
             lEmission = liquidParticleSystem.emission;
             lEmission.rateOverTimeMultiplier = 0; // Disable automatic emitting particle
+
+            InitialEquipment();
         }
 
         /// <summary>
@@ -398,6 +399,21 @@ namespace ChemistRecipe.Experiment
         }
 
         /// <summary>
+        /// Update liquid mesh
+        /// </summary>
+        void LateUpdate()
+        {
+            if (!ChemistRecipeApp.isPlaying) return;
+
+            // Update liquid mesh current Y (after Update)
+            if (LiquidMesh)
+            {
+                LiquidMesh.currentY = currentCapacity * (LiquidMesh.highestY / maximumCapacity);
+                LiquidMesh.GetComponent<MeshRenderer>().material.color = particleColor;
+            }
+        }
+
+        /// <summary>
         /// Update for debugging
         /// </summary>
         protected void UpdateDebug()
@@ -431,6 +447,9 @@ namespace ChemistRecipe.Experiment
             }
             BaseAxisY = baseAxisVector.y;
 
+            // Update Scale
+            transform.localScale = new Vector3(scale, scale, scale);
+
             if (oldFlowShootSpeed != flowShootSpeed)
             {
                 lParticleMain.startSpeed = new ParticleSystem.MinMaxCurve(flowShootSpeed);
@@ -450,6 +469,31 @@ namespace ChemistRecipe.Experiment
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Initial the material from setting
+        /// </summary>
+        private void InitialMaterial()
+        {
+            _Materials = new Dictionary<Material, Volume>();
+            if (initialMaterials.Length > 0)
+            {
+                foreach (MaterialVolumeMapping pair in initialMaterials)
+                {
+                    _Materials.Add(new Material(pair.material), new Volume(pair.volume));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Call when start course (or restart course)
+        /// </summary>
+        public void InitialEquipment()
+        {
+            // Initial pour buffer
+            pourBuffer = new Dictionary<uint, FlowParticle.FlowParticleParam>();
+
+            InitialMaterial();
+        }
+
     }
 }

@@ -21,7 +21,7 @@ public class TestCourseScript : CourseScript
 
     protected override void SetupCoruse()
     {
-        List<string> equipmentNames = new List<string>(new string[]{ "TestBeaker", "Bottle", "Bottle (1)" });
+        List<string> equipmentNames = new List<string>(new string[]{ "Beaker_Water", "Plate_Sodium_Hydroxide", "Bottle_Coconut_Oil" });
         
         foreach (FillableEquipment equipment in GetAllEquipment().Values)
         {

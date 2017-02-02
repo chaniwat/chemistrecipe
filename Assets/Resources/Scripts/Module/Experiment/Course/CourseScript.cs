@@ -37,7 +37,7 @@ namespace ChemistRecipe.Experiment
 
         #endregion
 
-        #region Life-Cycle control by CourseBehaviour
+        #region Life-Cycle control by CourseBehaviour and UIs
 
         public void setup()
         {
@@ -51,6 +51,15 @@ namespace ChemistRecipe.Experiment
 
         public void restart()
         {
+            // Re-Initial Equipment
+            foreach (Equipment equipment in GetAllEquipment().Values)
+            {
+                if (equipment is FillableEquipment)
+                {
+                    ((FillableEquipment)equipment).InitialEquipment();
+                }
+            }
+
             RestartCoruse();
         }
 

@@ -17,6 +17,8 @@ namespace ChemistRecipe.Experiment
             this.formula = formula;
             this.description = description;
         }
+        public Material(Material mat) : this(mat.name, mat.type, mat.formula, mat.description)
+        { }
         public Material(string name, Type type, string description) : this(name, type, "", description)
         { }
         public Material(string name, Type type) : this(name, type, "")
