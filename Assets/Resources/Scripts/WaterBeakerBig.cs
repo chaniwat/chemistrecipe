@@ -194,6 +194,7 @@ public class WaterBeakerBig : MonoBehaviour {
                 Vector3 localHitPoint = hit.collider.gameObject.transform.InverseTransformPoint(hit.point);
 
                 Debug.DrawLine(castPosition, hit.point, Color.green);
+               
 
                 ls_vector3.Add(localHitPoint);
                 cVerties[counter] = localHitPoint;
