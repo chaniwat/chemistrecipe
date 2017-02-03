@@ -203,12 +203,20 @@ namespace ChemistRecipe.Experiment
         }
 
         /// <summary>
-        /// Restart course
+        /// Restart Course
         /// </summary>
         public void RestartCourse()
         {
             runTimer = 0;
             CourseScript.restart();
+        }
+
+        /// <summary>
+        /// Finish Course
+        /// </summary>
+        public void FinishCourse()
+        {
+            CourseScript.finish();
         }
 
         public void GoToMainMenu()

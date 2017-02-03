@@ -97,7 +97,7 @@ namespace ChemistRecipe.Mechanism
                 };
             }
 
-            SetupMeshGenerator(2, fVerties, 0.36f);
+            SetupMeshGenerator(2, fVerties, 0.29f);
         }
 
         void Update()

@@ -6,6 +6,9 @@ using System;
 
 public class TestCourseScript : CourseScript
 {
+    // Final Animate
+    public GameObject finalSoap;
+
     // Materials
     private const string WATER = "Water";
     private const string SODIUM_HYDROXIDE = "Sodium Hydroxide";
@@ -40,7 +43,13 @@ public class TestCourseScript : CourseScript
 
     protected override void FinishCourse()
     {
-        
+        Destroy(courseBehaviour.trackers[baseTrackerName].attachObject.gameObject);
+
+        GameObject finalSoapObj = Instantiate(finalSoap);
+        finalSoapObj.transform.SetParent(courseBehaviour.trackers[baseTrackerName].transform);
+        finalSoapObj.transform.position = new Vector3(-0.906f, -3.406f, -0.501f);
+        finalSoapObj.transform.localScale = new Vector3(0.13f, 0.13f, 0.13f);
+        finalSoapObj.GetComponentInChildren<FinaleTrigger>().PlayAnimation();
     }
 
     protected override void RestartCoruse()

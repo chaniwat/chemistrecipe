@@ -32,8 +32,16 @@ namespace ChemistRecipe.Experiment
 
         #region Internal
 
-        private CourseBehaviour courseBehaviour;
+        private CourseBehaviour _courseBehaviour;
         private Dictionary<string, Equipment> equipmentMap = null;
+
+        public CourseBehaviour courseBehaviour
+        {
+            get
+            {
+                return _courseBehaviour;
+            }
+        }
 
         #endregion
 
@@ -41,6 +49,7 @@ namespace ChemistRecipe.Experiment
 
         public void setup()
         {
+            checkCourseBehaviour();
             SetupCoruse();
         }
 
@@ -76,7 +85,7 @@ namespace ChemistRecipe.Experiment
         public bool checkCourseBehaviour()
         {
             // Check CourseBehaviour
-            if (!(courseBehaviour = GetComponent<CourseBehaviour>()))
+            if (!(_courseBehaviour = GetComponent<CourseBehaviour>()))
             {
                 Debug.LogError("CourseScript component must in the same gameObject of CourseBehaviour.");
                 return false;
@@ -92,10 +101,10 @@ namespace ChemistRecipe.Experiment
         {
             if(checkCourseBehaviour())
             {
-                trackersMapping = new TrackerEquipmentMapping[courseBehaviour.DatasetNameList.Count];
+                trackersMapping = new TrackerEquipmentMapping[_courseBehaviour.DatasetNameList.Count];
 
                 int counter = 0;
-                foreach (string name in courseBehaviour.DatasetNameList)
+                foreach (string name in _courseBehaviour.DatasetNameList)
                 {
                     trackersMapping[counter] = new TrackerEquipmentMapping();
                     trackersMapping[counter++].trackerName = name;
