@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vuforia;
 
@@ -50,93 +51,109 @@ namespace ChemistRecipe.Experiment
         void Awake()
         {
             checkCourseScript();
+
             mVuforiaArController = VuforiaARController.Instance;
-            mVuforiaArController.RegisterVuforiaInitializedCallback(() =>
+            mVuforiaArController.RegisterVuforiaStartedCallback(StartVuforia);
+        }
+
+        private void StartVuforia()
+        {
+            if (CheckDataset())
             {
-                if(CheckDataset())
-                {
-                    mVuforiaArController.SetWorldCenterMode(VuforiaARController.WorldCenterMode.SPECIFIC_TARGET);
-                }
-                else
-                {
-                    Debug.LogError("Error: Dataset not found");
-                    Application.Quit();
-                }
-            });
-            mVuforiaArController.RegisterVuforiaStartedCallback(() =>
+                mVuforiaArController.SetWorldCenterMode(VuforiaARController.WorldCenterMode.SPECIFIC_TARGET);
+            }
+            else
             {
-                bool focusModeSet = CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
+                Debug.LogError("Error: Dataset not found");
+                Application.Quit();
+            }
 
-                if (!focusModeSet)
+            bool focusModeSet = CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
+
+            if (!focusModeSet)
+            {
+                Debug.Log("Failed to set focus mode (unsupported mode).");
+            }
+
+            ObjectTracker objectTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+
+            objectTracker.Stop();  // stop tracker so that we can add new dataset
+            objectTracker.DestroyAllDataSets(false);
+
+            _Dataset = objectTracker.CreateDataSet();
+
+            //if (_Dataset.Load(PathToDataset, VuforiaUnity.StorageType.STORAGE_ABSOLUTE))
+            if (_Dataset.Load(DatasetName))
+            {
+                if (!objectTracker.ActivateDataSet(_Dataset))
                 {
-                    Debug.Log("Failed to set focus mode (unsupported mode).");
+                    // Note: ImageTracker cannot have more than 100 total targets activated
+                    Debug.Log("<color=yellow>Failed to Activate DataSet: " + DatasetName + "</color>");
                 }
 
-                ObjectTracker objectTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-
-                _Dataset = objectTracker.CreateDataSet();
-
-                //if (_Dataset.Load(PathToDataset, VuforiaUnity.StorageType.STORAGE_ABSOLUTE))
-                if (_Dataset.Load(DatasetName))
+                if (!objectTracker.Start())
                 {
-                    objectTracker.Stop();  // stop tracker so that we can add new dataset
+                    Debug.Log("<color=yellow>Tracker Failed to Start.</color>");
+                }
 
-                    if (!objectTracker.ActivateDataSet(_Dataset))
+                int counter = 0;
+
+                trackers = new Dictionary<string, TrackingImage>();
+
+                IEnumerable<TrackableBehaviour> tbs = TrackerManager.Instance.GetStateManager().GetTrackableBehaviours();
+                foreach (TrackableBehaviour tb in tbs)
+                {
+                    if (tb.name == "New Game Object")
                     {
-                        // Note: ImageTracker cannot have more than 100 total targets activated
-                        Debug.Log("<color=yellow>Failed to Activate DataSet: " + DatasetName + "</color>");
+                        // change generic name to include trackable name
+                        tb.gameObject.name = ++counter + ":DynamicImageTarget-" + tb.TrackableName;
                     }
 
-                    if (!objectTracker.Start())
+                    // add additional script components for trackable
+                    tb.gameObject.AddComponent<TurnOffBehaviour>();
+                    TrackingImage ti = tb.gameObject.AddComponent<TrackingImage>();
+
+                    // Set specific center tracker
+                    if (tb.TrackableName == CourseScript.baseTrackerName)
                     {
-                        Debug.Log("<color=yellow>Tracker Failed to Start.</color>");
+                        mVuforiaArController.SetWorldCenter(tb);
                     }
 
-                    int counter = 0;
-
-                    trackers = new Dictionary<string, TrackingImage>();
-
-                    IEnumerable<TrackableBehaviour> tbs = TrackerManager.Instance.GetStateManager().GetTrackableBehaviours();
-                    foreach (TrackableBehaviour tb in tbs)
+                    // add tracker in dictionary
+                    if (trackers.ContainsKey(tb.TrackableName))
                     {
-                        if (tb.name == "New Game Object")
-                        {
-                            // change generic name to include trackable name
-                            tb.gameObject.name = ++counter + ":DynamicImageTarget-" + tb.TrackableName;
+                        trackers[tb.TrackableName] = ti;
+                    }
+                    else
+                    {
+                        trackers.Add(tb.TrackableName, ti);
+                    }
 
-                            // add additional script components for trackable
-                            tb.gameObject.AddComponent<TurnOffBehaviour>();
-                            TrackingImage ti = tb.gameObject.AddComponent<TrackingImage>();
-
-                            // Set specific center tracker
-                            if(tb.TrackableName == CourseScript.baseTrackerName)
-                            {
-                                mVuforiaArController.SetWorldCenter(tb);
-                            }
-
-                            // add tracker in dictionary
-                            trackers.Add(tb.TrackableName, ti);
-
-                            // Attach object to the child of tracker (from coursescript)
-                            Equipment equipment = null;
-                            if (equipment = CourseScript.GetTrackerAttachObject(tb.TrackableName))
-                            {
-                                ti.attachObject = equipment;
-                                TrackingImage.TrackingImageParam param = CourseScript.GetTrackerParameter(tb.TrackableName);
-                                ti.canFilp = param.canFilp;
-                                ti.filpXOffset = param.filpXOffset;
-                                ti.filpYOffset = param.filpYOffset;
-                                ti.filpZOffset = param.filpZOffset;
-                                equipment.transform.SetParent(tb.transform);
-                            }
-                        }
+                    // Attach object to the child of tracker (from coursescript)
+                    Equipment equipment = null;
+                    if (equipment = CourseScript.GetTrackerAttachObject(tb.TrackableName))
+                    {
+                        ti.attachObject = equipment;
+                        TrackingImage.TrackingImageParam param = CourseScript.GetTrackerParameter(tb.TrackableName);
+                        ti.canFilp = param.canFilp;
+                        ti.filpXOffset = param.filpXOffset;
+                        ti.filpYOffset = param.filpYOffset;
+                        ti.filpZOffset = param.filpZOffset;
+                        equipment.transform.SetParent(tb.transform);
                     }
                 }
-                else
+
+                int counter2 = 0;
+                foreach (DataSet dataset in objectTracker.GetDataSets())
                 {
-                    Debug.LogError("<color=yellow>Failed to load dataset: '" + DatasetName + "'</color>");
+                    counter2++;
                 }
-            });
+                Debug.Log("<color=red>Dataset Count : " + counter2 + "</color>");
+            }
+            else
+            {
+                Debug.LogError("<color=yellow>Failed to load dataset: '" + DatasetName + "'</color>");
+            }
         }
 
         /// <summary>
@@ -180,7 +197,9 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void OnDestroy()
         {
+            if (!ChemistRecipeApp.isPlaying) return;
 
+            mVuforiaArController.UnregisterVuforiaStartedCallback(StartVuforia);
         }
 
         /// <summary>
@@ -190,6 +209,11 @@ namespace ChemistRecipe.Experiment
         {
             runTimer = 0;
             CourseScript.restart();
+        }
+
+        public void GoToMainMenu()
+        {
+            SceneManager.LoadScene(0);
         }
 
         /// <summary>

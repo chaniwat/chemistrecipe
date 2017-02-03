@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace chemistrecipe.scene
@@ -147,10 +148,12 @@ namespace chemistrecipe.scene
         public void OnClickPlayBtn()
         {
             Debug.Log(JsonConvert.SerializeObject(SelectedCourse));
-            
+
             // TODO change to loading canvas
             // ..load scene async
             // ..and change scene
+
+            SceneManager.LoadScene(1);
         }
     }
 }
