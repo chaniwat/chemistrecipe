@@ -1,4 +1,5 @@
 ﻿using ChemistRecipe.AR;
+using ChemistRecipe.UI;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -23,6 +24,7 @@ namespace ChemistRecipe.Experiment
         public string DatasetName;
         public CourseScript CourseScript;
         public Dictionary<string, TrackingImage> trackers;
+        public SceneController sceneController;
 
         #region Vuforia variables
 
@@ -219,7 +221,10 @@ namespace ChemistRecipe.Experiment
             CourseScript.finish();
         }
 
-        public void GoToMainMenu()
+        /// <summary>
+        /// Stop Course (Go to Main Menu)
+        /// </summary>
+        public void StopCourse()
         {
             SceneManager.LoadScene(0);
         }

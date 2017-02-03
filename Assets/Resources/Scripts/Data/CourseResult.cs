@@ -46,6 +46,12 @@ public class CourseResult : MonoBehaviour {
         createHighScorePanel();
     }
 
+    void OnDestroy()
+    {
+        DatabaseReference scoreListReference = courseReference.Child("scores");
+        scoreListReference.OrderByChild("score").ValueChanged -= HandleValueChanged;
+    }
+
     void showResult()
     {
         int newScore = gameResult.data.score;
@@ -245,4 +251,5 @@ public class CourseResult : MonoBehaviour {
     void getGameResultMessage() {
         //eg. "you get new highscore", "1st in global rank", "new best time recorded"
     }
+
 }

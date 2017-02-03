@@ -30,6 +30,7 @@ namespace chemistrecipe.scene
         public GameObject TextScore;
         public GameObject TextCourseName;
         public GameObject TextCourseDescription;
+        public Button PlayButton;
 
         // Constant
         private Course SelectedCourse;
@@ -80,6 +81,18 @@ namespace chemistrecipe.scene
 
             // Get default description
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
+        }
+
+        void Update()
+        {
+            if (SelectedCourse == null)
+            {
+                PlayButton.interactable = false;
+            }
+            else if(SelectedCourse.name == "Creating Soap")
+            {
+                PlayButton.interactable = true;
+            }
         }
 
         // Call when change course
@@ -149,11 +162,10 @@ namespace chemistrecipe.scene
         {
             Debug.Log(JsonConvert.SerializeObject(SelectedCourse));
 
-            // TODO change to loading canvas
-            // ..load scene async
-            // ..and change scene
-
-            SceneManager.LoadScene(1);
+            if (SelectedCourse.name == "Creating Soap")
+            {
+                SceneManager.LoadScene(1);
+            }
         }
     }
 }

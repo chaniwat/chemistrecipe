@@ -10,12 +10,14 @@ public class CourseBehaviourCustomEditor : Editor
     SerializedProperty DatasetName;
     SerializedProperty DatasetExistanceStatus;
     SerializedProperty timerText;
+    SerializedProperty sceneController;
 
     public void OnEnable()
     {
         DatasetName = serializedObject.FindProperty("DatasetName");
         DatasetExistanceStatus = serializedObject.FindProperty("DatasetExistanceStatus");
         timerText = serializedObject.FindProperty("timerText");
+        sceneController = serializedObject.FindProperty("sceneController");
     }
 
     public override void OnInspectorGUI()
@@ -51,6 +53,7 @@ public class CourseBehaviourCustomEditor : Editor
             GUILayout.Label("");
 
             EditorGUILayout.PropertyField(timerText, new GUIContent("Timer UI"));
+            EditorGUILayout.PropertyField(sceneController, new GUIContent("Scene Controller"));
 
             serializedObject.ApplyModifiedProperties();
         }

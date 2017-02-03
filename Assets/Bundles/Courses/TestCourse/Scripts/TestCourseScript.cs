@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class TestCourseScript : CourseScript
 {
@@ -41,15 +42,23 @@ public class TestCourseScript : CourseScript
         }
     }
 
+    bool finishing = false;
+    FinaleTrigger trigger = null;
+
     protected override void FinishCourse()
     {
-        Destroy(courseBehaviour.trackers[baseTrackerName].attachObject.gameObject);
+        courseBehaviour.sceneController.HideAllCanvas();
+        courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
 
         GameObject finalSoapObj = Instantiate(finalSoap);
         finalSoapObj.transform.SetParent(courseBehaviour.trackers[baseTrackerName].transform);
         finalSoapObj.transform.position = new Vector3(-0.906f, -3.406f, -0.501f);
         finalSoapObj.transform.localScale = new Vector3(0.13f, 0.13f, 0.13f);
-        finalSoapObj.GetComponentInChildren<FinaleTrigger>().PlayAnimation();
+
+        trigger = finalSoapObj.GetComponentInChildren<FinaleTrigger>();
+        trigger.PlayAnimation();
+
+        finishing = true;
     }
 
     protected override void RestartCoruse()
@@ -59,7 +68,13 @@ public class TestCourseScript : CourseScript
 
     protected override void UpdateCoruse()
     {
-        
+        if (finishing)
+        {
+            if (trigger.soap1.GetCurrentAnimatorStateInfo(0).IsName("finishFallingSoap"))
+            {
+                SceneManager.LoadScene(2);
+            }
+        }
     }
 
     #region Handle event

@@ -1,5 +1,4 @@
-﻿using ChemistRecipe.AppObject;
-using ChemistRecipe.Experiment;
+﻿using ChemistRecipe.Experiment;
 using System;
 using System.Collections;
 using System.Collections.Generic;
