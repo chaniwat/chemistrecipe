@@ -26,6 +26,15 @@ namespace ChemistRecipe.Experiment
         public Dictionary<string, TrackingImage> trackers;
         public SceneController sceneController;
 
+        private GlobalObject _Global;
+        public GlobalObject globalObject
+        {
+            get
+            {
+                return _Global;
+            }
+        }
+
         #region Vuforia variables
 
         // AR Controller
@@ -43,6 +52,13 @@ namespace ChemistRecipe.Experiment
 
         public Text timerText;
         private float runTimer = 0;
+        public float currentCourseTime
+        {
+            get
+            {
+                return runTimer;
+            }
+        }
 
         #endregion
 
@@ -167,7 +183,8 @@ namespace ChemistRecipe.Experiment
             checkCourseScript();
 
             if (!ChemistRecipeApp.isPlaying) return;
-            
+
+            _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
             CourseScript.setup();
         }
 

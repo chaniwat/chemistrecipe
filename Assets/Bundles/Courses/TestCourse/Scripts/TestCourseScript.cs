@@ -50,6 +50,9 @@ public class TestCourseScript : CourseScript
         courseBehaviour.sceneController.HideAllCanvas();
         courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
 
+        courseBehaviour.globalObject.score = 80;
+        courseBehaviour.globalObject.time = (int)(courseBehaviour.currentCourseTime);
+
         GameObject finalSoapObj = Instantiate(finalSoap);
         finalSoapObj.transform.SetParent(courseBehaviour.trackers[baseTrackerName].transform);
         finalSoapObj.transform.position = new Vector3(-0.906f, -3.406f, -0.501f);

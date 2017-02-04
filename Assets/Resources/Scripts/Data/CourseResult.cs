@@ -32,15 +32,19 @@ public class CourseResult : MonoBehaviour {
     UnityEngine.Object prefab;
     DatabaseReference courseReference;
 
+    private GlobalObject _Global;
+
     // Use this for initialization
     void Start () {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
 
-        //Example
+        _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+
+        // Submit score
         gameResult = new GameResult();
-        gameResult.courseId = "090e0932aa78714276b66dd521019777";
-        gameResult.uID = "uid1";
-        gameResult.data = new Score("Marktrs", 612, 60); // Score(string name, int time, int score);
+        gameResult.courseId = _Global.courseID;
+        gameResult.uID = _Global.userID;
+        gameResult.data = new Score(_Global.playerName, _Global.time, _Global.score); // Score(string name, int time, int score);
 
         showResult();
         createHighScorePanel();
