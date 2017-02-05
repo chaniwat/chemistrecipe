@@ -34,6 +34,9 @@ namespace chemistrecipe.scene
         public Button TutorialButton;
         public Button PlayButton;
 
+        [Header("Course Image")]
+        public Image courseImage;
+
         // Constant
         private Course SelectedCourse;
         private string defaulDescription;
@@ -75,6 +78,7 @@ namespace chemistrecipe.scene
                         courseButton.GetComponent<Button>().onClick.AddListener(() =>
                         {
                             SelectedCourse = data;
+                            courseImage.overrideSprite = Resources.Load<Sprite>("Textures/090e0932aa78714276b66dd521019777");
                             updateSelectedCourse();
                         });
                     }
@@ -151,6 +155,7 @@ namespace chemistrecipe.scene
             SelectCoursePanel.SetActive(false);
 
             SelectedCourse = null;
+            courseImage.overrideSprite = Resources.Load<Sprite>("Sprites/color_background");
         }
 
         // Click by download button
