@@ -111,7 +111,7 @@ public class TestCourseScript : CourseScript
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
 
-                    if (vol.volume > 10f)
+                    if (vol.volume > 20f)
                     {
                         MIX_SODIUM_HYDROXIDE_TO_WATER = true;
                     }
