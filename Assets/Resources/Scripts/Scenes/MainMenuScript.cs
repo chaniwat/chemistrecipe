@@ -27,9 +27,11 @@ namespace chemistrecipe.scene
         public GameObject CourseListGrid;
         public GameObject StarLevel;
         public GameObject PrintButton;
+        
         public GameObject TextScore;
         public GameObject TextCourseName;
         public GameObject TextCourseDescription;
+        public Button TutorialButton;
         public Button PlayButton;
 
         // Constant
@@ -104,6 +106,7 @@ namespace chemistrecipe.scene
                 PrintButton.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponentInChildren<Text>().enabled = true;
                 PrintButton.GetComponent<Button>().interactable = true;
+                TutorialButton.interactable = true;
                 TextScore.GetComponent<Text>().enabled = true;
                 TextCourseName.GetComponent<Text>().enabled = true;
 
@@ -117,6 +120,7 @@ namespace chemistrecipe.scene
                 StarLevel.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponentInChildren<Text>().enabled = false;
+                TutorialButton.interactable = false;
                 PrintButton.GetComponent<Button>().interactable = false;
                 TextScore.GetComponent<Text>().enabled = false;
                 TextCourseName.GetComponent<Text>().enabled = false;
@@ -155,6 +159,11 @@ namespace chemistrecipe.scene
             string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FCreating%20Soap.pdf?alt=media&token=62e31e95-1eb8-4a15-8477-aca9d00f6401";
             Application.OpenURL(url);
             Debug.Log("Downloading url");
+        }
+
+        public void OnClickTutorial()
+        {
+            SceneManager.LoadScene(3);
         }
 
         // Click by play button
