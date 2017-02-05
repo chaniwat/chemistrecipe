@@ -153,6 +153,16 @@ namespace ChemistRecipe.Experiment
         private Dictionary<uint, FlowParticle.FlowParticleParam> pourBuffer;
         private uint pourCounter = 0;
 
+        // Stir
+        private float _stirAmplifier = 1f;
+        public float stirAmplifier
+        {
+            get
+            {
+                return _stirAmplifier;
+            }
+        }
+
         #endregion
 
         #region Action handler
@@ -291,6 +301,15 @@ namespace ChemistRecipe.Experiment
         {
             if (OnBeforeFill != null) OnBeforeFill(material, volume);
 
+            /*
+            // Check capacity
+            float currentCap = currentCapacity;
+            if (currentCap + volume.volume > maximumCapacity)
+            {
+                volume.volume = maximumCapacity - volume.volume;
+            }
+            */
+
             // Add volume if exist, if not then add new material and volume to it
             Volume oldVolume = GetVolumeOfMaterial(material.name);
             if (oldVolume != null)
@@ -344,9 +363,14 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         public void Stir()
         {
-            // TODO DO UPDATE SPIN (OR ROTATE) SPEED (for multipler mixing)
+            _stirAmplifier += 0.85f;
 
-            if(OnStir != null) OnStir();
+            if (_stirAmplifier > 25f)
+            {
+                _stirAmplifier = 25f;
+            }
+
+            if (OnStir != null) OnStir();
         }
 
         #endregion
@@ -380,6 +404,15 @@ namespace ChemistRecipe.Experiment
             if (!ChemistRecipeApp.isPlaying) return;
 
             if (OnBeforeUpdate != null) OnBeforeUpdate();
+            
+            #region reduce stirAmplifier over time if > 1f
+
+            if (_stirAmplifier > 1f)
+            {
+                _stirAmplifier -= 2.6f * Time.deltaTime;
+            }
+
+            #endregion
 
             // Pour equipment
             if (isPouring)

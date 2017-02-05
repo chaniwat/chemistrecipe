@@ -33,11 +33,11 @@ public class TestCourseScript : CourseScript
 
             equipment.OnBeforeUpdate = () =>
             {
-                beforeUpdate(equipment);
+                beforeUpdateEquipment(equipment);
             };
             equipment.OnStir = () =>
             {
-                stir(equipment);
+                stirEquipment(equipment);
             };
         }
     }
@@ -72,13 +72,83 @@ public class TestCourseScript : CourseScript
     protected override void UpdateCoruse()
     {
 
-        #region Check for Soap (Liquid), if have then show the finish button
+        #region Checkpoint
 
-        FillableEquipment equipment = (FillableEquipment) GetEquipmentByObjectName("Beaker_Water");
-        
-        if (equipment.ContainMaterial(SOAP_LIQUID))
+        if (!finishing)
         {
-            courseBehaviour.sceneController.ShowFinishButton();
+            FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
+
+            // Update color if contain Soap(liquid)
+            if (equipment.ContainMaterial(SOAP_LIQUID))
+            {
+                Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
+
+                if (vol.volume < 120f)
+                {
+                    equipment.particleColor = Color.Lerp(new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f), new Color(208f / 255f, 208f / 255f, 208f / 255f, 1f), vol.volume / 200f);
+                }
+            }
+
+            if (!FILL_SODIUM_HYDROXIDE_TO_WATER)
+            {
+                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+
+                // Check contain
+                if (equipment.ContainMaterial(SODIUM_HYDROXIDE))
+                {
+                    FILL_SODIUM_HYDROXIDE_TO_WATER = true;
+                }
+            }
+            else if (!MIX_SODIUM_HYDROXIDE_TO_WATER)
+            {
+                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+
+                // Check contain & volume
+                if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+                {
+                    Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+
+                    if (vol.volume > 160f)
+                    {
+                        MIX_SODIUM_HYDROXIDE_TO_WATER = true;
+                    }
+                }
+            }
+            else if (!FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
+            {
+                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทน้ำมันมะพร้าว");
+
+                // Check contain and volume
+                if (equipment.ContainMaterial(COCONUT_OIL))
+                {
+                    Volume vol = equipment.GetVolumeOfMaterial(COCONUT_OIL);
+
+                    if (vol.volume > 250f)
+                    {
+                        FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                    }
+                }
+            }
+            else if (!MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
+            {
+                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+
+                // Check contain and volume
+                if (equipment.ContainMaterial(SOAP_LIQUID))
+                {
+                    Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
+
+                    if (vol.volume > 200f)
+                    {
+                        MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                        courseBehaviour.sceneController.ShowFinishButton();
+                    }
+                }
+            }
+            else
+            {
+                courseBehaviour.sceneController.ChangeInstructionMessage("หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+            }
         }
 
         #endregion
@@ -94,8 +164,10 @@ public class TestCourseScript : CourseScript
 
     #region Handle event
 
-    private void beforeUpdate(FillableEquipment equipment)
+    private void beforeUpdateEquipment(FillableEquipment equipment)
     {
+        float stirAmplifier = equipment.stirAmplifier;
+
         #region If have Sodium Hydroxide and Water, increase temperature and mix it over time
 
         if (equipment.ContainMaterial(SODIUM_HYDROXIDE) && equipment.ContainMaterial(WATER))
@@ -107,12 +179,12 @@ public class TestCourseScript : CourseScript
             }
             // Increase volume & temperature
             Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            vol.volume += 0.6875f * Time.deltaTime;
-            vol.tempature += 0.0625f * Time.deltaTime;
+            vol.volume += 0.6875f * stirAmplifier * Time.deltaTime;
+            vol.tempature += 0.0625f * stirAmplifier * Time.deltaTime;
 
             // Reduce Sodium Hydroxide volume
             Volume sh = equipment.GetVolumeOfMaterial(SODIUM_HYDROXIDE);
-            sh.volume -= 0.0625f * Time.deltaTime;
+            sh.volume -= 0.0625f * stirAmplifier * Time.deltaTime;
             if (sh.volume <= 0)
             {
                 equipment.removeMaterial(SODIUM_HYDROXIDE);
@@ -120,7 +192,7 @@ public class TestCourseScript : CourseScript
 
             // Reduce Water volume
             Volume wa = equipment.GetVolumeOfMaterial(WATER);
-            wa.volume -= 0.625f * Time.deltaTime;
+            wa.volume -= 0.625f * stirAmplifier * Time.deltaTime;
             if (wa.volume <= 0)
             {
                 equipment.removeMaterial(WATER);
@@ -134,12 +206,12 @@ public class TestCourseScript : CourseScript
             if (equipment.ContainMaterial(SODIUM_HYDROXIDE))
             {
                 // Increase volume & temperature
-                vol.volume += 0.625f * Time.deltaTime;
-                vol.tempature += 0.0625f * Time.deltaTime;
+                vol.volume += 0.625f * stirAmplifier * Time.deltaTime;
+                vol.tempature += 0.0625f * stirAmplifier * Time.deltaTime;
 
                 // Reduce Sodium Hydroxide volume
                 Volume sh = equipment.GetVolumeOfMaterial(SODIUM_HYDROXIDE);
-                sh.volume -= 0.625f * Time.deltaTime;
+                sh.volume -= 0.625f * stirAmplifier * Time.deltaTime;
                 if (sh.volume <= 0)
                 {
                     equipment.removeMaterial(SODIUM_HYDROXIDE);
@@ -150,12 +222,12 @@ public class TestCourseScript : CourseScript
             if (equipment.ContainMaterial(WATER))
             {
                 // Increase volume & Reduce temperature
-                vol.volume += 0.625f * Time.deltaTime;
-                vol.tempature -= 0.005f * Time.deltaTime;
+                vol.volume += 0.625f * stirAmplifier * Time.deltaTime;
+                vol.tempature -= 0.005f * stirAmplifier * Time.deltaTime;
 
                 // Reduce Water volume
                 Volume wa = equipment.GetVolumeOfMaterial(WATER);
-                wa.volume -= 0.625f * Time.deltaTime;
+                wa.volume -= 0.625f * stirAmplifier * Time.deltaTime;
                 if (wa.volume <= 0)
                 {
                     equipment.removeMaterial(WATER);
@@ -164,7 +236,7 @@ public class TestCourseScript : CourseScript
         }
 
         #endregion
-
+        
         #region If Have Water + Sodium Hydroxide and its Temp > 25c, cool it down over time
 
         if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
@@ -174,84 +246,108 @@ public class TestCourseScript : CourseScript
         }
 
         #endregion
-    }
 
-    private void stir(FillableEquipment equipment)
-    {
-        #region If equipment contain Sodium Hydroxide and Water, mixed it!
+        #region If Have SOAP(Liquid) and its Temp > 25c, cool it down over time
 
-        if (equipment.ContainMaterial(SODIUM_HYDROXIDE) && equipment.ContainMaterial(WATER))
+        if (equipment.ContainMaterial(SOAP_LIQUID))
         {
-            // Mixed material
-            if (!equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
-            {
-                equipment.Fill(new ChemistRecipe.Experiment.Material(MIXED_WATER_SODIUM_HYDROXIDE, ChemistRecipe.Experiment.Type.LIQUID), new Volume(11f, 26f, Volume.Metric.mL));
-            }
-            else
-            {
-                Volume vol = equipment.Materials[equipment.getMaterial(MIXED_WATER_SODIUM_HYDROXIDE)];
-                vol.volume += 11f;
-                vol.tempature += 1f;
-            }
-
-            // Reduce material volume
-            //
-            // Sodium Hydroxide
-            Volume sh = equipment.GetVolumeOfMaterial(SODIUM_HYDROXIDE);
-            sh.volume -= 1f;
-            if (sh.volume <= 0)
-            {
-                equipment.removeMaterial(SODIUM_HYDROXIDE);
-            }
-
-            // Water
-            Volume wa = equipment.GetVolumeOfMaterial(WATER);
-            wa.volume -= 10f;
-            if (wa.volume <= 0)
-            {
-                equipment.removeMaterial(WATER);
-            }
+            Volume vol = equipment.Materials[equipment.getMaterial(SOAP_LIQUID)];
+            vol.tempature -= 0.03f * Time.deltaTime;
         }
 
         #endregion
+    }
 
-        // Mix remain water or sodium hydroxide with mixed_water_sodium_hydroxide
-
-        #region If Have Water + Sodium Hydroxide with Coconut Oil
+    private void stirEquipment(FillableEquipment equipment)
+    {
+        #region If Have Water + Sodium Hydroxide with Coconut Oil and Water + Sodium Hydroxide Temp >= 33c, mixed it!
 
         if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && equipment.ContainMaterial(COCONUT_OIL))
         {
+            // Check Tempature (if below 33c, return)
+            Volume MWSH_vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+            if (MWSH_vol.tempature < 33f)
+            {
+                return;
+            }
+
             // Mixed material
             if (!equipment.ContainMaterial(SOAP_LIQUID))
             {
-                equipment.Fill(new ChemistRecipe.Experiment.Material(SOAP_LIQUID, ChemistRecipe.Experiment.Type.LIQUID), new Volume(29.5f, Volume.Metric.mL));
+                equipment.Fill(new ChemistRecipe.Experiment.Material(SOAP_LIQUID, ChemistRecipe.Experiment.Type.LIQUID), new Volume(0f, MWSH_vol.tempature, Volume.Metric.mL));
             }
-            else
-            {
-                equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 11f;
-            }
+
+            equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 2.75f;
 
             // Reduce material volume
             //
-            // Sodium Hydroxide
-            Volume sh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            sh.volume -= 5f;
-            if (sh.volume <= 0)
+            // Water + Sodium Hydroxide
+            Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+            wsh.volume -= 1.45f;
+            if (wsh.volume <= 0)
             {
                 equipment.removeMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
             }
 
-            // Water
-            Volume wa = equipment.GetVolumeOfMaterial(COCONUT_OIL);
-            wa.volume -= 13f;
-            if (wa.volume <= 0)
+            // Coconut Oil
+            Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
+            col.volume -= 1.3f;
+            if (col.volume <= 0)
             {
                 equipment.removeMaterial(COCONUT_OIL);
             }
         }
+        else if (equipment.ContainMaterial(SOAP_LIQUID))
+        {
+            Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
+
+            // Mixed Water + Sodium Hydroxide with SOAP_LIQUID
+            if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+            {
+                float reduceVol = 1.45f;
+
+                // Reduce Water + Sodium Hydroxide volume
+                Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+                if (wsh.volume - reduceVol <= 0)
+                {
+                    reduceVol = reduceVol - wsh.volume;
+                    equipment.removeMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
+                }
+                else
+                {
+                    wsh.volume -= reduceVol;
+                }
+
+                // Increase volume & temperature
+                vol.volume += reduceVol;
+                vol.tempature += 0.0625f;
+            }
+
+            // Mixed Coconut Oil with SOAP_LIQUID
+            if (equipment.ContainMaterial(COCONUT_OIL))
+            {
+                float reduceVol = 1.3f;
+
+                // Reduce Coconut Oil volume
+                Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
+                if (col.volume <= 0)
+                {
+                    reduceVol = reduceVol - col.volume;
+                    equipment.removeMaterial(COCONUT_OIL);
+                }
+                else
+                {
+                    col.volume -= reduceVol;
+                }
+
+                // Increase volume & Reduce temperature
+                vol.volume += reduceVol;
+                vol.tempature -= 0.003f;
+            }
+        }
 
         #endregion
-    }    
+    }
 
     #endregion
 

@@ -241,7 +241,8 @@ namespace ChemistRecipe.Experiment
                     string updateBuffer1 = hitEquipment.gameObject.name + "\n";
                     updateBuffer1 += "อุณหภูมิ: ";
 
-                    string updateBuffer2 = "สาร:\n";
+                    string updateBuffer2 = "ปริมาตรรวม: " + hitEquipment.currentCapacity + "\n";
+                    updateBuffer2 += "สาร:\n";
 
                     float temp = 0f;
                     bool setTempFlag = false;
