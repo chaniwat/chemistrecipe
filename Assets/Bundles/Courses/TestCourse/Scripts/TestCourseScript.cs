@@ -66,7 +66,10 @@ public class TestCourseScript : CourseScript
 
     protected override void RestartCoruse()
     {
-        
+        FILL_SODIUM_HYDROXIDE_TO_WATER = false;
+        MIX_SODIUM_HYDROXIDE_TO_WATER = false;
+        FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
+        MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
     }
 
     protected override void UpdateCoruse()
