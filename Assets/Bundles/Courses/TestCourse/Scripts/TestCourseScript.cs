@@ -71,6 +71,18 @@ public class TestCourseScript : CourseScript
 
     protected override void UpdateCoruse()
     {
+
+        #region Check for Soap (Liquid), if have then show the finish button
+
+        FillableEquipment equipment = (FillableEquipment) GetEquipmentByObjectName("Beaker_Water");
+        
+        if (equipment.ContainMaterial(SOAP_LIQUID))
+        {
+            courseBehaviour.sceneController.ShowFinishButton();
+        }
+
+        #endregion
+
         if (finishing)
         {
             if (trigger.soap1.GetCurrentAnimatorStateInfo(0).IsName("finishFallingSoap"))

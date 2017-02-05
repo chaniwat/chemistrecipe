@@ -62,6 +62,12 @@ namespace ChemistRecipe.Experiment
 
         #endregion
 
+        #region Internal
+
+        private Camera playCamera;
+
+        #endregion
+
         /// <summary>
         /// Unity Awake()
         /// Call before Start() (At first)
@@ -185,8 +191,12 @@ namespace ChemistRecipe.Experiment
             if (!ChemistRecipeApp.isPlaying) return;
 
             _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+            playCamera = GameObject.Find("Camera").GetComponent<Camera>();
             CourseScript.setup();
         }
+
+        private GameObject previousHitObject;
+        private bool disableFlag = false;
 
         /// <summary>
         /// Unity Update()
@@ -208,6 +218,69 @@ namespace ChemistRecipe.Experiment
             timerText.text = minute.ToString("00") + "." + second.ToString("00.00");
 
             CourseScript.update();
+
+            // Ray casting at cursor
+            Ray ray = playCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                FillableEquipment hitEquipment;
+                if ((hitEquipment = hit.collider.GetComponentInParent<FillableEquipment>()) != null)
+                {
+                    Debug.Log(hitEquipment.gameObject.name);
+
+                    if (previousHitObject == null || hitEquipment.gameObject.name != previousHitObject.name)
+                    {
+                        previousHitObject = hitEquipment.gameObject;
+                        sceneController.ShowStirButton(hitEquipment);
+                        disableFlag = false;
+                    }
+
+                    // Update EquipmentDetail
+                    string updateBuffer1 = hitEquipment.gameObject.name + "\n";
+                    updateBuffer1 += "อุณหภูมิ: ";
+
+                    string updateBuffer2 = "สาร:\n";
+
+                    float temp = 0f;
+                    bool setTempFlag = false;
+
+                    int counter = hitEquipment.Materials.Count;
+                    foreach (KeyValuePair<Material, Volume> pair in hitEquipment.Materials)
+                    {
+                        if (!setTempFlag)
+                        {
+                            setTempFlag = true;
+                            temp = pair.Value.tempature;
+                        }
+
+                        if (pair.Value.tempature > temp)
+                        {
+                            temp = pair.Value.tempature;
+                        }
+
+                        updateBuffer2 += "    - " + pair.Key.name + " (" + pair.Value.volume.ToString("0.0000") + pair.Value.metric.ToString() + ")";
+                        if(counter > 1)
+                        {
+                            updateBuffer2 += "\n";
+                            counter--;
+                        }
+                    }
+
+                    updateBuffer1 += temp.ToString("0.00") + "c\n";
+                    updateBuffer2.Remove(updateBuffer2.Length - 5, 4);
+
+                    sceneController.ShowEquipmentDetail(updateBuffer1 + updateBuffer2);
+                }
+            }
+            else if (!disableFlag)
+            {
+                sceneController.HideStirButton();
+                sceneController.HideEquipmentDetail();
+                previousHitObject = null;
+                disableFlag = true;
+            }
         }
 
         /// <summary>

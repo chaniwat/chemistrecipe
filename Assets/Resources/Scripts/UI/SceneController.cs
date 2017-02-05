@@ -20,9 +20,13 @@ namespace ChemistRecipe.UI
         public Canvas DebugCanvas;
 
         [Header("Play Overlay")]
+        public Image Cursor;
         public Button MenuButton;
+        public Button FinishCourseButton;
+        public Button StirButton;
         public Text TimerText;
         public Text InstructionText;
+        public Text EquipmentDetailText;
 
         [Header("Menu Buttons")]
         public Button ResumeButton;
@@ -34,6 +38,9 @@ namespace ChemistRecipe.UI
 
         [Header("Checklist Buttons")]
         public Button CloseCheckListButton;
+
+        // Internal
+        private FillableEquipment currentHitEquipment = null;
 
         // Use this for initialization
         void Start()
@@ -47,9 +54,25 @@ namespace ChemistRecipe.UI
             SidebarMenuCanvas.enabled = false;
             CheckListCanvas.enabled = false;
 
+            // Disable Stir & Finish Course Button
+            StirButton.gameObject.SetActive(false);
+            FinishCourseButton.gameObject.SetActive(false);
+
+            // Hide Equipment Detail
+            EquipmentDetailText.enabled = false;
+            EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
+
             // Add Button action
             // Play Overlay
             MenuButton.onClick.AddListener(ShowSidebarMenu);
+            StirButton.onClick.AddListener(() =>
+            {
+                if (currentHitEquipment != null)
+                {
+                    currentHitEquipment.Stir();
+                }
+            });
+            FinishCourseButton.onClick.AddListener(courseBehaviour.FinishCourse);
 
             // Sidebar Menu
             ResumeButton.onClick.AddListener(HideAllSidebar);
@@ -96,5 +119,49 @@ namespace ChemistRecipe.UI
             CheckListCanvas.enabled = false;
         }
 
+        public void ShowFinishButton()
+        {
+            FinishCourseButton.gameObject.SetActive(true);
+        }
+
+        public void ShowStirButton(FillableEquipment newHitEquipment)
+        {
+            currentHitEquipment = newHitEquipment;
+            StirButton.gameObject.SetActive(true);
+            Cursor.enabled = false;
+        }
+
+        public void HideStirButton()
+        {
+            currentHitEquipment = null;
+            StirButton.gameObject.SetActive(false);
+            Cursor.enabled = true;
+        }
+
+        public void ChangeInstructionMessage(string text)
+        {
+            InstructionText.text = "  ";
+            InstructionText.text = text;
+            InstructionText.text = text + " ";
+        }
+
+        public void ShowEquipmentDetail(string text)
+        {
+            EquipmentDetailText.enabled = true;
+            EquipmentDetailText.GetComponentInParent<Image>().enabled = true;
+
+            EquipmentDetailText.text = text;
+            EquipmentDetailText.text = text + " ";
+        }
+
+        public void HideEquipmentDetail()
+        {
+            EquipmentDetailText.enabled = false;
+            EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
+
+            EquipmentDetailText.text = "  ";
+            EquipmentDetailText.text = " ";
+        }
+        
     }
 }

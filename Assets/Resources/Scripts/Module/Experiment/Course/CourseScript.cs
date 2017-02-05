@@ -16,6 +16,8 @@ namespace ChemistRecipe.Experiment
             public string trackerName = "";
             public Equipment equipmentObject = null;
             public bool canFilp = true;
+            public float xOffset = 0.0f;
+            public float yOffset = 0.0f;
             public float zOffset = 0.0f;
         }
 
@@ -180,6 +182,8 @@ namespace ChemistRecipe.Experiment
                 if (o.trackerName == name)
                 {
                     param.canFilp = o.canFilp;
+                    param.filpXOffset = o.xOffset;
+                    param.filpYOffset = o.yOffset;
                     param.filpZOffset = o.zOffset;
 
                     break;
