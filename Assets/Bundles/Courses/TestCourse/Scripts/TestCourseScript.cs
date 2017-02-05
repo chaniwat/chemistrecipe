@@ -86,9 +86,9 @@ public class TestCourseScript : CourseScript
             {
                 Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
 
-                if (vol.volume < 120f)
+                if (vol.volume < 50f)
                 {
-                    equipment.particleColor = Color.Lerp(new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f), new Color(208f / 255f, 208f / 255f, 208f / 255f, 1f), vol.volume / 200f);
+                    equipment.particleColor = Color.Lerp(new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f), new Color(208f / 255f, 208f / 255f, 208f / 255f, 1f), vol.volume / 50f);
                 }
             }
 
@@ -111,7 +111,7 @@ public class TestCourseScript : CourseScript
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
 
-                    if (vol.volume > 160f)
+                    if (vol.volume > 10f)
                     {
                         MIX_SODIUM_HYDROXIDE_TO_WATER = true;
                     }
@@ -125,11 +125,8 @@ public class TestCourseScript : CourseScript
                 if (equipment.ContainMaterial(COCONUT_OIL))
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(COCONUT_OIL);
-
-                    if (vol.volume > 250f)
-                    {
-                        FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
-                    }
+                    
+                    FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
                 }
             }
             else if (!MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
@@ -141,7 +138,7 @@ public class TestCourseScript : CourseScript
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
 
-                    if (vol.volume > 200f)
+                    if (vol.volume > 20f)
                     {
                         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
                         courseBehaviour.sceneController.ShowFinishButton();
