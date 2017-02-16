@@ -19,6 +19,9 @@ namespace ChemistRecipe.Utility
         private Dictionary<int, List<Mesh>> cacheMeshes;
         private List<Mesh> cacheBottomMeshes;
 
+        // TODO Remove Poly2Mesh, use own algorithm
+        // http://wiki.unity3d.com/index.php/ProceduralPrimitives
+
         public LiquidMeshFillableGenerator(int floorCount, int degCount, Dictionary<int, Vector3>[] fVerties)
         {
             this.floorCount = floorCount;

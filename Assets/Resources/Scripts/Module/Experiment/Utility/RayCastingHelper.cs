@@ -16,7 +16,9 @@ namespace ChemistRecipe.Utility
             Vector3[] cVerties = new Vector3[degCount];
 
             RaycastHit hit;
-            Vector3 castPosition = originTransform.TransformPoint(new Vector3(originTransform.localPosition.x, originTransform.localPosition.y + yOffset, originTransform.localPosition.z));
+            Vector3 castPosition = originTransform.TransformPoint(
+                new Vector3(originTransform.localPosition.x, originTransform.localPosition.y + yOffset, originTransform.localPosition.z)
+            );
 
             // Casting 360*
             for (int counter = 0; counter < 32; counter++)

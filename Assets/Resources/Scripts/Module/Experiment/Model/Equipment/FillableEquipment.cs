@@ -33,7 +33,7 @@ namespace ChemistRecipe.Experiment
         [Tooltip("Fillable area (Collider3D)")]
         public Collider FillableArea;
         [Tooltip("Liquid Mesh (Liquid Generator)")]
-        public LiquidMeshFillable LiquidMesh;
+        public CylinderGenerator LiquidMesh;
         [Tooltip("Initial material of this container")]
         public MaterialVolumeMapping[] initialMaterials;
 
@@ -441,7 +441,7 @@ namespace ChemistRecipe.Experiment
             // Update liquid mesh current Y (after Update)
             if (LiquidMesh)
             {
-                LiquidMesh.currentY = currentCapacity * (LiquidMesh.highestY / maximumCapacity);
+                LiquidMesh.currentYNormalize = currentCapacity / maximumCapacity;
                 LiquidMesh.GetComponent<MeshRenderer>().material.color = particleColor;
             }
         }
