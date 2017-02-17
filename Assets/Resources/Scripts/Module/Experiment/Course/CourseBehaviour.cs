@@ -228,8 +228,6 @@ namespace ChemistRecipe.Experiment
                 FillableEquipment hitEquipment;
                 if ((hitEquipment = hit.collider.GetComponentInParent<FillableEquipment>()) != null)
                 {
-                    Debug.Log(hitEquipment.gameObject.name);
-
                     if (previousHitObject == null || hitEquipment.gameObject.name != previousHitObject.name)
                     {
                         previousHitObject = hitEquipment.gameObject;

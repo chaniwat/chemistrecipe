@@ -461,52 +461,71 @@ public class CylinderGenerator : MonoBehaviour {
         return (n * factorial(n - 1));
     }
 
+    public void ForceGenerate()
+    {
+        int currentFloor = determinedFloor(currentYNormalize);
+
+        mesh.Clear();
+
+        if (currentFloor == 0)
+        {
+            // Clear and skip mesh
+        }
+        else
+        {
+            heightBreakPoint = new float[currentFloor + 1];
+            for (int i = 0; i < currentFloor + 1; i++)
+            {
+                heightBreakPoint[i] = baseHeightBreakPoint[i];
+            }
+
+            verties = ConstructVerties(heightBreakPoint);
+            normals = ConstructNormals(verties.Length, heightBreakPoint.Length - 1);
+            uvs = ConstructUVs(verties.Length, heightBreakPoint, CurrentY);
+            triangles = ConstructTriangles(heightBreakPoint);
+
+            // Recalculate Y
+            for (int i = sideCount + 1; i < (sideCount * 2) + 2; i++)
+            {
+                verties[i].y = CurrentY;
+            }
+
+            int startFloorCounter = ((sideCount + 1) * 2) * (currentFloor);
+            int endFloorCounter = ((sideCount + 1) * 2) * (currentFloor + 1);
+
+            for (int i = startFloorCounter; i < endFloorCounter; i += 2)
+            {
+                verties[i].y = CurrentY;
+            }
+
+            mesh.vertices = verties;
+            mesh.normals = normals;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
+
+            mesh.RecalculateBounds();
+        }
+    }
+
+    bool filpflop = false;
+
     void Update()
     {
+        if (!filpflop && GetComponent<MeshRenderer>().enabled)
+        {
+            ForceGenerate();
+            filpflop = true;
+        }
+        else if(filpflop && !GetComponent<MeshRenderer>().enabled)
+        {
+            filpflop = false;
+        }
+
         int currentFloor = determinedFloor(currentYNormalize);
 
         if (currentFloor != previousFloor)
         {
-            mesh.Clear();
-
-            if (currentFloor == 0)
-            {
-                // Clear and skip mesh
-            }
-            else
-            {
-                heightBreakPoint = new float[currentFloor + 1];
-                for (int i = 0; i < currentFloor + 1; i++)
-                {
-                    heightBreakPoint[i] = baseHeightBreakPoint[i];
-                }
-
-                verties = ConstructVerties(heightBreakPoint);
-                normals = ConstructNormals(verties.Length, heightBreakPoint.Length - 1);
-                uvs = ConstructUVs(verties.Length, heightBreakPoint, CurrentY);
-                triangles = ConstructTriangles(heightBreakPoint);
-
-                // Recalculate Y
-                for (int i = sideCount + 1; i < (sideCount * 2) + 2; i++)
-                {
-                    verties[i].y = CurrentY;
-                }
-
-                int startFloorCounter = ((sideCount + 1) * 2) * (currentFloor);
-                int endFloorCounter = ((sideCount + 1) * 2) * (currentFloor + 1);
-
-                for (int i = startFloorCounter; i < endFloorCounter; i += 2)
-                {
-                    verties[i].y = CurrentY;
-                }
-
-                mesh.vertices = verties;
-                mesh.normals = normals;
-                mesh.uv = uvs;
-                mesh.triangles = triangles;
-
-                mesh.RecalculateBounds();
-            }
+            ForceGenerate();
 
             previousFloor = currentFloor;
         }
