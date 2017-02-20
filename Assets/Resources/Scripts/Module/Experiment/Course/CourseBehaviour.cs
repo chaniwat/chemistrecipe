@@ -1,7 +1,13 @@
 ﻿using ChemistRecipe.AR;
 using ChemistRecipe.UI;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using UnityEngine;
@@ -186,13 +192,43 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Start()
         {
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
+
             checkCourseScript();
 
             if (!ChemistRecipeApp.isPlaying) return;
 
             _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
             playCamera = GameObject.Find("Camera").GetComponent<Camera>();
+
+            // Setup gameResult
+            _Global.gameResult = new GameResult();
+            _Global.gameResult.courseId = "090e0932aa78714276b66dd521019777";
+            //_Global.gameResult.uID = CalculateMD5Hash(new DateTime().Millisecond.ToString());
+            _Global.gameResult.uID = "uid1";
+            _Global.gameResult.data = new Score("User", 0, 0);
+
+            _Global.isHighScore = false;
+            _Global.isFastestTime = false;
+
             CourseScript.setup();
+        }
+
+        private string CalculateMD5Hash(string input)
+        {
+            // step 1, calculate MD5 hash from input
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            // step 2, convert byte array to hex string
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+
+            return sb.ToString();
         }
 
         private GameObject previousHitObject;
@@ -236,8 +272,7 @@ namespace ChemistRecipe.Experiment
                     }
 
                     // Update EquipmentDetail
-                    string updateBuffer1 = hitEquipment.gameObject.name + "\n";
-                    updateBuffer1 += "อุณหภูมิ: ";
+                    string updateBuffer1 = "อุณหภูมิ: ";
 
                     string updateBuffer2 = "ปริมาตรรวม: " + hitEquipment.currentCapacity + "\n";
                     updateBuffer2 += "สาร:\n";
@@ -316,6 +351,57 @@ namespace ChemistRecipe.Experiment
         public void StopCourse()
         {
             SceneManager.LoadScene(0);
+        }
+
+        /// <summary>
+        /// Submit the score
+        /// </summary>
+        public void SubmitScore(GameResult gameResult)
+        {
+            FirebaseDatabase.DefaultInstance.GetReference("courses")
+                .Child(gameResult.courseId)
+                .Child("scores")
+                .Child(gameResult.uID)
+                .GetValueAsync().ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
+                    {
+                    // Handle the error... (no internet?)
+                    Debug.LogError("Firebase : Something Wrong");
+                    }
+                    else if (task.IsCompleted)
+                    {
+                        DataSnapshot snapshot = task.Result;
+                        Score data = JsonConvert.DeserializeObject<Score>(snapshot.GetRawJsonValue());
+
+                        GameResult forUpdate = new GameResult();
+                        forUpdate.courseId = gameResult.courseId;
+                        forUpdate.uID = gameResult.uID;
+                        forUpdate.data = new Score(gameResult.data.name, data.time, data.score);
+
+                        if (gameResult.data.score > data.score)
+                        {
+                            _Global.isHighScore = true;
+                            forUpdate.data.score = gameResult.data.score;
+                            forUpdate.data.time = gameResult.data.time;
+                        }
+
+                        if (gameResult.data.score == data.score && gameResult.data.time < data.time)
+                        {
+                            _Global.isFastestTime = true;
+                            forUpdate.data.time = gameResult.data.time;
+                        }
+
+                        Debug.Log("GameResult :" + JsonConvert.SerializeObject(gameResult.data));
+                        Debug.Log("Finalize :" + JsonConvert.SerializeObject(forUpdate.data));
+
+                        FirebaseDatabase.DefaultInstance.GetReference("courses")
+                            .Child(forUpdate.courseId)
+                            .Child("scores")
+                            .Child(forUpdate.uID)
+                            .SetRawJsonValueAsync(JsonConvert.SerializeObject(forUpdate.data));
+                    }
+                });
         }
 
         /// <summary>

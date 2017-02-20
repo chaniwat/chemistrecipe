@@ -42,8 +42,13 @@ namespace chemistrecipe.scene
         private string defaulDescription;
         private string courseURL;
 
+        private GlobalObject _Global;
+
         void Start()
         {
+            // Get global object
+            _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+
             // Load CourseButton Prefab
             Object prefab = Resources.Load("Prefabs/UI/CourseButton");
 
@@ -89,6 +94,8 @@ namespace chemistrecipe.scene
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
         }
 
+        private bool changeOpenTutorialState = false;
+
         void Update()
         {
             if (SelectedCourse == null)
@@ -98,6 +105,18 @@ namespace chemistrecipe.scene
             else if(SelectedCourse.name == "Creating Soap")
             {
                 PlayButton.interactable = true;
+            }
+
+            // Check if change from tutorial
+            if (!changeOpenTutorialState && _Global.isOpenTutorial)
+            {
+                SelectCoursePanel.SetActive(false);
+                changeOpenTutorialState = true;
+            }
+            else if (changeOpenTutorialState && !_Global.isOpenTutorial)
+            {
+                SelectCoursePanel.SetActive(true);
+                changeOpenTutorialState = false;
             }
         }
 
@@ -161,14 +180,16 @@ namespace chemistrecipe.scene
         // Click by download button
         public void OnClickDownload()
         {
-            string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FCreating%20Soap.pdf?alt=media&token=62e31e95-1eb8-4a15-8477-aca9d00f6401";
+            string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FMarker-course1.pdf?alt=media&token=ef874247-eb59-4c7e-8a3e-68d448349153";
             Application.OpenURL(url);
             Debug.Log("Downloading url");
         }
 
         public void OnClickTutorial()
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(3, LoadSceneMode.Additive);
+            SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
+            _Global.isOpenTutorial = true;
         }
 
         // Click by play button

@@ -40,6 +40,8 @@ public class TestCourseScript : CourseScript
                 stirEquipment(equipment);
             };
         }
+
+        courseBehaviour.sceneController.ShowFinishButton();
     }
 
     bool finishing = false;
@@ -50,8 +52,9 @@ public class TestCourseScript : CourseScript
         courseBehaviour.sceneController.HideAllCanvas();
         courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
 
-        courseBehaviour.globalObject.score = 80;
-        courseBehaviour.globalObject.time = (int)(courseBehaviour.currentCourseTime);
+        courseBehaviour.globalObject.gameResult.data.score = new System.Random().Next(0, 100);
+        //courseBehaviour.globalObject.gameResult.data.time = (int)(courseBehaviour.currentCourseTime);
+        courseBehaviour.globalObject.gameResult.data.time = new System.Random().Next(120, 600);
 
         GameObject finalSoapObj = Instantiate(finalSoap);
         finalSoapObj.transform.SetParent(courseBehaviour.trackers[baseTrackerName].transform);
@@ -61,6 +64,7 @@ public class TestCourseScript : CourseScript
         trigger = finalSoapObj.GetComponentInChildren<FinaleTrigger>();
         trigger.PlayAnimation();
 
+        courseBehaviour.SubmitScore(courseBehaviour.globalObject.gameResult);
         finishing = true;
     }
 

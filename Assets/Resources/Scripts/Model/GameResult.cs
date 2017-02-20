@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Resources.Scripts.Data
+public class GameResult
 {
-    class GameResult
-    {
-        public string courseId;
-        public string uID;
-        public Score data;
-    }
+    public string courseId;
+    public string uID;
+    public Score data;
 }

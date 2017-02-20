@@ -12,8 +12,16 @@ public class Slide : MonoBehaviour {
     public List<Sprite> imageList;
     int index = 0;
 
+    private GlobalObject _Global;
+
     // Use this for initialization
     void Start () {
+        // Get global object
+        _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+
+        // Disable audio listener
+        GameObject.Find("Main Camera").GetComponent<AudioListener>().enabled = false;
+
         string path = "Sprites/Tutorial/card";
         int number = 1;
         while (number < 9) {
@@ -34,7 +42,9 @@ public class Slide : MonoBehaviour {
             index++;
         }
         else {
-            SceneManager.LoadScene(0);
+            SceneManager.SetActiveScene(SceneManager.GetSceneAt(0));
+            _Global.isOpenTutorial = false;
+            SceneManager.UnloadSceneAsync(3);
         }
         slider.GetComponent<Image>().sprite = imageList[index];
     }
@@ -45,7 +55,9 @@ public class Slide : MonoBehaviour {
             index--;
         }
         else {
-            SceneManager.LoadScene(0);
+            SceneManager.SetActiveScene(SceneManager.GetSceneAt(0));
+            _Global.isOpenTutorial = false;
+            SceneManager.UnloadSceneAsync(3);
         }
         slider.GetComponent<Image>().sprite = imageList[index];
     }

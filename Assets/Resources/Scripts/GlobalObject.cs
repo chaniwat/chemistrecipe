@@ -9,11 +9,11 @@ public class GlobalObject : MonoBehaviour {
     // For Testing
     public string message = "NULL";
 
-    public string courseID = "090e0932aa78714276b66dd521019777";
-    public string userID = "uid1";
-    public string playerName = "Marktrs";
-    public int score;
-    public int time;
+    public bool isOpenTutorial = false;
+    
+    public GameResult gameResult;
+    public bool isHighScore = false;
+    public bool isFastestTime = false;
 
     public static GlobalObject instance;
 
@@ -27,7 +27,7 @@ public class GlobalObject : MonoBehaviour {
         }
         else if (instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 

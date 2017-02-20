@@ -8,11 +8,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using Assets.Resources.Scripts.Data;
 
 public class CourseResult : MonoBehaviour {
-
-    public static int startRankNumber = 1;
 
     public GameObject LeftPanel;
     public GameObject nameColumn;
@@ -40,78 +37,28 @@ public class CourseResult : MonoBehaviour {
 
         _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
 
-        // Submit score
-        gameResult = new GameResult();
-        gameResult.courseId = _Global.courseID;
-        gameResult.uID = _Global.userID;
-        gameResult.data = new Score(_Global.playerName, _Global.time, _Global.score); // Score(string name, int time, int score);
+        gameResult = _Global.gameResult;
 
         showResult();
         createHighScorePanel();
     }
 
-    void OnDestroy()
-    {
-        DatabaseReference scoreListReference = courseReference.Child("scores");
-        scoreListReference.OrderByChild("score").ValueChanged -= HandleValueChanged;
-    }
-
     void showResult()
     {
-        int newScore = gameResult.data.score;
-        int newTime = gameResult.data.time;
-        resultTextMessage.GetComponent<Text>().text = compareScoreAndTime(newScore, newTime); //get gameResultMessage
-        scoreText.GetComponent<Text>().text = newScore + " / 100"; //show score
-        timeText.GetComponent<Text>().text = formatSecondToTimePattern(newTime); //show used time
-        getMedal(newScore);
-        getRank();
-    }
-    
-    string compareScoreAndTime(int newScore, int newTime)
-    {
-        string result="";
-        int oldScore, oldTime;
-        FirebaseDatabase.DefaultInstance.GetReference("courses")
-            .Child(gameResult.courseId)
-            .Child("scores")
-            .Child(gameResult.uID)
-            .GetValueAsync().ContinueWith(task =>
+        if(_Global.isHighScore)
         {
-            if (task.IsFaulted)
-            {   
-                // Handle the error... (no internet?)
-                Debug.LogError("Firebase : Something Wrong");
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                Score data = JsonConvert.DeserializeObject<Score>(snapshot.GetRawJsonValue());
-                
-                oldScore = data.score;
-                oldTime = data.time;
+            resultTextMessage.GetComponent<Text>().text = "You made new Highscore!";
+        }
+        else if(_Global.isFastestTime)
+        {
+            resultTextMessage.GetComponent<Text>().text = "New best time record!";
+        }
 
-                if (newScore >= oldScore)
-                {
-                    submitGameResult(newScore, newTime);
-                    result = "You made new Highscore!";
-                    if (newTime < oldTime)
-                    {   
-                        result = "New best time record and Highscore !";
-                    }
-                }
-            }
-        });
-        return result;
-    }
-   
-    void submitGameResult(int score, int time)
-    {
-        DatabaseReference userRecordRef = FirebaseDatabase.DefaultInstance.GetReference("courses")
-            .Child(gameResult.courseId)
-            .Child("scores")
-            .Child(gameResult.uID);
-        userRecordRef.Child("score").SetValueAsync(score);
-        userRecordRef.Child("time").SetValueAsync(time);
+        scoreText.GetComponent<Text>().text = gameResult.data.score + " / 100";
+        timeText.GetComponent<Text>().text = formatSecondToTimePattern(gameResult.data.time);
+
+        getMedal(gameResult.data.score);
+        getRank();
     }
 
     void createHighScorePanel()
@@ -120,59 +67,46 @@ public class CourseResult : MonoBehaviour {
 
         courseReference = FirebaseDatabase.DefaultInstance.GetReference("courses").Child(gameResult.courseId);
         DatabaseReference scoreListReference = courseReference.Child("scores");
-        scoreListReference.OrderByChild("score").ValueChanged += HandleValueChanged;
-    }
-
-    void HandleValueChanged(object sender, ValueChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
+        scoreListReference.OrderByChild("score").GetValueAsync().ContinueWith(task =>
         {
-            Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
+            List<Score> scoreList = new List<Score>();
 
-        foreach (Transform child in LeftPanel.transform) {
-            GameObject.Destroy(child.gameObject);
-        }
-
-        foreach (Transform child in nameColumn.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-
-        List<Score> scoreList = new List<Score>();
-
-        DataSnapshot snapshot = args.Snapshot;
-        foreach (var childSnapshot in snapshot.Children)
-        {
-            // Deserialize JSON into Object
-            scoreList.Add(JsonConvert.DeserializeObject<Score>(childSnapshot.GetRawJsonValue()));
-        }
-
-        scoreList.Sort((a, b) => (a.score > b.score ? -1 : a.score < b.score ? 1 : 0));
-
-        while (startRankNumber < scoreList.Count+1) {
-
-            GameObject rankItemText = (GameObject)Instantiate(prefab, LeftPanel.transform);
-            GameObject playerNameText = (GameObject)Instantiate(prefab, nameColumn.transform);
-
-            Score score = scoreList[startRankNumber - 1];
-            if (score.name.Length > 8)
+            DataSnapshot snapshot = task.Result;
+            foreach (var childSnapshot in snapshot.Children)
             {
-                score.name = score.name.Substring(0, 8);
+                // Deserialize JSON into Object
+                scoreList.Add(JsonConvert.DeserializeObject<Score>(childSnapshot.GetRawJsonValue()));
             }
-            score.name += new string(' ', 8 - score.name.Length);
-            playerNameText.GetComponent<Text>().text = score.name;
-            rankItemText.GetComponent<Text>().text = "   " + startRankNumber
-                                                    + "                      "
-                                                    + "      " + formatSecondToTimePattern(score.time)
-                                                    + "       " + score.score;
-            
-            startRankNumber++;
-            if (startRankNumber == 10) {
-                break;
+
+            scoreList.Sort((a, b) => (a.score > b.score ? -1 : a.score < b.score ? 1 : 0));
+
+            int startRankNumber = 1;
+
+            while (startRankNumber < scoreList.Count + 1)
+            {
+
+                GameObject rankItemText = (GameObject)Instantiate(prefab, LeftPanel.transform);
+                GameObject playerNameText = (GameObject)Instantiate(prefab, nameColumn.transform);
+
+                Score score = scoreList[startRankNumber - 1];
+                if (score.name.Length > 8)
+                {
+                    score.name = score.name.Substring(0, 8);
+                }
+                score.name += new string(' ', 8 - score.name.Length);
+                playerNameText.GetComponent<Text>().text = score.name;
+                rankItemText.GetComponent<Text>().text = "   " + startRankNumber
+                                                        + "                      "
+                                                        + "      " + formatSecondToTimePattern(score.time)
+                                                        + "       " + score.score;
+
+                startRankNumber++;
+                if (startRankNumber == 10)
+                {
+                    break;
+                }
             }
-        }
+        });
     }
 
     string formatSecondToTimePattern(int sec) {
@@ -250,10 +184,6 @@ public class CourseResult : MonoBehaviour {
         {
             medal.GetComponent<Image>().sprite = copperMedal;
         }
-    }
-
-    void getGameResultMessage() {
-        //eg. "you get new highscore", "1st in global rank", "new best time recorded"
     }
 
 }
