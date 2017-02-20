@@ -41,7 +41,7 @@ public class TestCourseScript : CourseScript
             };
         }
 
-        courseBehaviour.sceneController.ShowFinishButton();
+        //courseBehaviour.sceneController.ShowFinishButton();
     }
 
     bool finishing = false;
@@ -52,9 +52,44 @@ public class TestCourseScript : CourseScript
         courseBehaviour.sceneController.HideAllCanvas();
         courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
 
-        courseBehaviour.globalObject.gameResult.data.score = new System.Random().Next(0, 100);
-        //courseBehaviour.globalObject.gameResult.data.time = (int)(courseBehaviour.currentCourseTime);
-        courseBehaviour.globalObject.gameResult.data.time = new System.Random().Next(120, 600);
+        // For Check :3
+        //courseBehaviour.globalObject.gameResult.data.score = new System.Random().Next(0, 100);
+        //courseBehaviour.globalObject.gameResult.data.time = new System.Random().Next(120, 600);
+
+        courseBehaviour.globalObject.gameResult.data.score = 60;
+
+        if (courseBehaviour.currentCourseTime < 300)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 10;
+        }
+        else if(courseBehaviour.currentCourseTime >= 300 && courseBehaviour.currentCourseTime < 500)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 6;
+        }
+
+        Volume soapLiquidVol = ((FillableEquipment)GetEquipmentByObjectName("Beaker_Water")).GetVolumeOfMaterial(SOAP_LIQUID);
+        if (soapLiquidVol.volume >= 20 && soapLiquidVol.volume < 50)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 6;
+        }
+        else if (soapLiquidVol.volume >= 50 && soapLiquidVol.volume < 100)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 12;
+        }
+        else if (soapLiquidVol.volume >= 100 && soapLiquidVol.volume < 200)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 16;
+        }
+        else if (soapLiquidVol.volume >= 200 && soapLiquidVol.volume < 400)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 23;
+        }
+        else if (soapLiquidVol.volume >= 400)
+        {
+            courseBehaviour.globalObject.gameResult.data.score += 30;
+        }
+
+        courseBehaviour.globalObject.gameResult.data.time = (int)(courseBehaviour.currentCourseTime);
 
         GameObject finalSoapObj = Instantiate(finalSoap);
         finalSoapObj.transform.SetParent(courseBehaviour.trackers[baseTrackerName].transform);
@@ -78,7 +113,6 @@ public class TestCourseScript : CourseScript
 
     protected override void UpdateCoruse()
     {
-
         #region Checkpoint
 
         if (!finishing)
@@ -115,7 +149,7 @@ public class TestCourseScript : CourseScript
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
 
-                    if (vol.volume > 20f)
+                    if (vol.volume > 10f)
                     {
                         MIX_SODIUM_HYDROXIDE_TO_WATER = true;
                     }
@@ -142,7 +176,7 @@ public class TestCourseScript : CourseScript
                 {
                     Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
 
-                    if (vol.volume > 20f)
+                    if (vol.volume > 10f)
                     {
                         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
                         courseBehaviour.sceneController.ShowFinishButton();
