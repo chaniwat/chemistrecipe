@@ -40,8 +40,8 @@ namespace chemistrecipe.scene
         // Constant
         private Course SelectedCourse;
         private string defaulDescription;
-        private string courseURL;
-
+        private string markerURL;
+        
         void Start()
         {
             // Load CourseButton Prefab
@@ -75,6 +75,7 @@ namespace chemistrecipe.scene
                         GameObject courseButton = (GameObject)Instantiate(prefab, CourseListGrid.transform);
                         courseButton.GetComponent<CourseButtonScript>().data = data;
                         courseButton.GetComponentInChildren<Text>().text = data.name;
+                        markerURL = data.url.marker;
                         courseButton.GetComponent<Button>().onClick.AddListener(() =>
                         {
                             SelectedCourse = data;
@@ -155,15 +156,13 @@ namespace chemistrecipe.scene
             SelectCoursePanel.SetActive(false);
 
             SelectedCourse = null;
-            courseImage.overrideSprite = Resources.Load<Sprite>("Sprites/color_background");
+            courseImage.overrideSprite = Resources.Load<Sprite>("Sprites/color_background2");
         }
 
         // Click by download button
         public void OnClickDownload()
         {
-            string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FCreating%20Soap.pdf?alt=media&token=62e31e95-1eb8-4a15-8477-aca9d00f6401";
-            Application.OpenURL(url);
-            Debug.Log("Downloading url");
+            Application.OpenURL(markerURL);
         }
 
         public void OnClickTutorial()

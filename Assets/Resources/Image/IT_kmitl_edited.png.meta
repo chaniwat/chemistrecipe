@@ -1,0 +1,1078 @@
+fileFormatVersion: 2
+guid: 37d4f47debec18147af52ae89e18ef21
+timeCreated: 1486803683
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: IT_kmitl_edited_0
+    21300002: IT_kmitl_edited_1
+    21300004: IT_kmitl_edited_2
+    21300006: IT_kmitl_edited_3
+    21300008: IT_kmitl_edited_4
+    21300010: IT_kmitl_edited_5
+    21300012: IT_kmitl_edited_6
+    21300014: IT_kmitl_edited_7
+    21300016: IT_kmitl_edited_8
+    21300018: IT_kmitl_edited_9
+    21300020: IT_kmitl_edited_10
+    21300022: IT_kmitl_edited_11
+    21300024: IT_kmitl_edited_12
+    21300026: IT_kmitl_edited_13
+    21300028: IT_kmitl_edited_14
+    21300030: IT_kmitl_edited_15
+    21300032: IT_kmitl_edited_16
+    21300034: IT_kmitl_edited_17
+    21300036: IT_kmitl_edited_18
+    21300038: IT_kmitl_edited_19
+    21300040: IT_kmitl_edited_20
+    21300042: IT_kmitl_edited_21
+    21300044: IT_kmitl_edited_22
+    21300046: IT_kmitl_edited_23
+    21300048: IT_kmitl_edited_24
+    21300050: IT_kmitl_edited_25
+    21300052: IT_kmitl_edited_26
+    21300054: IT_kmitl_edited_27
+    21300056: IT_kmitl_edited_28
+    21300058: IT_kmitl_edited_29
+    21300060: IT_kmitl_edited_30
+    21300062: IT_kmitl_edited_31
+    21300064: IT_kmitl_edited_32
+    21300066: IT_kmitl_edited_33
+    21300068: IT_kmitl_edited_34
+    21300070: IT_kmitl_edited_35
+    21300072: IT_kmitl_edited_36
+    21300074: IT_kmitl_edited_37
+    21300076: IT_kmitl_edited_38
+    21300078: IT_kmitl_edited_39
+    21300080: IT_kmitl_edited_40
+    21300082: IT_kmitl_edited_41
+    21300084: IT_kmitl_edited_42
+    21300086: IT_kmitl_edited_43
+    21300088: IT_kmitl_edited_44
+    21300090: IT_kmitl_edited_45
+    21300092: IT_kmitl_edited_46
+    21300094: IT_kmitl_edited_47
+    21300096: IT_kmitl_edited_48
+    21300098: IT_kmitl_edited_49
+    21300100: IT_kmitl_edited_50
+    21300102: IT_kmitl_edited_51
+    21300104: IT_kmitl_edited_52
+    21300106: IT_kmitl_edited_53
+    21300108: IT_kmitl_edited_54
+    21300110: IT_kmitl_edited_55
+    21300112: IT_kmitl_edited_56
+    21300114: IT_kmitl_edited_57
+    21300116: IT_kmitl_edited_58
+    21300118: IT_kmitl_edited_59
+    21300120: IT_kmitl_edited_60
+    21300122: IT_kmitl_edited_61
+    21300124: IT_kmitl_edited_62
+    21300126: IT_kmitl_edited_63
+    21300128: IT_kmitl_edited_64
+    21300130: IT_kmitl_edited_65
+    21300132: IT_kmitl_edited_66
+    21300134: IT_kmitl_edited_67
+    21300136: IT_kmitl_edited_68
+    21300138: IT_kmitl_edited_69
+    21300140: IT_kmitl_edited_70
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: IT_kmitl_edited_0
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 255
+        width: 59
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_1
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 165
+        width: 23
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_2
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 165
+        width: 92
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_3
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 189
+        width: 103
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_4
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 120
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_5
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 120
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_6
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 120
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_7
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 120
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_8
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 120
+        width: 4
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_9
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 120
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_10
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 117
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_11
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 120
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_12
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 120
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_13
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 120
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_14
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 120
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_15
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 120
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_16
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 120
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_17
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 120
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_18
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 120
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_19
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 120
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_20
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 120
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_21
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 120
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_22
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 120
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_23
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 120
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_24
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 120
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_25
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 120
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_26
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 120
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_27
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 120
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_28
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 120
+        width: 4
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_29
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 120
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_30
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 117
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_31
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 117
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_32
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 104
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_33
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 104
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_34
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 101
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_35
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 104
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_36
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_37
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 104
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_38
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 101
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_39
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 104
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_40
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_41
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 103
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_42
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_43
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 104
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_44
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_45
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 103
+        width: 5
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_46
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 103
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_47
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_48
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 103
+        width: 5
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_49
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_50
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_51
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 104
+        width: 5
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_52
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 104
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_53
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_54
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_55
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 104
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_56
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 104
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_57
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_58
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 103
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_59
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 101
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_60
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 101
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_61
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 104
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_62
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_63
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 103
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_64
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 104
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_65
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 104
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_66
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_67
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 103
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_68
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 103
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_69
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 104
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: IT_kmitl_edited_70
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 101
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
