@@ -1,0 +1,34 @@
+fileFormatVersion: 2
+guid: cd463cc76cb98e3428fdf868e6abafce
+timeCreated: 1488881422
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Kanit
+  fontNames:
+  - Kanit
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0f00b3f04b85ba947bca6b113a113f62, type: 3}
+  - {fileID: 12800000, guid: 85778631acf2f5b4b943a3e89bf64f6a, type: 3}
+  - {fileID: 12800000, guid: 36dd3172f948f574aa3c096ce465f78f, type: 3}
+  - {fileID: 12800000, guid: 012397c3bdc13c0419b3292e4101df13, type: 3}
+  - {fileID: 12800000, guid: a0e54ad44ca46214992bf93eff22967a, type: 3}
+  - {fileID: 12800000, guid: 52780c1563a403549aaf4d18b0ee5c4f, type: 3}
+  - {fileID: 12800000, guid: 13d657f5327f2634da891293b49a2645, type: 3}
+  - {fileID: 12800000, guid: 47ef8bb62a9ba124c864f051c369a0c4, type: 3}
+  - {fileID: 12800000, guid: aa45d86801c7471429b049dfa0e66354, type: 3}
+  - {fileID: 12800000, guid: 6960697ccdec4aa4e9758a9b45fd4fc1, type: 3}
+  - {fileID: 12800000, guid: c737ae2d5e43ed340b05d99fb1d09259, type: 3}
+  - {fileID: 12800000, guid: 082287de93441134491c22867124d81c, type: 3}
+  - {fileID: 12800000, guid: 6954e11fbabd5794c9078bb097247af1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
