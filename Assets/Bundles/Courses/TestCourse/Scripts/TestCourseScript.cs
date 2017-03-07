@@ -109,11 +109,17 @@ public class TestCourseScript : CourseScript
         MIX_SODIUM_HYDROXIDE_TO_WATER = false;
         FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
+
+        // Reset color
+        FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
+        equipment.particleColor = new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f);
     }
 
     protected override void UpdateCoruse()
     {
         #region Checkpoint
+
+        // TODO Highlight Equipment by instruction message
 
         if (!finishing)
         {

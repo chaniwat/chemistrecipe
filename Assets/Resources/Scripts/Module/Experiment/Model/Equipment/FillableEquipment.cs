@@ -10,6 +10,7 @@ namespace ChemistRecipe.Experiment
     [ExecuteInEditMode]
     public class FillableEquipment : Equipment
     {
+
         #region Settings & States
 
         // Container variable, struct
@@ -142,6 +143,9 @@ namespace ChemistRecipe.Experiment
         public TextMesh debugText = null;
 
         #endregion
+
+        // TODO Highlight flag
+        public bool highlighting = false;
 
         #region Internal Only
 

@@ -32,6 +32,9 @@ namespace ChemistRecipe.Experiment
         public Dictionary<string, TrackingImage> trackers;
         public SceneController sceneController;
 
+        public TextMesh textMeshTemplate;
+        public GameObject highlightPlaneTemplate;
+
         private GlobalObject _Global;
         public GlobalObject globalObject
         {
@@ -142,6 +145,13 @@ namespace ChemistRecipe.Experiment
                     // add additional script components for trackable
                     tb.gameObject.AddComponent<TurnOffBehaviour>();
                     TrackingImage ti = tb.gameObject.AddComponent<TrackingImage>();
+
+                    // Init 2 gameObject (TextMesh & HighlightPlane)
+                    TextMesh tmObject = Instantiate(textMeshTemplate, tb.gameObject.transform);
+                    //GameObject highlightPlane = Instantiate(highlightPlaneTemplate, tb.gameObject.transform);
+
+                    ti.textMesh = tmObject;
+                    //ti.HighlightPlaneObject = highlightPlane;
 
                     // Set specific center tracker
                     if (tb.TrackableName == CourseScript.baseTrackerName)
@@ -274,8 +284,8 @@ namespace ChemistRecipe.Experiment
                     // Update EquipmentDetail
                     string updateBuffer1 = "อุณหภูมิ: ";
 
-                    string updateBuffer2 = "ปริมาตรรวม: " + hitEquipment.currentCapacity + "\n";
-                    updateBuffer2 += "สาร:\n";
+                    string updateBuffer2 = "ปริมาตร: " + hitEquipment.currentCapacity + "\n";
+                    updateBuffer2 += "---\n";
 
                     float temp = 0f;
                     bool setTempFlag = false;
@@ -294,7 +304,7 @@ namespace ChemistRecipe.Experiment
                             temp = pair.Value.tempature;
                         }
 
-                        updateBuffer2 += "    - " + pair.Key.name + " (" + pair.Value.volume.ToString("0.0000") + pair.Value.metric.ToString() + ")";
+                        updateBuffer2 += "> " + pair.Key.name + " (" + pair.Value.volume.ToString("0.00") + pair.Value.metric.ToString() + ")";
                         if(counter > 1)
                         {
                             updateBuffer2 += "\n";

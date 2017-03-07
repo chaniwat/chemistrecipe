@@ -11,6 +11,8 @@ public class CourseBehaviourCustomEditor : Editor
     SerializedProperty DatasetExistanceStatus;
     SerializedProperty timerText;
     SerializedProperty sceneController;
+    SerializedProperty textMeshTemplate;
+    SerializedProperty highlightPlaneTemplate;
 
     public void OnEnable()
     {
@@ -18,6 +20,8 @@ public class CourseBehaviourCustomEditor : Editor
         DatasetExistanceStatus = serializedObject.FindProperty("DatasetExistanceStatus");
         timerText = serializedObject.FindProperty("timerText");
         sceneController = serializedObject.FindProperty("sceneController");
+        textMeshTemplate = serializedObject.FindProperty("textMeshTemplate");
+        highlightPlaneTemplate = serializedObject.FindProperty("highlightPlaneTemplate");
     }
 
     public override void OnInspectorGUI()
@@ -54,6 +58,11 @@ public class CourseBehaviourCustomEditor : Editor
 
             EditorGUILayout.PropertyField(timerText, new GUIContent("Timer UI"));
             EditorGUILayout.PropertyField(sceneController, new GUIContent("Scene Controller"));
+
+            GUILayout.Label("");
+
+            EditorGUILayout.PropertyField(textMeshTemplate, new GUIContent("TextMesh Template"));
+            EditorGUILayout.PropertyField(highlightPlaneTemplate, new GUIContent("Highlight Plane Template"));
 
             serializedObject.ApplyModifiedProperties();
         }

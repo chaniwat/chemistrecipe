@@ -30,6 +30,10 @@ namespace ChemistRecipe.AR
         public float filpYOffset = 0.0f;
         [Tooltip("Z Offset for centering the object")]
         public float filpZOffset = 0.0f;
+        [Tooltip("TextMesh")]
+        public TextMesh textMesh;
+        [Tooltip("Highlight Plane")]
+        public GameObject HighlightPlaneObject;
 
         #endregion
 
@@ -119,6 +123,31 @@ namespace ChemistRecipe.AR
             if (tracking)
             {
                 OnTracking();   
+            }
+
+            // Update materials text & border highlighting if have attachObject
+
+            if(attachObject)
+            {
+                #region update materials text mesh
+
+                string updateBuffer = "";
+
+                int counter = ((FillableEquipment)attachObject).Materials.Count;
+                foreach (KeyValuePair<Experiment.Material, Volume> pair in ((FillableEquipment)attachObject).Materials)
+                {
+                    updateBuffer += pair.Key.name;
+                    if (counter > 1)
+                    {
+                        updateBuffer += "\n";
+                        counter--;
+                    }
+                }
+
+                textMesh.text = updateBuffer;
+
+                #endregion
+
             }
         }
 
