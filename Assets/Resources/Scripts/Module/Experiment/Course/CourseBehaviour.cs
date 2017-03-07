@@ -192,11 +192,11 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Start()
         {
-            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
-
             checkCourseScript();
 
             if (!ChemistRecipeApp.isPlaying) return;
+
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chemresipe.firebaseio.com/");
 
             _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
             playCamera = GameObject.Find("Camera").GetComponent<Camera>();

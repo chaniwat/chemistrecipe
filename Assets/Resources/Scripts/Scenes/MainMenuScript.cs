@@ -41,6 +41,7 @@ namespace chemistrecipe.scene
         private Course SelectedCourse;
         private string defaulDescription;
         private string courseURL;
+        private string markerURL;
 
         private GlobalObject _Global;
 
@@ -80,6 +81,7 @@ namespace chemistrecipe.scene
                         GameObject courseButton = (GameObject)Instantiate(prefab, CourseListGrid.transform);
                         courseButton.GetComponent<CourseButtonScript>().data = data;
                         courseButton.GetComponentInChildren<Text>().text = data.name;
+                        markerURL = data.url.marker;
                         courseButton.GetComponent<Button>().onClick.AddListener(() =>
                         {
                             SelectedCourse = data;
@@ -174,15 +176,15 @@ namespace chemistrecipe.scene
             SelectCoursePanel.SetActive(false);
 
             SelectedCourse = null;
-            courseImage.overrideSprite = Resources.Load<Sprite>("Sprites/color_background");
+            courseImage.overrideSprite = Resources.Load<Sprite>("Sprites/color_background2");
         }
 
         // Click by download button
         public void OnClickDownload()
         {
             string url = "https://firebasestorage.googleapis.com/v0/b/chemresipe.appspot.com/o/Marker%2FMarker-course1.pdf?alt=media&token=ef874247-eb59-4c7e-8a3e-68d448349153";
-            Application.OpenURL(url);
-            Debug.Log("Downloading url");
+            
+            Application.OpenURL(markerURL);
         }
 
         public void OnClickTutorial()
