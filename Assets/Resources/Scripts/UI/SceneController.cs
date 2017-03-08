@@ -18,6 +18,7 @@ namespace ChemistRecipe.UI
         public Canvas SidebarMenuCanvas;
         public Canvas CheckListCanvas;
         public Canvas DebugCanvas;
+        public Canvas TutorialCanvas;
 
         [Header("Play Overlay")]
         public Image Cursor;
@@ -53,6 +54,7 @@ namespace ChemistRecipe.UI
             // Default hide sidebar canvas
             SidebarMenuCanvas.enabled = false;
             CheckListCanvas.enabled = false;
+            TutorialCanvas.enabled = false;
 
             // Disable Stir & Finish Course Button
             StirButton.gameObject.SetActive(false);
@@ -76,6 +78,7 @@ namespace ChemistRecipe.UI
 
             // Sidebar Menu
             ResumeButton.onClick.AddListener(HideAllSidebar);
+            InstructionButton.onClick.AddListener(ShowTutorial);
             CheckListButton.onClick.AddListener(ShowCheckList);
             RestartButton.onClick.AddListener(HideAllSidebar);
             RestartButton.onClick.AddListener(courseBehaviour.RestartCourse);
@@ -162,6 +165,10 @@ namespace ChemistRecipe.UI
             EquipmentDetailText.text = "  ";
             EquipmentDetailText.text = " ";
         }
-        
+
+        public void ShowTutorial() {
+            HideAllCanvas();
+            TutorialCanvas.enabled = true;
+        }
     }
 }

@@ -61,6 +61,4 @@ public class Slide : MonoBehaviour {
         }
         slider.GetComponent<Image>().sprite = imageList[index];
     }
-
-
 }
