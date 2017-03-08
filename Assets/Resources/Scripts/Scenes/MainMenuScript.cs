@@ -27,7 +27,8 @@ namespace chemistrecipe.scene
         public GameObject CourseListGrid;
         public GameObject StarLevel;
         public GameObject PrintButton;
-        
+        public GameObject ProfilePanel;
+
         public GameObject TextScore;
         public GameObject TextCourseName;
         public GameObject TextCourseDescription;
@@ -127,14 +128,16 @@ namespace chemistrecipe.scene
         {
             if(SelectedCourse != null)
             {
+                ProfilePanel.SetActive(false);
                 StarLevel.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponentInChildren<Text>().enabled = true;
                 PrintButton.GetComponent<Button>().interactable = true;
-                TutorialButton.interactable = true;
+                TutorialButton.GetComponent<Image>().enabled = true;
+                TutorialButton.GetComponentInChildren<Text>().enabled = true;
+                TutorialButton.GetComponent<Button>().interactable = true;
                 TextScore.GetComponent<Text>().enabled = true;
                 TextCourseName.GetComponent<Text>().enabled = true;
-
                 TextCourseName.GetComponent<Text>().text = SelectedCourse.name;
                 TextCourseDescription.GetComponent<Text>().text = SelectedCourse.description;
 
@@ -142,15 +145,18 @@ namespace chemistrecipe.scene
             }
             else
             {
+                ProfilePanel.SetActive(true);
                 StarLevel.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponentInChildren<Text>().enabled = false;
-                TutorialButton.interactable = false;
                 PrintButton.GetComponent<Button>().interactable = false;
+                TutorialButton.GetComponent<Image>().enabled = false;
+                TutorialButton.GetComponentInChildren<Text>().enabled = false;
+                TutorialButton.GetComponent<Button>().interactable = false;
                 TextScore.GetComponent<Text>().enabled = false;
                 TextCourseName.GetComponent<Text>().enabled = false;
-
                 TextCourseDescription.GetComponent<Text>().text = defaulDescription;
+                
             }
         }
 
@@ -159,7 +165,6 @@ namespace chemistrecipe.scene
         {
             MainMenuPanel.SetActive(false);
             SelectCoursePanel.SetActive(true);
-
             updateSelectedCourse();
         }
 
@@ -203,6 +208,24 @@ namespace chemistrecipe.scene
             {
                 SceneManager.LoadScene(1);
             }
+        }
+
+        public void OnclickLogo()
+        {
+            SelectedCourse = null;
+            ProfilePanel.SetActive(true);
+            courseImage.overrideSprite = Resources.Load<Sprite>("Textures/color_background2");
+            StarLevel.GetComponent<Image>().enabled = false;
+            PrintButton.GetComponent<Image>().enabled = false;
+            PrintButton.GetComponentInChildren<Text>().enabled = false;
+            PrintButton.GetComponent<Button>().interactable = false;
+            TutorialButton.GetComponent<Image>().enabled = false;
+            TutorialButton.GetComponentInChildren<Text>().enabled = false;
+            TutorialButton.GetComponent<Button>().interactable = false;
+            TextScore.GetComponent<Text>().enabled = false;
+            TextCourseName.GetComponent<Text>().enabled = false;
+            TextCourseDescription.GetComponent<Text>().text = defaulDescription;
+            
         }
     }
 }
