@@ -38,6 +38,12 @@ namespace chemistrecipe.scene
         [Header("Course Image")]
         public Image courseImage;
 
+        [Header("Course Image")]
+        public Text playerName;
+        public Text playerAlias;
+        public Text playerLevel;
+        public Image playerAvatar;
+
         // Constant
         private Course SelectedCourse;
         private string defaulDescription;
@@ -50,6 +56,12 @@ namespace chemistrecipe.scene
         {
             // Get global object
             _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+
+            //setup player profile
+            playerName.text = _Global.playerName;
+            playerAlias.text = _Global.playerAlias;
+            playerLevel.text = _Global.playerLevel;
+            playerAvatar.sprite = _Global.playerAvatar;
 
             // Load CourseButton Prefab
             Object prefab = Resources.Load("Prefabs/UI/CourseButton");
