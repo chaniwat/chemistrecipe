@@ -148,10 +148,11 @@ namespace ChemistRecipe.Experiment
 
                     // Init 2 gameObject (TextMesh & HighlightPlane)
                     TextMesh tmObject = Instantiate(textMeshTemplate, tb.gameObject.transform);
-                    //GameObject highlightPlane = Instantiate(highlightPlaneTemplate, tb.gameObject.transform);
+                    GameObject highlightPlane = Instantiate(highlightPlaneTemplate, tb.gameObject.transform);
+                    highlightPlane.GetComponent<MeshRenderer>().enabled = false;
 
                     ti.textMesh = tmObject;
-                    //ti.HighlightPlaneObject = highlightPlane;
+                    ti.HighlightPlaneObject = highlightPlane;
 
                     // Set specific center tracker
                     if (tb.TrackableName == CourseScript.baseTrackerName)

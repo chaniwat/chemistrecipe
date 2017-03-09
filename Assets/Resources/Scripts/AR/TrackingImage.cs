@@ -118,6 +118,9 @@ namespace ChemistRecipe.AR
 
         #endregion
 
+        private bool highlightFlag = false;
+        private bool changeStateTracking = false;
+
         void Update()
         {
             if (tracking)
@@ -145,6 +148,31 @@ namespace ChemistRecipe.AR
                 }
 
                 textMesh.text = updateBuffer;
+
+                #endregion
+
+                #region update hightlighttext
+
+                if(tracking)
+                {
+                    Debug.Log("fired " + gameObject.name);
+                    if (((FillableEquipment)attachObject).highlighting && !highlightFlag)
+                    {
+                        HighlightPlaneObject.GetComponent<MeshRenderer>().enabled = true;
+                        highlightFlag = true;
+                    }
+                    else if (!((FillableEquipment)attachObject).highlighting && highlightFlag)
+                    {
+                        HighlightPlaneObject.GetComponent<MeshRenderer>().enabled = false;
+                        highlightFlag = false;
+                    }
+                }
+                else
+                {
+                    HighlightPlaneObject.GetComponent<MeshRenderer>().enabled = false;
+                    highlightFlag = false;    
+                }
+                
 
                 #endregion
 
@@ -202,6 +230,12 @@ namespace ChemistRecipe.AR
                     continue;
                 }
 
+                // Skipping HighlightPlane
+                if (attachObject && component.gameObject == HighlightPlaneObject)
+                {
+                    continue;
+                }
+
                 component.enabled = toggleTo;
             }
 
@@ -210,6 +244,12 @@ namespace ChemistRecipe.AR
             {
                 // Skipping Particle System
                 if (attachObject && component.gameObject.GetComponent<ParticleSystem>())
+                {
+                    continue;
+                }
+
+                // Skipping HighlightPlane
+                if (attachObject && component.gameObject == HighlightPlaneObject)
                 {
                     continue;
                 }

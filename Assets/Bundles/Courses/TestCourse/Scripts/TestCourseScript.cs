@@ -23,6 +23,9 @@ public class TestCourseScript : CourseScript
         FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false,
         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
 
+    // Equipments
+    private FillableEquipment beakerWater, plateSodiumHydroxide, bottleCoconutOil;
+
     protected override void SetupCoruse()
     {
         List<string> equipmentNames = new List<string>(new string[]{ "Beaker_Water", "Plate_Sodium_Hydroxide", "Bottle_Coconut_Oil" });
@@ -40,6 +43,10 @@ public class TestCourseScript : CourseScript
                 stirEquipment(equipment);
             };
         }
+
+        beakerWater = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
+        plateSodiumHydroxide = (FillableEquipment)GetEquipmentByObjectName("Plate_Sodium_Hydroxide");
+        bottleCoconutOil = (FillableEquipment)GetEquipmentByObjectName("Bottle_Coconut_Oil");
 
         //courseBehaviour.sceneController.ShowFinishButton();
     }
@@ -121,6 +128,10 @@ public class TestCourseScript : CourseScript
 
         // TODO Highlight Equipment by instruction message
 
+        beakerWater.highlighting = false;
+        plateSodiumHydroxide.highlighting = false;
+        bottleCoconutOil.highlighting = false;
+
         if (!finishing)
         {
             FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
@@ -145,6 +156,8 @@ public class TestCourseScript : CourseScript
                 {
                     FILL_SODIUM_HYDROXIDE_TO_WATER = true;
                 }
+
+                plateSodiumHydroxide.highlighting = true;
             }
             else if (!MIX_SODIUM_HYDROXIDE_TO_WATER)
             {
@@ -160,6 +173,8 @@ public class TestCourseScript : CourseScript
                         MIX_SODIUM_HYDROXIDE_TO_WATER = true;
                     }
                 }
+
+                beakerWater.highlighting = true;
             }
             else if (!FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
@@ -172,6 +187,8 @@ public class TestCourseScript : CourseScript
                     
                     FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
                 }
+
+                bottleCoconutOil.highlighting = true;
             }
             else if (!MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
@@ -188,6 +205,8 @@ public class TestCourseScript : CourseScript
                         courseBehaviour.sceneController.ShowFinishButton();
                     }
                 }
+
+                beakerWater.highlighting = true;
             }
             else
             {
