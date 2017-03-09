@@ -79,25 +79,28 @@ public class TestCourseScript : CourseScript
         }
 
         Volume soapLiquidVol = ((FillableEquipment)GetEquipmentByObjectName("Beaker_Water")).GetVolumeOfMaterial(SOAP_LIQUID);
-        if (soapLiquidVol.volume >= 20 && soapLiquidVol.volume < 50)
+        if (soapLiquidVol != null)
         {
-            courseBehaviour.globalObject.gameResult.data.score += 6;
-        }
-        else if (soapLiquidVol.volume >= 50 && soapLiquidVol.volume < 100)
-        {
-            courseBehaviour.globalObject.gameResult.data.score += 12;
-        }
-        else if (soapLiquidVol.volume >= 100 && soapLiquidVol.volume < 200)
-        {
-            courseBehaviour.globalObject.gameResult.data.score += 16;
-        }
-        else if (soapLiquidVol.volume >= 200 && soapLiquidVol.volume < 400)
-        {
-            courseBehaviour.globalObject.gameResult.data.score += 23;
-        }
-        else if (soapLiquidVol.volume >= 400)
-        {
-            courseBehaviour.globalObject.gameResult.data.score += 30;
+            if (soapLiquidVol.volume >= 20 && soapLiquidVol.volume < 50)
+            {
+                courseBehaviour.globalObject.gameResult.data.score += 6;
+            }
+            else if (soapLiquidVol.volume >= 50 && soapLiquidVol.volume < 100)
+            {
+                courseBehaviour.globalObject.gameResult.data.score += 12;
+            }
+            else if (soapLiquidVol.volume >= 100 && soapLiquidVol.volume < 200)
+            {
+                courseBehaviour.globalObject.gameResult.data.score += 16;
+            }
+            else if (soapLiquidVol.volume >= 200 && soapLiquidVol.volume < 400)
+            {
+                courseBehaviour.globalObject.gameResult.data.score += 23;
+            }
+            else if (soapLiquidVol.volume >= 400)
+            {
+                courseBehaviour.globalObject.gameResult.data.score += 30;
+            }
         }
 
         courseBehaviour.globalObject.gameResult.data.time = (int)(courseBehaviour.currentCourseTime);
@@ -229,6 +232,10 @@ public class TestCourseScript : CourseScript
                 SceneManager.LoadScene(2);
             }
         }
+    }
+
+    public void ForceFinishCourse() {
+        FinishCourse();
     }
 
     protected override void FailCourse()

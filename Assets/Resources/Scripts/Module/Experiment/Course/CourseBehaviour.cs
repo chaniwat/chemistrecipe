@@ -225,8 +225,8 @@ namespace ChemistRecipe.Experiment
             _Global.gameResult = new GameResult();
             _Global.gameResult.courseId = "090e0932aa78714276b66dd521019777";
             //_Global.gameResult.uID = CalculateMD5Hash(new DateTime().Millisecond.ToString());
-            _Global.gameResult.uID = "uid1";
-            _Global.gameResult.data = new Score("User", 0, 0);
+            _Global.gameResult.uID = _Global.playerUid;
+            _Global.gameResult.data = new Score(_Global.playerName, 0, 0);
 
             _Global.isHighScore = false;
             _Global.isFastestTime = false;
@@ -399,8 +399,18 @@ namespace ChemistRecipe.Experiment
                 {
                     if (task.IsFaulted)
                     {
-                    // Handle the error... (no internet?)
-                    Debug.LogError("Firebase : Something Wrong");
+                        // Handle the error... (no internet?)
+                        Debug.LogError("Firebase : Something Wrong");
+                    }
+                    else if (task.Result.ChildrenCount == 0)
+                    {
+                        Debug.Log("No data to compare");
+                        Debug.Log("CourseId = " + gameResult.courseId + " uID = " + gameResult.uID);
+                        FirebaseDatabase.DefaultInstance.GetReference("courses")
+                            .Child(gameResult.courseId)
+                            .Child("scores")
+                            .Child(gameResult.uID)
+                            .SetRawJsonValueAsync(JsonConvert.SerializeObject(gameResult.data));
                     }
                     else if (task.IsCompleted)
                     {
@@ -434,6 +444,7 @@ namespace ChemistRecipe.Experiment
                             .Child(forUpdate.uID)
                             .SetRawJsonValueAsync(JsonConvert.SerializeObject(forUpdate.data));
                     }
+                    
                 });
         }
 

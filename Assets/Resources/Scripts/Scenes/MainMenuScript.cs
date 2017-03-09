@@ -27,15 +27,31 @@ namespace chemistrecipe.scene
         public GameObject CourseListGrid;
         public GameObject StarLevel;
         public GameObject PrintButton;
-        
+        public GameObject ProfilePanel;
+
         public GameObject TextScore;
         public GameObject TextCourseName;
         public GameObject TextCourseDescription;
         public Button TutorialButton;
         public Button PlayButton;
 
+        [Header("Setting")]
+        public GameObject SettingPanel;
+        public Button confirmSetting;
+        public InputField playerNameInput;
+        public InputField playerAliasInput;
+        public InputField playerUidInput;
+        public Slider effectVolume;
+        public Slider musicVolume;
+
         [Header("Course Image")]
         public Image courseImage;
+
+        [Header("Course Image")]
+        public Text playerName;
+        public Text playerAlias;
+        public Text playerLevel;
+        public Image playerAvatar;
 
         // Constant
         private Course SelectedCourse;
@@ -49,6 +65,12 @@ namespace chemistrecipe.scene
         {
             // Get global object
             _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
+
+            //setup player profile
+            playerName.text = _Global.playerName;
+            playerAlias.text = _Global.playerAlias;
+            playerLevel.text = _Global.playerLevel;
+            playerAvatar.sprite = _Global.playerAvatar;
 
             // Load CourseButton Prefab
             Object prefab = Resources.Load("Prefabs/UI/CourseButton");
@@ -94,6 +116,7 @@ namespace chemistrecipe.scene
 
             // Get default description
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
+            
         }
 
         private bool changeOpenTutorialState = false;
@@ -127,14 +150,16 @@ namespace chemistrecipe.scene
         {
             if(SelectedCourse != null)
             {
+                ProfilePanel.SetActive(false);
                 StarLevel.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponent<Image>().enabled = true;
                 PrintButton.GetComponentInChildren<Text>().enabled = true;
                 PrintButton.GetComponent<Button>().interactable = true;
-                TutorialButton.interactable = true;
+                TutorialButton.GetComponent<Image>().enabled = true;
+                TutorialButton.GetComponentInChildren<Text>().enabled = true;
+                TutorialButton.GetComponent<Button>().interactable = true;
                 TextScore.GetComponent<Text>().enabled = true;
                 TextCourseName.GetComponent<Text>().enabled = true;
-
                 TextCourseName.GetComponent<Text>().text = SelectedCourse.name;
                 TextCourseDescription.GetComponent<Text>().text = SelectedCourse.description;
 
@@ -142,15 +167,18 @@ namespace chemistrecipe.scene
             }
             else
             {
+                ProfilePanel.SetActive(true);
                 StarLevel.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponent<Image>().enabled = false;
                 PrintButton.GetComponentInChildren<Text>().enabled = false;
-                TutorialButton.interactable = false;
                 PrintButton.GetComponent<Button>().interactable = false;
+                TutorialButton.GetComponent<Image>().enabled = false;
+                TutorialButton.GetComponentInChildren<Text>().enabled = false;
+                TutorialButton.GetComponent<Button>().interactable = false;
                 TextScore.GetComponent<Text>().enabled = false;
                 TextCourseName.GetComponent<Text>().enabled = false;
-
                 TextCourseDescription.GetComponent<Text>().text = defaulDescription;
+                
             }
         }
 
@@ -159,7 +187,6 @@ namespace chemistrecipe.scene
         {
             MainMenuPanel.SetActive(false);
             SelectCoursePanel.SetActive(true);
-
             updateSelectedCourse();
         }
 
@@ -204,5 +231,74 @@ namespace chemistrecipe.scene
                 SceneManager.LoadScene(1);
             }
         }
+
+        //Click logo in select course panel
+        public void OnclickLogo()
+        {
+            SelectedCourse = null;
+            ProfilePanel.SetActive(true);
+            courseImage.overrideSprite = Resources.Load<Sprite>("Textures/color_background2");
+            StarLevel.GetComponent<Image>().enabled = false;
+            PrintButton.GetComponent<Image>().enabled = false;
+            PrintButton.GetComponentInChildren<Text>().enabled = false;
+            PrintButton.GetComponent<Button>().interactable = false;
+            TutorialButton.GetComponent<Image>().enabled = false;
+            TutorialButton.GetComponentInChildren<Text>().enabled = false;
+            TutorialButton.GetComponent<Button>().interactable = false;
+            TextScore.GetComponent<Text>().enabled = false;
+            TextCourseName.GetComponent<Text>().enabled = false;
+            TextCourseDescription.GetComponent<Text>().text = defaulDescription;
+            
+        }
+
+        public void OnclickSetting() {
+
+            SettingPanel.SetActive(true);
+            
+            playerNameInput.GetComponentInChildren<Text>().text = _Global.playerName;
+            playerAliasInput.GetComponentInChildren<Text>().text = _Global.playerAlias;
+            playerUidInput.GetComponentInChildren<Text>().text = _Global.playerUid;
+
+            // Add listener to inputfield
+            playerNameInput.onEndEdit.AddListener(SubmitPlayerName);
+            playerAliasInput.onEndEdit.AddListener(SubmitPlayerAlias);
+            playerUidInput.onEndEdit.AddListener(SubmitPlayerUid);
+
+            MainMenuPanel.SetActive(false);
+        }
+
+        public void OnclickConfirmSetting() {
+
+            SettingPanel.SetActive(false);
+            
+            /*
+            _Global.playerName = playerNameInput.transform.Find("Text").GetComponent<Text>().text;
+            _Global.playerAlias = playerAliasInput.transform.Find("Text").GetComponent<Text>().text;
+            _Global.playerUid = playerUidInput.transform.Find("Text").GetComponent<Text>().text;
+            */
+            
+            playerName.text = _Global.playerName;
+            playerAlias.text = _Global.playerAlias;
+            playerLevel.text = _Global.playerLevel;
+            playerAvatar.sprite = _Global.playerAvatar;
+
+            MainMenuPanel.SetActive(true);
+        }
+
+        public void SubmitPlayerName(string name) {
+            _Global.playerName = name;
+            Debug.Log("Saved name \" " + _Global.playerName + " \"");
+        }
+
+        public void SubmitPlayerAlias(string alias)
+        {
+            _Global.playerAlias = alias;
+        }
+
+        public void SubmitPlayerUid(string uid)
+        {
+            _Global.playerUid = uid;
+        }
+
     }
 }

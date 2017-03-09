@@ -15,6 +15,12 @@ public class GlobalObject : MonoBehaviour {
     public bool isHighScore = false;
     public bool isFastestTime = false;
 
+    public string playerUid;
+    public string playerName;
+    public string playerAlias;
+    public string playerLevel;
+    public Sprite playerAvatar;
+
     public static GlobalObject instance;
 
     // Called when object is loaded (before start)
@@ -30,5 +36,6 @@ public class GlobalObject : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+    
 
 }
