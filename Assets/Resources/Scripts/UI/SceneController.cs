@@ -67,6 +67,7 @@ namespace ChemistRecipe.UI
             MenuButton.onClick.AddListener(ShowSidebarMenu);
             StirButton.onClick.AddListener(() =>
             {
+                Vibration.Vibrate(50);
                 if (currentHitEquipment != null)
                 {
                     currentHitEquipment.Stir();
