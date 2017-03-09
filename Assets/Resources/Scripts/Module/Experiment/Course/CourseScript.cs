@@ -79,6 +79,11 @@ namespace ChemistRecipe.Experiment
             FinishCourse();
         }
 
+        public void fail()
+        {
+            FailCourse();
+        }
+
         #endregion
 
         /// <summary>
@@ -197,6 +202,7 @@ namespace ChemistRecipe.Experiment
         protected abstract void UpdateCoruse();
         protected abstract void RestartCoruse();
         protected abstract void FinishCourse();
+        protected abstract void FailCourse();
 
         // TODO register raycasting camera hit gameObject handler
 

@@ -155,7 +155,6 @@ namespace ChemistRecipe.AR
 
                 if(tracking)
                 {
-                    Debug.Log("fired " + gameObject.name);
                     if (((FillableEquipment)attachObject).highlighting && !highlightFlag)
                     {
                         HighlightPlaneObject.GetComponent<MeshRenderer>().enabled = true;
@@ -260,7 +259,7 @@ namespace ChemistRecipe.AR
             // Toggle enable flowing
             if (attachObject)
             {
-                attachObject.GetComponent<FillableEquipment>().enableFlow = toggleTo;
+                attachObject.GetComponent<FillableEquipment>().canFlow = toggleTo;
             }
         }
 

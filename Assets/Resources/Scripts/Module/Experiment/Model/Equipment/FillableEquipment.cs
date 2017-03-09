@@ -86,6 +86,7 @@ namespace ChemistRecipe.Experiment
         [Tooltip("Particle System for generate water flow")]
         public ParticleSystem liquidParticleSystem;
         [Tooltip("Can it flow?")]
+        public bool canFlow = true;
         public bool enableFlow = true;
         [Tooltip("How to visual object flow?")]
         public FlowType flowType = FlowType.LIQUID;
@@ -115,7 +116,7 @@ namespace ChemistRecipe.Experiment
                 }
                 else
                 {
-                    if (BaseAxisY <= minSpeedFlowAtY && enableFlow)
+                    if (BaseAxisY <= minSpeedFlowAtY && (canFlow && enableFlow))
                     {
                         return true;
                     }

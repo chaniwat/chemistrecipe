@@ -44,6 +44,15 @@ namespace ChemistRecipe.Experiment
             }
         }
 
+        private bool _isFailState = false;
+        public bool isFailState
+        {
+            get
+            {
+                return _isFailState;
+            }
+        }
+
         #region Vuforia variables
 
         // AR Controller
@@ -258,13 +267,16 @@ namespace ChemistRecipe.Experiment
 
             if (!ChemistRecipeApp.isPlaying) return;
 
-            runTimer += Time.deltaTime;
+            if (!isFailState)
+            {
+                runTimer += Time.deltaTime;
 
-            int minute = (int)(runTimer / 60);
-            float second = runTimer - (minute * 60);
-            timerText.text = minute.ToString("00") + "." + second.ToString("00.00");
+                int minute = (int)(runTimer / 60);
+                float second = runTimer - (minute * 60);
+                timerText.text = minute.ToString("00") + "." + second.ToString("00.00");
 
-            CourseScript.update();
+                CourseScript.update();
+            }
 
             // Ray casting at cursor
             Ray ray = playCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
@@ -345,6 +357,7 @@ namespace ChemistRecipe.Experiment
         public void RestartCourse()
         {
             runTimer = 0;
+            _isFailState = false;
             CourseScript.restart();
         }
 
@@ -362,6 +375,15 @@ namespace ChemistRecipe.Experiment
         public void StopCourse()
         {
             SceneManager.LoadScene(0);
+        }
+
+        /// <summary>
+        /// Fail the course (need to restart | incorrect step)
+        /// </summary>
+        public void FailCourse()
+        {
+            _isFailState = true;
+            CourseScript.fail();
         }
 
         /// <summary>

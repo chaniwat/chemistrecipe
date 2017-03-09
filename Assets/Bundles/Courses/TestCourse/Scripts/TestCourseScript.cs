@@ -42,6 +42,10 @@ public class TestCourseScript : CourseScript
             {
                 stirEquipment(equipment);
             };
+            equipment.OnAfterFill = (material, volume) =>
+            {
+                afterFillEquipment(equipment, material, volume);
+            };
         }
 
         beakerWater = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
@@ -117,6 +121,10 @@ public class TestCourseScript : CourseScript
         FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
 
+        beakerWater.enableFlow = true;
+        plateSodiumHydroxide.enableFlow = true;
+        bottleCoconutOil.enableFlow = true;
+
         // Reset color
         FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         equipment.particleColor = new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f);
@@ -125,8 +133,6 @@ public class TestCourseScript : CourseScript
     protected override void UpdateCoruse()
     {
         #region Checkpoint
-
-        // TODO Highlight Equipment by instruction message
 
         beakerWater.highlighting = false;
         plateSodiumHydroxide.highlighting = false;
@@ -223,6 +229,17 @@ public class TestCourseScript : CourseScript
                 SceneManager.LoadScene(2);
             }
         }
+    }
+
+    protected override void FailCourse()
+    {
+        beakerWater.enableFlow = false;
+        plateSodiumHydroxide.enableFlow = false;
+        bottleCoconutOil.enableFlow = false;
+
+        // TODO Show UI (Instruction Message & restart btn + back to main menu)
+
+        courseBehaviour.sceneController.ChangeInstructionMessage("การทดลองล้มเหลว");
     }
 
     #region Handle event
@@ -407,6 +424,19 @@ public class TestCourseScript : CourseScript
                 vol.volume += reduceVol;
                 vol.tempature -= 0.003f;
             }
+        }
+
+        #endregion
+    }
+
+    private void afterFillEquipment(FillableEquipment equipment, ChemistRecipe.Experiment.Material fillMaterial, Volume fillVol)
+    {
+        // TODO if Water + Coconut Oil and not have Water + Sodium Hydroxide
+
+        #region If have Water and Coconut Oil but not contain Water + Sodium Hydroxide, fail the course
+        if (equipment.ContainMaterial(WATER) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && fillMaterial.name == COCONUT_OIL)
+        {
+            courseBehaviour.FailCourse();
         }
 
         #endregion
