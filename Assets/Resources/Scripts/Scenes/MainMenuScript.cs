@@ -35,6 +35,15 @@ namespace chemistrecipe.scene
         public Button TutorialButton;
         public Button PlayButton;
 
+        [Header("Setting")]
+        public GameObject SettingPanel;
+        public Button confirmSetting;
+        public InputField playerNameInput;
+        public InputField playerAliasInput;
+        public InputField playerUidInput;
+        public Slider effectVolume;
+        public Slider musicVolume;
+
         [Header("Course Image")]
         public Image courseImage;
 
@@ -107,6 +116,7 @@ namespace chemistrecipe.scene
 
             // Get default description
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
+            
         }
 
         private bool changeOpenTutorialState = false;
@@ -222,6 +232,7 @@ namespace chemistrecipe.scene
             }
         }
 
+        //Click logo in select course panel
         public void OnclickLogo()
         {
             SelectedCourse = null;
@@ -239,5 +250,55 @@ namespace chemistrecipe.scene
             TextCourseDescription.GetComponent<Text>().text = defaulDescription;
             
         }
+
+        public void OnclickSetting() {
+
+            SettingPanel.SetActive(true);
+            
+            playerNameInput.GetComponentInChildren<Text>().text = _Global.playerName;
+            playerAliasInput.GetComponentInChildren<Text>().text = _Global.playerAlias;
+            playerUidInput.GetComponentInChildren<Text>().text = _Global.playerUid;
+
+            // Add listener to inputfield
+            playerNameInput.onEndEdit.AddListener(SubmitPlayerName);
+            playerAliasInput.onEndEdit.AddListener(SubmitPlayerAlias);
+            playerUidInput.onEndEdit.AddListener(SubmitPlayerUid);
+
+            MainMenuPanel.SetActive(false);
+        }
+
+        public void OnclickConfirmSetting() {
+
+            SettingPanel.SetActive(false);
+            
+            /*
+            _Global.playerName = playerNameInput.transform.Find("Text").GetComponent<Text>().text;
+            _Global.playerAlias = playerAliasInput.transform.Find("Text").GetComponent<Text>().text;
+            _Global.playerUid = playerUidInput.transform.Find("Text").GetComponent<Text>().text;
+            */
+            
+            playerName.text = _Global.playerName;
+            playerAlias.text = _Global.playerAlias;
+            playerLevel.text = _Global.playerLevel;
+            playerAvatar.sprite = _Global.playerAvatar;
+
+            MainMenuPanel.SetActive(true);
+        }
+
+        public void SubmitPlayerName(string name) {
+            _Global.playerName = name;
+            Debug.Log("Saved name \" " + _Global.playerName + " \"");
+        }
+
+        public void SubmitPlayerAlias(string alias)
+        {
+            _Global.playerAlias = alias;
+        }
+
+        public void SubmitPlayerUid(string uid)
+        {
+            _Global.playerUid = uid;
+        }
+
     }
 }

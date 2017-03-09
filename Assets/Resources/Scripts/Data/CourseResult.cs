@@ -45,13 +45,16 @@ public class CourseResult : MonoBehaviour {
 
     void showResult()
     {
-        if(_Global.isHighScore)
+        if (_Global.isHighScore)
         {
             resultTextMessage.GetComponent<Text>().text = "You made new Highscore!";
         }
-        else if(_Global.isFastestTime)
+        else if (_Global.isFastestTime)
         {
             resultTextMessage.GetComponent<Text>().text = "New best time record!";
+        }
+        else {
+            resultTextMessage.GetComponent<Text>().text = "";
         }
 
         scoreText.GetComponent<Text>().text = gameResult.data.score + " / 100";
@@ -155,7 +158,7 @@ public class CourseResult : MonoBehaviour {
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    long playerPosition = -1;
+                    long playerPosition = 0;
                     foreach (var child in snapshot.Children) {
                         playerPosition++;
                         Score data = JsonConvert.DeserializeObject<Score>(child.GetRawJsonValue());
@@ -164,7 +167,8 @@ public class CourseResult : MonoBehaviour {
                             break;
                         }
                     }
-                    ranknumber = (snapshot.ChildrenCount - playerPosition).ToString();
+                    //ranknumber = (snapshot.ChildrenCount - playerPosition).ToString();
+                    ranknumber = playerPosition.ToString();
                     rankText.GetComponent<Text>().text = ranknumber;
                 }
             });
