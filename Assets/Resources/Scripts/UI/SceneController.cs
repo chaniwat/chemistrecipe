@@ -55,6 +55,14 @@ namespace ChemistRecipe.UI
             SetupUI();
         }
 
+        private string updateInstructionText = "";
+        private string updateEquipmentText = "";
+        private string updateFailText = "";
+
+        private bool forceUpdateInstruction = false;
+        private bool forceUpdateEquipmentDetail = false;
+        private bool forceUpdateFailDetail = false;
+
         public void Update()
         {
             if(isHoldStirButton)
@@ -70,6 +78,24 @@ namespace ChemistRecipe.UI
             else
             {
                 accumulateHoldingStirButton = 0f;
+            }
+
+            if(forceUpdateInstruction)
+            {
+                InstructionText.text = updateInstructionText + " ";
+                forceUpdateInstruction = false;
+            }
+
+            if(forceUpdateEquipmentDetail)
+            {
+                EquipmentDetailText.text = updateEquipmentText + " ";
+                forceUpdateEquipmentDetail = false;
+            }
+
+            if(forceUpdateFailDetail)
+            {
+                FailDetailText.text = updateFailText + " ";
+                forceUpdateFailDetail = false;
             }
         }
 
@@ -176,9 +202,10 @@ namespace ChemistRecipe.UI
 
         public void ChangeInstructionMessage(string text)
         {
-            InstructionText.text = "  ";
             InstructionText.text = text;
-            InstructionText.text = text + " ";
+
+            forceUpdateInstruction = true;
+            updateInstructionText = text;
         }
 
         public void ShowEquipmentDetail(string text)
@@ -187,7 +214,9 @@ namespace ChemistRecipe.UI
             EquipmentDetailText.GetComponentInParent<Image>().enabled = true;
 
             EquipmentDetailText.text = text;
-            EquipmentDetailText.text = text + " ";
+
+            forceUpdateEquipmentDetail = true;
+            updateEquipmentText = text;
         }
 
         public void HideEquipmentDetail()
@@ -195,8 +224,10 @@ namespace ChemistRecipe.UI
             EquipmentDetailText.enabled = false;
             EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
 
-            EquipmentDetailText.text = "  ";
             EquipmentDetailText.text = " ";
+
+            forceUpdateEquipmentDetail = true;
+            updateEquipmentText = " ";
         }
 
         public void ShowFailDetail(string text)
@@ -205,7 +236,9 @@ namespace ChemistRecipe.UI
             FailDetailText.GetComponentInParent<Image>().enabled = true;
 
             FailDetailText.text = text;
-            FailDetailText.text = text + " ";
+
+            forceUpdateFailDetail = true;
+            updateFailText = text;
         }
 
         public void HideFailDetail()
@@ -213,8 +246,10 @@ namespace ChemistRecipe.UI
             FailDetailText.enabled = false;
             FailDetailText.GetComponentInParent<Image>().enabled = false;
 
-            FailDetailText.text = "  ";
             FailDetailText.text = " ";
+
+            forceUpdateFailDetail = true;
+            updateFailText = " ";
         }
 
         public void ShowTutorial() {
