@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using ChemistRecipe.AR;
 
 public class TestCourseScript : CourseScript
 {
@@ -67,6 +68,13 @@ public class TestCourseScript : CourseScript
     {
         courseBehaviour.sceneController.HideAllCanvas();
         courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
+
+        // Disable highlights and Text
+        foreach (TrackingImage ti in courseBehaviour.trackers.Values)
+        {
+            ti.enableTextMesh = false;
+            ti.enableHighlightPlane = false;
+        }
 
         // For Check :3
         //courseBehaviour.globalObject.gameResult.data.score = new System.Random().Next(0, 100);
@@ -133,10 +141,14 @@ public class TestCourseScript : CourseScript
         plateSodiumHydroxide.enableFlow = true;
         bottleCoconutOil.enableFlow = true;
 
+        updateInstruction = false;
+
         // Reset color
         FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         equipment.particleColor = new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f);
     }
+
+    private bool updateInstruction = false;
 
     protected override void UpdateCoruse()
     {
@@ -163,7 +175,11 @@ public class TestCourseScript : CourseScript
 
             if (!FILL_SODIUM_HYDROXIDE_TO_WATER)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+                if(!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+                    updateInstruction = true;
+                }                
 
                 if (!plateSodiumHydroxide.ContainMaterial(SODIUM_HYDROXIDE))
                 {
@@ -175,6 +191,7 @@ public class TestCourseScript : CourseScript
                     else if(equipment.ContainMaterial(SODIUM_HYDROXIDE) && accumulateFillSodiumHydroxide >= 15f)
                     {
                         FILL_SODIUM_HYDROXIDE_TO_WATER = true;
+                        updateInstruction = false;
                     }
                     else
                     {
@@ -186,19 +203,28 @@ public class TestCourseScript : CourseScript
             }
             else if (!MIX_SODIUM_HYDROXIDE_TO_WATER)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                    updateInstruction = true;
+                }
 
                 // Check contain & volume
                 if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && !equipment.ContainMaterial(SODIUM_HYDROXIDE) && !equipment.ContainMaterial(WATER))
                 {
                     MIX_SODIUM_HYDROXIDE_TO_WATER = true;
+                    updateInstruction = false;
                 }
 
                 beakerWater.highlighting = true;
             }
             else if (!FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทน้ำมันมะพร้าว");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทน้ำมันมะพร้าว");
+                    updateInstruction = true;
+                }
 
                 if (!bottleCoconutOil.ContainMaterial(COCONUT_OIL))
                 {
@@ -210,6 +236,7 @@ public class TestCourseScript : CourseScript
                     else if (equipment.ContainMaterial(COCONUT_OIL) && accumulateFillCoconutOil >= 100f)
                     {
                         FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                        updateInstruction = false;
                     }
                     else
                     {
@@ -221,12 +248,17 @@ public class TestCourseScript : CourseScript
             }
             else if (!MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                    updateInstruction = true;
+                }
 
                 // Check contain and volume
                 if (equipment.ContainMaterial(SOAP_LIQUID) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && !equipment.ContainMaterial(COCONUT_OIL))
                 {
                     MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                    updateInstruction = false;
                     courseBehaviour.sceneController.ShowFinishButton();
                 }
 
@@ -234,7 +266,11 @@ public class TestCourseScript : CourseScript
             }
             else
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage("หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+                    updateInstruction = true;
+                }
 
                 beakerWater.highlighting = true;
             }
@@ -374,7 +410,7 @@ public class TestCourseScript : CourseScript
         {
             // Check Tempature (if below 33c, return)
             Volume MWSH_vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            if (MWSH_vol.tempature < 33f)
+            if (MWSH_vol.tempature < 35f)
             {
                 return;
             }
@@ -385,13 +421,13 @@ public class TestCourseScript : CourseScript
                 equipment.Fill(new ChemistRecipe.Experiment.Material(SOAP_LIQUID, ChemistRecipe.Experiment.Type.LIQUID), new Volume(0f, MWSH_vol.tempature, Volume.Metric.mL));
             }
 
-            equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 2.75f;
+            equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 27.5f;
 
             // Reduce material volume
             //
             // Water + Sodium Hydroxide
             Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            wsh.volume -= 1.45f;
+            wsh.volume -= 14.5f;
             if (wsh.volume <= 0)
             {
                 equipment.removeMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
@@ -399,7 +435,7 @@ public class TestCourseScript : CourseScript
 
             // Coconut Oil
             Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
-            col.volume -= 1.3f;
+            col.volume -= 13f;
             if (col.volume <= 0)
             {
                 equipment.removeMaterial(COCONUT_OIL);
@@ -412,7 +448,7 @@ public class TestCourseScript : CourseScript
             // Mixed Water + Sodium Hydroxide with SOAP_LIQUID
             if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
             {
-                float reduceVol = 1.45f;
+                float reduceVol = 14.5f;
 
                 // Reduce Water + Sodium Hydroxide volume
                 Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
@@ -428,13 +464,13 @@ public class TestCourseScript : CourseScript
 
                 // Increase volume & temperature
                 vol.volume += reduceVol;
-                vol.tempature += 0.0625f;
+                vol.tempature += 0.625f;
             }
 
             // Mixed Coconut Oil with SOAP_LIQUID
             if (equipment.ContainMaterial(COCONUT_OIL))
             {
-                float reduceVol = 1.3f;
+                float reduceVol = 13f;
 
                 // Reduce Coconut Oil volume
                 Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
@@ -450,7 +486,7 @@ public class TestCourseScript : CourseScript
 
                 // Increase volume & Reduce temperature
                 vol.volume += reduceVol;
-                vol.tempature -= 0.003f;
+                vol.tempature -= 0.03f;
             }
         }
 

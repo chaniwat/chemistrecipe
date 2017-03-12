@@ -368,11 +368,11 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         public void Stir()
         {
-            _stirAmplifier += 0.85f;
+            _stirAmplifier += 25f;
 
-            if (_stirAmplifier > 25f)
+            if (_stirAmplifier > 120f)
             {
-                _stirAmplifier = 25f;
+                _stirAmplifier = 120f;
             }
 
             if (OnStir != null) OnStir();
@@ -414,7 +414,7 @@ namespace ChemistRecipe.Experiment
 
             if (_stirAmplifier > 1f)
             {
-                _stirAmplifier -= 2.6f * Time.deltaTime;
+                _stirAmplifier -= 40f * Time.deltaTime;
             }
 
             #endregion

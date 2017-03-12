@@ -63,6 +63,11 @@ namespace ChemistRecipe.UI
         private bool forceUpdateEquipmentDetail = false;
         private bool forceUpdateFailDetail = false;
 
+        private bool highlightInstructionText = false;
+        private float accumulateInstructionText = 0f;
+        private bool blinkState = false;
+        private float accumulateblinkInstructionText = 0f;
+
         public void Update()
         {
             if(isHoldStirButton)
@@ -84,6 +89,40 @@ namespace ChemistRecipe.UI
             {
                 InstructionText.text = updateInstructionText + " ";
                 forceUpdateInstruction = false;
+
+                highlightInstructionText = true;
+                accumulateInstructionText = 2.5f;
+                accumulateblinkInstructionText = 0.25f;
+                InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0f);
+            }
+
+            if(highlightInstructionText)
+            {
+                accumulateblinkInstructionText -= Time.deltaTime;
+
+                if(accumulateblinkInstructionText < 0f)
+                {
+                    accumulateblinkInstructionText = 0.25f;
+
+                    if(!blinkState)
+                    {
+                        InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1f);
+                        blinkState = true;
+                    }
+                    else
+                    {
+                        InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0f);
+                        blinkState = false;
+                    }
+                }
+
+                accumulateInstructionText -= Time.deltaTime;
+
+                if (accumulateInstructionText < 0f)
+                {
+                    highlightInstructionText = false;
+                    InstructionText.color = Color.white;
+                }
             }
 
             if(forceUpdateEquipmentDetail)
