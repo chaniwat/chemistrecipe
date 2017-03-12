@@ -83,6 +83,7 @@ namespace ChemistRecipe.UI
                 }
             });
             FinishCourseButton.onClick.AddListener(courseBehaviour.FinishCourse);
+            RestartCourseButton.onClick.AddListener(courseBehaviour.RestartCourse);
 
             // Sidebar Menu
             ResumeButton.onClick.AddListener(HideAllSidebar);
@@ -149,14 +150,12 @@ namespace ChemistRecipe.UI
         {
             currentHitEquipment = newHitEquipment;
             StirButton.gameObject.SetActive(true);
-            Cursor.enabled = false;
         }
 
         public void HideStirButton()
         {
             currentHitEquipment = null;
             StirButton.gameObject.SetActive(false);
-            Cursor.enabled = true;
         }
 
         public void ChangeInstructionMessage(string text)
