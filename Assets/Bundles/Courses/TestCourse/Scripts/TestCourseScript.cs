@@ -438,12 +438,10 @@ public class TestCourseScript : CourseScript
 
     private void afterFillEquipment(FillableEquipment equipment, ChemistRecipe.Experiment.Material fillMaterial, Volume fillVol)
     {
-        // TODO if Water + Coconut Oil and not have Water + Sodium Hydroxide
-
         #region If have Water and Coconut Oil but not contain Water + Sodium Hydroxide, fail the course
         if (equipment.ContainMaterial(WATER) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && fillMaterial.name == COCONUT_OIL)
         {
-            courseBehaviour.FailCourse();
+            courseBehaviour.FailCourse("น้ำกับน้ำมันมะพร้าวไม่ทำปฏิกิริยากัน");
         }
 
         #endregion

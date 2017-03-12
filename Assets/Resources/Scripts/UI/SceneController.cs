@@ -24,10 +24,12 @@ namespace ChemistRecipe.UI
         public Image Cursor;
         public Button MenuButton;
         public Button FinishCourseButton;
+        public Button RestartCourseButton;
         public Button StirButton;
         public Text TimerText;
         public Text InstructionText;
         public Text EquipmentDetailText;
+        public Text FailDetailText;
 
         [Header("Menu Buttons")]
         public Button ResumeButton;
@@ -59,10 +61,15 @@ namespace ChemistRecipe.UI
             // Disable Stir & Finish Course Button
             StirButton.gameObject.SetActive(false);
             FinishCourseButton.gameObject.SetActive(false);
+            RestartCourseButton.gameObject.SetActive(false);
 
             // Hide Equipment Detail
             EquipmentDetailText.enabled = false;
             EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
+
+            // Hide Fail Detail
+            FailDetailText.enabled = false;
+            FailDetailText.GetComponentInParent<Image>().enabled = false;
 
             // Add Button action
             // Play Overlay
@@ -128,6 +135,16 @@ namespace ChemistRecipe.UI
             FinishCourseButton.gameObject.SetActive(true);
         }
 
+        public void ShowRestartButton()
+        {
+            RestartCourseButton.gameObject.SetActive(true);
+        }
+
+        public void HideRestartButton()
+        {
+            RestartCourseButton.gameObject.SetActive(false);
+        }
+
         public void ShowStirButton(FillableEquipment newHitEquipment)
         {
             currentHitEquipment = newHitEquipment;
@@ -165,6 +182,24 @@ namespace ChemistRecipe.UI
 
             EquipmentDetailText.text = "  ";
             EquipmentDetailText.text = " ";
+        }
+
+        public void ShowFailDetail(string text)
+        {
+            FailDetailText.enabled = true;
+            FailDetailText.GetComponentInParent<Image>().enabled = true;
+
+            FailDetailText.text = text;
+            FailDetailText.text = text + " ";
+        }
+
+        public void HideFailDetail()
+        {
+            FailDetailText.enabled = false;
+            FailDetailText.GetComponentInParent<Image>().enabled = false;
+
+            FailDetailText.text = "  ";
+            FailDetailText.text = " ";
         }
 
         public void ShowTutorial() {
