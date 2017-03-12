@@ -44,11 +44,33 @@ namespace ChemistRecipe.UI
 
         // Internal
         private FillableEquipment currentHitEquipment = null;
+        private bool isHoldStirButton = false;
+
+        private float accumulateHoldingStirButton = 0f;
+        private float targetHoldingStirButtonTime = 0.13f;
 
         // Use this for initialization
         void Start()
         {
             SetupUI();
+        }
+
+        public void Update()
+        {
+            if(isHoldStirButton)
+            {
+                accumulateHoldingStirButton += Time.deltaTime;
+
+                while(accumulateHoldingStirButton > targetHoldingStirButtonTime)
+                {
+                    accumulateHoldingStirButton -= targetHoldingStirButtonTime;
+                    CallStirButtonAction();
+                }
+            }
+            else
+            {
+                accumulateHoldingStirButton = 0f;
+            }
         }
 
         void SetupUI()
@@ -74,14 +96,8 @@ namespace ChemistRecipe.UI
             // Add Button action
             // Play Overlay
             MenuButton.onClick.AddListener(ShowSidebarMenu);
-            StirButton.onClick.AddListener(() =>
-            {
-                Vibration.Vibrate(50);
-                if (currentHitEquipment != null)
-                {
-                    currentHitEquipment.Stir();
-                }
-            });
+            // Stir button is set in EventTrigger         
+
             FinishCourseButton.onClick.AddListener(courseBehaviour.FinishCourse);
             RestartCourseButton.onClick.AddListener(courseBehaviour.RestartCourse);
 
@@ -204,6 +220,25 @@ namespace ChemistRecipe.UI
         public void ShowTutorial() {
             HideAllCanvas();
             TutorialCanvas.enabled = true;
+        }
+
+        public void OnStirButtonDown()
+        {
+            isHoldStirButton = true;
+        }
+
+        public void OnStirButtonUp()
+        {
+            isHoldStirButton = false;
+        }
+
+        public void CallStirButtonAction()
+        {
+            Vibration.Vibrate(130);
+            if (currentHitEquipment != null)
+            {
+                currentHitEquipment.Stir();
+            }
         }
     }
 }
