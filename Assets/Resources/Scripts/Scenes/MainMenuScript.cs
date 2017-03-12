@@ -286,18 +286,29 @@ namespace chemistrecipe.scene
         }
 
         public void SubmitPlayerName(string name) {
-            _Global.playerName = name;
-            Debug.Log("Saved name \" " + _Global.playerName + " \"");
+            if ( name.Length > 0 ) {
+                _Global.playerName = name;
+                Debug.Log("Saved name \" " + _Global.playerName + " \"");
+            }
+            
         }
 
         public void SubmitPlayerAlias(string alias)
         {
-            _Global.playerAlias = alias;
+            if ( alias.Length < 0) {
+                _Global.playerAlias = alias;
+                Debug.Log("Saved alias \" " + _Global.playerAlias + " \"");
+            }
+            
         }
 
         public void SubmitPlayerUid(string uid)
         {
-            _Global.playerUid = uid;
+            if (uid.Length > 0) {
+                _Global.playerUid = uid;
+                Debug.Log("Saved uid \" " + _Global.playerUid + " \"");
+            }
+            
         }
 
     }
