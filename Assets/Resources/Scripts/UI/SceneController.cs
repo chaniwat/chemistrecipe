@@ -178,6 +178,11 @@ namespace ChemistRecipe.UI
             FinishCourseButton.gameObject.SetActive(true);
         }
 
+        public void HideFinishButton()
+        {
+            FinishCourseButton.gameObject.SetActive(false);
+        }
+
         public void ShowRestartButton()
         {
             RestartCourseButton.gameObject.SetActive(true);

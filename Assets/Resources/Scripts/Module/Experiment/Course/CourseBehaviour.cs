@@ -360,6 +360,7 @@ namespace ChemistRecipe.Experiment
             _isFailState = false;
             sceneController.HideRestartButton();
             sceneController.HideFailDetail();
+            sceneController.HideFinishButton();
             CourseScript.restart();
         }
 
