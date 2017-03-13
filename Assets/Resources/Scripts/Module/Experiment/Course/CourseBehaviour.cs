@@ -32,6 +32,7 @@ namespace ChemistRecipe.Experiment
         public CourseScript CourseScript;
         public Dictionary<string, TrackingImage> trackers;
         public SceneController sceneController;
+        public CourseUISoundController UISoundController;
 
         public TextMesh textMeshTemplate;
         public GameObject highlightPlaneTemplate;

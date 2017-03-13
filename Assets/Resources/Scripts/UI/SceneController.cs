@@ -257,6 +257,8 @@ namespace ChemistRecipe.UI
 
             forceUpdateInstruction = true;
             updateInstructionText = text;
+
+            courseBehaviour.UISoundController.playInstructionUpdate();
         }
 
         public void ShowEquipmentDetail(string text)

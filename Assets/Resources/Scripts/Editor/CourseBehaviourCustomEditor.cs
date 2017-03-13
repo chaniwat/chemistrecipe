@@ -11,6 +11,7 @@ public class CourseBehaviourCustomEditor : Editor
     SerializedProperty DatasetExistanceStatus;
     SerializedProperty timerText;
     SerializedProperty sceneController;
+    SerializedProperty UISoundController;
     SerializedProperty textMeshTemplate;
     SerializedProperty highlightPlaneTemplate;
 
@@ -20,6 +21,7 @@ public class CourseBehaviourCustomEditor : Editor
         DatasetExistanceStatus = serializedObject.FindProperty("DatasetExistanceStatus");
         timerText = serializedObject.FindProperty("timerText");
         sceneController = serializedObject.FindProperty("sceneController");
+        UISoundController = serializedObject.FindProperty("UISoundController");
         textMeshTemplate = serializedObject.FindProperty("textMeshTemplate");
         highlightPlaneTemplate = serializedObject.FindProperty("highlightPlaneTemplate");
     }
@@ -58,6 +60,7 @@ public class CourseBehaviourCustomEditor : Editor
 
             EditorGUILayout.PropertyField(timerText, new GUIContent("Timer UI"));
             EditorGUILayout.PropertyField(sceneController, new GUIContent("Scene Controller"));
+            EditorGUILayout.PropertyField(UISoundController, new GUIContent("Course UI Sound Controller"));
 
             GUILayout.Label("");
 
