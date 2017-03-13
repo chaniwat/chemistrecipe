@@ -74,19 +74,33 @@ namespace ChemistRecipe.UI
 
         public void Update()
         {
-            if(isHoldStirButton)
+            if (currentHitEquipment)
             {
-                accumulateHoldingStirButton += Time.deltaTime;
-
-                while(accumulateHoldingStirButton > targetHoldingStirButtonTime)
+                if (isHoldStirButton)
                 {
-                    accumulateHoldingStirButton -= targetHoldingStirButtonTime;
-                    CallStirButtonAction();
+                    accumulateHoldingStirButton += Time.deltaTime;
+
+                    while (accumulateHoldingStirButton > targetHoldingStirButtonTime)
+                    {
+                        accumulateHoldingStirButton -= targetHoldingStirButtonTime;
+                        CallStirButtonAction();
+                    }
+
+                    if (!currentHitEquipment.stirSoundSource.isPlaying)
+                    {
+                        currentHitEquipment.stirSoundSource.Play();
+                    }
+                }
+                else
+                {
+                    accumulateHoldingStirButton = 0f;
+
+                    currentHitEquipment.stirSoundSource.Stop();
                 }
             }
             else
             {
-                accumulateHoldingStirButton = 0f;
+                isHoldStirButton = false;
             }
 
             if(forceUpdateInstruction)
@@ -249,6 +263,9 @@ namespace ChemistRecipe.UI
         {
             currentHitEquipment = null;
             StirButton.gameObject.SetActive(false);
+
+            currentHitEquipment.stirSoundSource.Stop();
+            isHoldStirButton = false;
         }
 
         public void ChangeInstructionMessage(string text)

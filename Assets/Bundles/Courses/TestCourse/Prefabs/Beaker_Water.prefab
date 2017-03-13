@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4446603850083218}
   - component: {fileID: 114645054626756912}
+  - component: {fileID: 82436369999449192}
   m_Layer: 0
   m_Name: Beaker_Water
   m_TagString: Untagged
@@ -134,7 +135,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1104886272425558}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0018133605, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4984389681211138}
@@ -147,8 +148,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1619024722471894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.58, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 1.5, y: 0, z: 2.38}
+  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
   m_Children:
   - {fileID: 4984389681211138}
   - {fileID: 4940246068676782}
@@ -332,6 +333,86 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!82 &82436369999449192
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1619024722471894}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!102 &102969396036880422
 TextMesh:
   serializedVersion: 3
@@ -339,7 +420,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1602139469895984}
-  m_Text: 100.00
+  m_Text: 200.00
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -371,7 +452,7 @@ MonoBehaviour:
   - 0.15
   - 0.29
   currentYNormalize: 1
-  target: {fileID: 0}
+  target: {fileID: 64152408158581256}
 --- !u!114 &114645054626756912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -383,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 125be0533be7bac40b36732f6149e43a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scale: 2
+  scale: 0.32
   maximumCapacity: 1000
   metric: 0
   FillableArea: {fileID: 64400315262738232}
@@ -395,7 +476,7 @@ MonoBehaviour:
       formula: H_2O
       description: Water
     volume:
-      volume: 100
+      volume: 200
       tempature: 25
       metric: 0
   liquidParticleSystem: {fileID: 198428733429001900}
@@ -409,7 +490,7 @@ MonoBehaviour:
   minimumFlowSpeed: 0
   maximumFlowSpeed: 10
   flowShootSpeed: 1.5
-  particleColor: {r: 0, g: 0.5448277, b: 1, a: 1}
+  particleColor: {r: 0.62559474, g: 0.8175628, b: 0.97794116, a: 1}
   particleSize: 0.27
   infinityCapacity: 0
   debugText: {fileID: 102969396036880422}
@@ -480,7 +561,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -774686113
+  randomSeed: 83048713
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -641,7 +722,7 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minColor: {r: 1, g: 0, b: 0.80784315, a: 1}
-      maxColor: {r: 0, g: 0.54509807, b: 1, a: 1}
+      maxColor: {r: 0.627451, g: 0.8156863, b: 0.9764706, a: 1}
       minMaxState: 0
     startSize:
       scalar: 0.27

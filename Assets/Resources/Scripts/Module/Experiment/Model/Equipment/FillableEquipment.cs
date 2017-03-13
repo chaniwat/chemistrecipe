@@ -145,7 +145,6 @@ namespace ChemistRecipe.Experiment
 
         #endregion
 
-        // TODO Highlight flag
         public bool highlighting = false;
 
         #region Internal Only
@@ -185,6 +184,34 @@ namespace ChemistRecipe.Experiment
         public Action<Material, Volume> OnBeforeFill;
         public Action<Material, Volume> OnAfterFill;
         public Action OnStir;
+
+        #endregion
+
+        #region Sound
+
+        public AudioClip liquidFillSound;
+        private AudioSource _liquidFillSoundSource;
+        public AudioSource liquidFillSoundSource
+        {
+            get
+            {
+                return _liquidFillSoundSource;
+            }
+        }
+
+        private bool isFilling = false;
+        private float accumulateFillSoundTimeOut = 0.0f;
+        private float baseFillSoundTimeOut = 0.25f;
+
+        public AudioClip stirSound;
+        private AudioSource _stirSoundSource;
+        public AudioSource stirSoundSource
+        {
+            get
+            {
+                return _stirSoundSource;
+            }
+        }
 
         #endregion
 
@@ -326,6 +353,8 @@ namespace ChemistRecipe.Experiment
                 _Materials.Add(material, volume);
             }
 
+            isFilling = true;
+
             if (OnAfterFill != null) OnAfterFill(material, volume);
         }
 
@@ -391,6 +420,16 @@ namespace ChemistRecipe.Experiment
             lEmission.rateOverTimeMultiplier = 0; // Disable automatic emitting particle
 
             InitialEquipment();
+
+            if (!ChemistRecipeApp.isPlaying) return;
+
+            _liquidFillSoundSource = gameObject.AddComponent<AudioSource>();
+            _liquidFillSoundSource.clip = liquidFillSound;
+            _liquidFillSoundSource.playOnAwake = false;
+
+            _stirSoundSource = gameObject.AddComponent<AudioSource>();
+            _stirSoundSource.clip = stirSound;
+            _stirSoundSource.playOnAwake = false;
         }
 
         /// <summary>
@@ -409,7 +448,36 @@ namespace ChemistRecipe.Experiment
             if (!ChemistRecipeApp.isPlaying) return;
 
             if (OnBeforeUpdate != null) OnBeforeUpdate();
-            
+
+            #region Play sound if filling liquid
+
+            if (isFilling)
+            {
+                accumulateFillSoundTimeOut = baseFillSoundTimeOut;
+            }
+
+            accumulateFillSoundTimeOut -= Time.deltaTime;
+
+            if (accumulateFillSoundTimeOut > 0f)
+            {
+                if (!liquidFillSoundSource.isPlaying)
+                {
+                    liquidFillSoundSource.Play();
+                }
+            }            
+
+            if (accumulateFillSoundTimeOut < 0f)
+            {
+                if(liquidFillSoundSource.isPlaying)
+                {
+                    liquidFillSoundSource.Stop();
+                }
+            }
+
+            isFilling = false;
+
+            #endregion
+
             #region reduce stirAmplifier over time if > 1f
 
             if (_stirAmplifier > 1f)
