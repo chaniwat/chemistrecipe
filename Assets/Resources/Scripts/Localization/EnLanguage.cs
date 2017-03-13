@@ -50,6 +50,9 @@ namespace chemistrecipe.localization
             setString("course.settingbtn", "Setting");
             setString("course.mainmenubtn", "Main Menu");
             setString("course.closetutorialbtn", "Close");
+
+            setString("course.equipment.detail.volume", "Volume");
+            setString("course.equipment.detail.temperature", "Temp");
         }
 
     }

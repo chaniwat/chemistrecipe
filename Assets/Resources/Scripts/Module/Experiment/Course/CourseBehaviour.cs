@@ -1,4 +1,5 @@
-﻿using ChemistRecipe.AR;
+﻿using chemistrecipe.localization;
+using ChemistRecipe.AR;
 using ChemistRecipe.UI;
 using Firebase;
 using Firebase.Database;
@@ -260,6 +261,8 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Update()
         {
+            LocalLanguage locale = globalObject.currentLocale;
+
             if (ChemistRecipeApp.isEditing)
             {
                 checkCourseScript();
@@ -295,9 +298,11 @@ namespace ChemistRecipe.Experiment
                     }
 
                     // Update EquipmentDetail
-                    string updateBuffer1 = "อุณหภูมิ: ";
+                    string tempLocale = locale.getString("course.equipment.detail.temperature");
+                    string updateBuffer1 = tempLocale+": ";
 
-                    string updateBuffer2 = "ปริมาตร: " + hitEquipment.currentCapacity + "\n";
+                    string volLocale = locale.getString("course.equipment.detail.volume");
+                    string updateBuffer2 = volLocale+": " + hitEquipment.currentCapacity + "\n";
                     updateBuffer2 += "---\n";
 
                     float temp = 0f;

@@ -50,6 +50,9 @@ namespace chemistrecipe.localization
             setString("course.settingbtn", "ตั้งค่า");
             setString("course.mainmenubtn", "กลับหน้าหลัก");
             setString("course.closetutorialbtn", "ปิด");
+
+            setString("course.equipment.detail.volume", "ปริมาตร");
+            setString("course.equipment.detail.temperature", "อุณหภูมิ");
         }
 
     }
