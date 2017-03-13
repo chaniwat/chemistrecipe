@@ -9,6 +9,7 @@ public class CylinderGenerator : MonoBehaviour {
     public int sideCount;
     public float[] baseHeightBreakPoint;
     public float currentYNormalize = 1f;
+    public Collider target;
 
     // Variables
     private int previousFloor = 0;
@@ -106,14 +107,17 @@ public class CylinderGenerator : MonoBehaviour {
 
             if (Physics.Raycast(castPosition, direction, out hit))
             {
-                Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
-
-                verties[counter++] = localHitPoint;
-
-                if (!setCenterPoint)
+                if(hit.collider == target)
                 {
-                    verties[0] = hit.transform.InverseTransformPoint(castPosition);
-                    setCenterPoint = true;
+                    Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
+
+                    verties[counter++] = localHitPoint;
+
+                    if (!setCenterPoint)
+                    {
+                        verties[0] = hit.transform.InverseTransformPoint(castPosition);
+                        setCenterPoint = true;
+                    }
                 }
             }
         }
@@ -137,14 +141,17 @@ public class CylinderGenerator : MonoBehaviour {
 
             if (Physics.Raycast(castPosition, direction, out hit))
             {
-                Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
-
-                verties[counter++] = localHitPoint;
-
-                if (!setCenterPoint)
+                if (hit.collider == target)
                 {
-                    verties[sideCount + 1] = hit.transform.InverseTransformPoint(castPosition);
-                    setCenterPoint = true;
+                    Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
+
+                    verties[counter++] = localHitPoint;
+
+                    if (!setCenterPoint)
+                    {
+                        verties[sideCount + 1] = hit.transform.InverseTransformPoint(castPosition);
+                        setCenterPoint = true;
+                    }
                 }
             }
         }
@@ -173,36 +180,39 @@ public class CylinderGenerator : MonoBehaviour {
 
                     if (Physics.Raycast(castPosition, direction, out hit))
                     {
-                        Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
-
-                        Vector3 belowVertex;
-                        if (floor == 1)
+                        if (hit.collider == target)
                         {
-                            belowVertex = verties[r + 1];
-                        }
-                        else
-                        {
-                            belowVertex = prevFloorVerties[r];
-                        }
+                            Vector3 localHitPoint = hit.transform.InverseTransformPoint(hit.point);
 
-                        verties[counter++] = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
-                        verties[counter++] = new Vector3(belowVertex.x, belowVertex.y, belowVertex.z);
+                            Vector3 belowVertex;
+                            if (floor == 1)
+                            {
+                                belowVertex = verties[r + 1];
+                            }
+                            else
+                            {
+                                belowVertex = prevFloorVerties[r];
+                            }
 
-                        // Start point
-                        if (r == 0)
-                        {
-                            startAbovePoint = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
-                            startBelowPoint = new Vector3(belowVertex.x, belowVertex.y, belowVertex.z);
+                            verties[counter++] = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
+                            verties[counter++] = new Vector3(belowVertex.x, belowVertex.y, belowVertex.z);
+
+                            // Start point
+                            if (r == 0)
+                            {
+                                startAbovePoint = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
+                                startBelowPoint = new Vector3(belowVertex.x, belowVertex.y, belowVertex.z);
+                            }
+
+                            // End point
+                            if (r == sideCount - 1)
+                            {
+                                verties[counter++] = new Vector3(startAbovePoint.x, startAbovePoint.y, startAbovePoint.z);
+                                verties[counter++] = new Vector3(startBelowPoint.x, startBelowPoint.y, startBelowPoint.z);
+                            }
+
+                            prevFloorVerties[r] = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
                         }
-
-                        // End point
-                        if (r == sideCount - 1)
-                        {
-                            verties[counter++] = new Vector3(startAbovePoint.x, startAbovePoint.y, startAbovePoint.z);
-                            verties[counter++] = new Vector3(startBelowPoint.x, startBelowPoint.y, startBelowPoint.z);
-                        }
-
-                        prevFloorVerties[r] = new Vector3(localHitPoint.x, localHitPoint.y, localHitPoint.z);
                     }
                 }
                 

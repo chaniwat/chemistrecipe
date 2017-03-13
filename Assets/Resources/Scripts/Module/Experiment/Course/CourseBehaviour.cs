@@ -358,6 +358,9 @@ namespace ChemistRecipe.Experiment
         {
             runTimer = 0;
             _isFailState = false;
+            sceneController.HideRestartButton();
+            sceneController.HideFailDetail();
+            sceneController.HideFinishButton();
             CourseScript.restart();
         }
 
@@ -380,9 +383,13 @@ namespace ChemistRecipe.Experiment
         /// <summary>
         /// Fail the course (need to restart | incorrect step)
         /// </summary>
-        public void FailCourse()
+        public void FailCourse(String text)
         {
             _isFailState = true;
+
+            sceneController.ShowRestartButton();
+            sceneController.ShowFailDetail(text);
+
             CourseScript.fail();
         }
 

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using ChemistRecipe.AR;
+using chemistrecipe.localization;
 
 public class TestCourseScript : CourseScript
 {
@@ -23,11 +25,18 @@ public class TestCourseScript : CourseScript
         FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false,
         MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = false;
 
+    // Material fill data
+    private float accumulateFillSodiumHydroxide = 0f;
+    private float accumulateFillCoconutOil = 0f;
+
+
     // Equipments
     private FillableEquipment beakerWater, plateSodiumHydroxide, bottleCoconutOil;
 
     protected override void SetupCoruse()
     {
+        registerLocale();
+
         List<string> equipmentNames = new List<string>(new string[]{ "Beaker_Water", "Plate_Sodium_Hydroxide", "Bottle_Coconut_Oil" });
         
         foreach (FillableEquipment equipment in GetAllEquipment().Values)
@@ -51,8 +60,35 @@ public class TestCourseScript : CourseScript
         beakerWater = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         plateSodiumHydroxide = (FillableEquipment)GetEquipmentByObjectName("Plate_Sodium_Hydroxide");
         bottleCoconutOil = (FillableEquipment)GetEquipmentByObjectName("Bottle_Coconut_Oil");
+    }
 
-        //courseBehaviour.sceneController.ShowFinishButton();
+    private void registerLocale()
+    {
+        LocalLanguage thLocale = courseBehaviour.globalObject.localization["th"];
+
+        thLocale.setString("course.create_soap.instruction.1", "ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+        thLocale.setString("course.create_soap.instruction.2", "ทำการคนให้สารผสมกัน");
+        thLocale.setString("course.create_soap.instruction.3", "ทำการเทน้ำมันมะพร้าว");
+        thLocale.setString("course.create_soap.instruction.4", "ทำการคนให้สารผสมกัน");
+        thLocale.setString("course.create_soap.instruction.5", "หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+
+        thLocale.setString("course.create_soap.fail.1", "ไม่มีสาร Sodium Hydroxide อยู่ในบีกเกอร์น้ำ");
+        thLocale.setString("course.create_soap.fail.2", "สาร Sodium Hydroxide ไม่เพียงพอต่อการทำปฎิกิริยา");
+        thLocale.setString("course.create_soap.fail.3", "ไม่มีน้ำมันมะพร้าวอยู่ในบีกเกอร์น้ำ");
+        thLocale.setString("course.create_soap.fail.4", "น้ำมันมะพร้าวไม่เพียงพอต่อการทำปฎิกิริยา");
+
+        LocalLanguage enLocale = courseBehaviour.globalObject.localization["en"];
+
+        enLocale.setString("course.create_soap.instruction.1", "Fill Sodium Hydroxide into water");
+        enLocale.setString("course.create_soap.instruction.2", "Stir and mixed the substance");
+        enLocale.setString("course.create_soap.instruction.3", "Fill coconut oil");
+        enLocale.setString("course.create_soap.instruction.4", "Stir and mixed the substance");
+        enLocale.setString("course.create_soap.instruction.5", "After mixed, Rest it and wait utill substance is solid");
+
+        enLocale.setString("course.create_soap.fail.1", "No Sodium Hydroxide in Breaker");
+        enLocale.setString("course.create_soap.fail.2", "Not enough Sodium Hydroxide to make the reaction");
+        enLocale.setString("course.create_soap.fail.3", "No coconut oil in Breaker");
+        enLocale.setString("course.create_soap.fail.4", "Not enough coconut oil to make the reaction");
     }
 
     bool finishing = false;
@@ -62,6 +98,13 @@ public class TestCourseScript : CourseScript
     {
         courseBehaviour.sceneController.HideAllCanvas();
         courseBehaviour.trackers[baseTrackerName].attachObject.gameObject.SetActive(false);
+
+        // Disable highlights and Text
+        foreach (TrackingImage ti in courseBehaviour.trackers.Values)
+        {
+            ti.enableTextMesh = false;
+            ti.enableHighlightPlane = false;
+        }
 
         // For Check :3
         //courseBehaviour.globalObject.gameResult.data.score = new System.Random().Next(0, 100);
@@ -128,13 +171,19 @@ public class TestCourseScript : CourseScript
         plateSodiumHydroxide.enableFlow = true;
         bottleCoconutOil.enableFlow = true;
 
+        updateInstruction = false;
+
         // Reset color
         FillableEquipment equipment = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         equipment.particleColor = new Color(160f / 255f, 208f / 255f, 249f / 255f, 1f);
     }
 
+    private bool updateInstruction = false;
+
     protected override void UpdateCoruse()
     {
+        LocalLanguage locale = courseBehaviour.globalObject.currentLocale;
+
         #region Checkpoint
 
         beakerWater.highlighting = false;
@@ -158,68 +207,104 @@ public class TestCourseScript : CourseScript
 
             if (!FILL_SODIUM_HYDROXIDE_TO_WATER)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
-
-                // Check contain
-                if (equipment.ContainMaterial(SODIUM_HYDROXIDE))
+                if(!updateInstruction)
                 {
-                    FILL_SODIUM_HYDROXIDE_TO_WATER = true;
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.1"));
+                    updateInstruction = true;
+                }                
+
+                if (!plateSodiumHydroxide.ContainMaterial(SODIUM_HYDROXIDE))
+                {
+                    // Check if contain
+                    if (!equipment.ContainMaterial(SODIUM_HYDROXIDE))
+                    {
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.1"));
+                    }
+                    else if(equipment.ContainMaterial(SODIUM_HYDROXIDE) && accumulateFillSodiumHydroxide >= 15f)
+                    {
+                        FILL_SODIUM_HYDROXIDE_TO_WATER = true;
+                        updateInstruction = false;
+                    }
+                    else
+                    {
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.2"));
+                    }
                 }
 
                 plateSodiumHydroxide.highlighting = true;
             }
             else if (!MIX_SODIUM_HYDROXIDE_TO_WATER)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.2"));
+                    updateInstruction = true;
+                }
 
                 // Check contain & volume
-                if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
+                if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && !equipment.ContainMaterial(SODIUM_HYDROXIDE) && !equipment.ContainMaterial(WATER))
                 {
-                    Volume vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-
-                    if (vol.volume > 10f)
-                    {
-                        MIX_SODIUM_HYDROXIDE_TO_WATER = true;
-                    }
+                    MIX_SODIUM_HYDROXIDE_TO_WATER = true;
+                    updateInstruction = false;
                 }
 
                 beakerWater.highlighting = true;
             }
             else if (!FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทน้ำมันมะพร้าว");
-
-                // Check contain and volume
-                if (equipment.ContainMaterial(COCONUT_OIL))
+                if (!updateInstruction)
                 {
-                    Volume vol = equipment.GetVolumeOfMaterial(COCONUT_OIL);
-                    
-                    FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.3"));
+                    updateInstruction = true;
+                }
+
+                if (!bottleCoconutOil.ContainMaterial(COCONUT_OIL))
+                {
+                    // Check if contain
+                    if (!equipment.ContainMaterial(COCONUT_OIL))
+                    {
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.3"));
+                    }
+                    else if (equipment.ContainMaterial(COCONUT_OIL) && accumulateFillCoconutOil >= 100f)
+                    {
+                        FILL_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                        updateInstruction = false;
+                    }
+                    else
+                    {
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.4"));
+                    }
                 }
 
                 bottleCoconutOil.highlighting = true;
             }
             else if (!MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL)
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.4"));
+                    updateInstruction = true;
+                }
 
                 // Check contain and volume
-                if (equipment.ContainMaterial(SOAP_LIQUID))
+                if (equipment.ContainMaterial(SOAP_LIQUID) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && !equipment.ContainMaterial(COCONUT_OIL))
                 {
-                    Volume vol = equipment.GetVolumeOfMaterial(SOAP_LIQUID);
-
-                    if (vol.volume > 10f)
-                    {
-                        MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
-                        courseBehaviour.sceneController.ShowFinishButton();
-                    }
+                    MIX_MIXED_WATER_SODIUM_HYDROXIDE_TO_OIL = true;
+                    updateInstruction = false;
+                    courseBehaviour.sceneController.ShowFinishButton();
                 }
 
                 beakerWater.highlighting = true;
             }
             else
             {
-                courseBehaviour.sceneController.ChangeInstructionMessage("หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+                if (!updateInstruction)
+                {
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.5"));
+                    updateInstruction = true;
+                }
+
+                beakerWater.highlighting = true;
             }
         }
 
@@ -240,13 +325,17 @@ public class TestCourseScript : CourseScript
 
     protected override void FailCourse()
     {
+        // disable flow
         beakerWater.enableFlow = false;
         plateSodiumHydroxide.enableFlow = false;
         bottleCoconutOil.enableFlow = false;
 
-        // TODO Show UI (Instruction Message & restart btn + back to main menu)
+        // disable highlight
+        beakerWater.highlighting = false;
+        plateSodiumHydroxide.highlighting = false;
+        bottleCoconutOil.highlighting = false;
 
-        courseBehaviour.sceneController.ChangeInstructionMessage("การทดลองล้มเหลว");
+        courseBehaviour.sceneController.ChangeInstructionMessage(courseBehaviour.globalObject.currentLocale.getString("course.fail");
     }
 
     #region Handle event
@@ -353,7 +442,7 @@ public class TestCourseScript : CourseScript
         {
             // Check Tempature (if below 33c, return)
             Volume MWSH_vol = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            if (MWSH_vol.tempature < 33f)
+            if (MWSH_vol.tempature < 35f)
             {
                 return;
             }
@@ -364,13 +453,13 @@ public class TestCourseScript : CourseScript
                 equipment.Fill(new ChemistRecipe.Experiment.Material(SOAP_LIQUID, ChemistRecipe.Experiment.Type.LIQUID), new Volume(0f, MWSH_vol.tempature, Volume.Metric.mL));
             }
 
-            equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 2.75f;
+            equipment.Materials[equipment.getMaterial(SOAP_LIQUID)].volume += 27.5f;
 
             // Reduce material volume
             //
             // Water + Sodium Hydroxide
             Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
-            wsh.volume -= 1.45f;
+            wsh.volume -= 14.5f;
             if (wsh.volume <= 0)
             {
                 equipment.removeMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
@@ -378,7 +467,7 @@ public class TestCourseScript : CourseScript
 
             // Coconut Oil
             Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
-            col.volume -= 1.3f;
+            col.volume -= 13f;
             if (col.volume <= 0)
             {
                 equipment.removeMaterial(COCONUT_OIL);
@@ -391,7 +480,7 @@ public class TestCourseScript : CourseScript
             // Mixed Water + Sodium Hydroxide with SOAP_LIQUID
             if (equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE))
             {
-                float reduceVol = 1.45f;
+                float reduceVol = 14.5f;
 
                 // Reduce Water + Sodium Hydroxide volume
                 Volume wsh = equipment.GetVolumeOfMaterial(MIXED_WATER_SODIUM_HYDROXIDE);
@@ -407,13 +496,13 @@ public class TestCourseScript : CourseScript
 
                 // Increase volume & temperature
                 vol.volume += reduceVol;
-                vol.tempature += 0.0625f;
+                vol.tempature += 0.625f;
             }
 
             // Mixed Coconut Oil with SOAP_LIQUID
             if (equipment.ContainMaterial(COCONUT_OIL))
             {
-                float reduceVol = 1.3f;
+                float reduceVol = 13f;
 
                 // Reduce Coconut Oil volume
                 Volume col = equipment.GetVolumeOfMaterial(COCONUT_OIL);
@@ -429,7 +518,7 @@ public class TestCourseScript : CourseScript
 
                 // Increase volume & Reduce temperature
                 vol.volume += reduceVol;
-                vol.tempature -= 0.003f;
+                vol.tempature -= 0.03f;
             }
         }
 
@@ -438,12 +527,27 @@ public class TestCourseScript : CourseScript
 
     private void afterFillEquipment(FillableEquipment equipment, ChemistRecipe.Experiment.Material fillMaterial, Volume fillVol)
     {
-        // TODO if Water + Coconut Oil and not have Water + Sodium Hydroxide
+
+        #region keep mat fill data
+
+        if(equipment.name == beakerWater.name)
+        {
+            if (fillMaterial.name == SODIUM_HYDROXIDE)
+            {
+                accumulateFillSodiumHydroxide += fillVol.volume;
+            }
+            else if (fillMaterial.name == COCONUT_OIL)
+            {
+                accumulateFillCoconutOil += fillVol.volume;
+            }
+        }
+
+        #endregion
 
         #region If have Water and Coconut Oil but not contain Water + Sodium Hydroxide, fail the course
         if (equipment.ContainMaterial(WATER) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && fillMaterial.name == COCONUT_OIL)
         {
-            courseBehaviour.FailCourse();
+            courseBehaviour.FailCourse("น้ำกับน้ำมันมะพร้าวไม่ทำปฏิกิริยากัน");
         }
 
         #endregion
