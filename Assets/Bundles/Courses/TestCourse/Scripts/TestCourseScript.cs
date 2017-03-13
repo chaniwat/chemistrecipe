@@ -335,7 +335,7 @@ public class TestCourseScript : CourseScript
         plateSodiumHydroxide.highlighting = false;
         bottleCoconutOil.highlighting = false;
 
-        courseBehaviour.sceneController.ChangeInstructionMessage(courseBehaviour.globalObject.currentLocale.getString("course.fail");
+        courseBehaviour.sceneController.ChangeInstructionMessage(courseBehaviour.globalObject.currentLocale.getString("course.fail"));
     }
 
     #region Handle event
