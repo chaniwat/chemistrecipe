@@ -28,8 +28,6 @@ public class MainMenuLocalization : MonoBehaviour {
     public Text soundText;
     public Text volumeText;
     public Text languageText;
-    public Text gameText;
-    public Text playerUidText;
     public Button confirmBtn;
 
     [Header("Lazy Mode")]
@@ -70,8 +68,6 @@ public class MainMenuLocalization : MonoBehaviour {
         soundText.text = currentLocale.getString(setting + "sound");
         volumeText.text = currentLocale.getString(setting + "sound.volume");
         languageText.text = currentLocale.getString(setting + "language");
-        gameText.text = currentLocale.getString(setting + "game");
-        playerUidText.text = currentLocale.getString(setting + "game.player");
         confirmBtn.GetComponentInChildren<Text>().text = currentLocale.getString(setting + "confirm");
 
     }

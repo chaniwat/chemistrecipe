@@ -61,7 +61,7 @@ public class TestCourseScript : CourseScript
         plateSodiumHydroxide = (FillableEquipment)GetEquipmentByObjectName("Plate_Sodium_Hydroxide");
         bottleCoconutOil = (FillableEquipment)GetEquipmentByObjectName("Bottle_Coconut_Oil");
 
-        //courseBehaviour.sceneController.ShowFinishButton();
+        courseBehaviour.sceneController.ShowFinishButton();
     }
 
     private void registerLocale()

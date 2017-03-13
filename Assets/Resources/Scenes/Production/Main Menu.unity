@@ -558,7 +558,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &36103282
 MonoBehaviour:
@@ -589,11 +589,14 @@ MonoBehaviour:
   playerUidInput: {fileID: 372202260}
   effectVolume: {fileID: 235636813}
   musicVolume: {fileID: 0}
+  language: {fileID: 517617877}
   courseImage: {fileID: 704550683}
   playerName: {fileID: 1059488701}
   playerAlias: {fileID: 19078724}
   playerLevel: {fileID: 653049261}
   playerAvatar: {fileID: 644761660}
+  mainMenuLocalization: {fileID: 277999027}
+  defaulDescription: 
 --- !u!114 &36103283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1529,6 +1532,64 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 271504362}
+--- !u!1 &277999026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 277999028}
+  - component: {fileID: 277999027}
+  m_Layer: 0
+  m_Name: _localization
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &277999027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 277999026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a460b12e39739684bb4877ef3594cb8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startBtn: {fileID: 1076564896}
+  connectBtn: {fileID: 12171741}
+  settingBtn: {fileID: 1087393646}
+  exitBtn: {fileID: 2070350917}
+  tutorialBtn: {fileID: 1343366364}
+  getMarkerBtn: {fileID: 1961789937}
+  playBtn: {fileID: 194428885}
+  backBtn: {fileID: 1629843361}
+  courseDescriptionText: {fileID: 1710456463}
+  profileText: {fileID: 1943897718}
+  nameText: {fileID: 1047713553}
+  aliasText: {fileID: 151768330}
+  avatarText: {fileID: 1605044808}
+  soundText: {fileID: 751199662}
+  volumeText: {fileID: 503832058}
+  languageText: {fileID: 634178667}
+  confirmBtn: {fileID: 997154830}
+  mainMenuScript: {fileID: 36103282}
+--- !u!4 &277999028
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 277999026}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 983.26654, y: 636.2076, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &359783299
 GameObject:
   m_ObjectHideFlags: 0
@@ -4912,7 +4973,7 @@ Transform:
   - {fileID: 1954710975}
   - {fileID: 2130480640}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &512937928
 GameObject:
