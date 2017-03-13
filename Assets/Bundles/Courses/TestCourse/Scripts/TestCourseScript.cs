@@ -76,6 +76,7 @@ public class TestCourseScript : CourseScript
         thLocale.setString("course.create_soap.fail.2", "สาร Sodium Hydroxide ไม่เพียงพอต่อการทำปฎิกิริยา");
         thLocale.setString("course.create_soap.fail.3", "ไม่มีน้ำมันมะพร้าวอยู่ในบีกเกอร์น้ำ");
         thLocale.setString("course.create_soap.fail.4", "น้ำมันมะพร้าวไม่เพียงพอต่อการทำปฎิกิริยา");
+        thLocale.setString("course.create_soap.fail.5", "น้ำกับน้ำมันมะพร้าวไม่ทำปฏิกิริยากัน");
 
         LocalLanguage enLocale = courseBehaviour.globalObject.localization["en"];
 
@@ -89,6 +90,7 @@ public class TestCourseScript : CourseScript
         enLocale.setString("course.create_soap.fail.2", "Not enough Sodium Hydroxide to make the reaction");
         enLocale.setString("course.create_soap.fail.3", "No coconut oil in Breaker");
         enLocale.setString("course.create_soap.fail.4", "Not enough coconut oil to make the reaction");
+        thLocale.setString("course.create_soap.fail.5", "No reaction betwwen water and coconut oil");
     }
 
     bool finishing = false;
@@ -547,7 +549,7 @@ public class TestCourseScript : CourseScript
         #region If have Water and Coconut Oil but not contain Water + Sodium Hydroxide, fail the course
         if (equipment.ContainMaterial(WATER) && !equipment.ContainMaterial(MIXED_WATER_SODIUM_HYDROXIDE) && fillMaterial.name == COCONUT_OIL)
         {
-            courseBehaviour.FailCourse("น้ำกับน้ำมันมะพร้าวไม่ทำปฏิกิริยากัน");
+            courseBehaviour.FailCourse(courseBehaviour.globalObject.currentLocale.getString("course.create_soap.fail.5"));
         }
 
         #endregion

@@ -43,6 +43,7 @@ namespace chemistrecipe.scene
         public InputField playerUidInput;
         public Slider effectVolume;
         public Slider musicVolume;
+        public Dropdown language;
 
         [Header("Course Image")]
         public Image courseImage;
@@ -53,9 +54,12 @@ namespace chemistrecipe.scene
         public Text playerLevel;
         public Image playerAvatar;
 
+        [Header("Lazy Mode")]
+        public MainMenuLocalization mainMenuLocalization;
+
         // Constant
         private Course SelectedCourse;
-        private string defaulDescription;
+        public string defaulDescription;
         private string courseURL;
         private string markerURL;
 
@@ -116,7 +120,25 @@ namespace chemistrecipe.scene
 
             // Get default description
             defaulDescription = TextCourseDescription.GetComponent<Text>().text;
-            
+
+            language.value = _Global.currentLocale.locale == "en" ? 0 : 1;
+            language.onValueChanged.AddListener((target) =>
+            {
+
+                Debug.Log("fired!");
+                Debug.Log(language.value);
+
+                if (language.value == 0)
+                {
+                    _Global.changeLocale("en");
+                }
+                else if(language.value == 1)
+                {
+                    _Global.changeLocale("th");
+                }
+
+                mainMenuLocalization.setLocale();
+            });
         }
 
         private bool changeOpenTutorialState = false;
@@ -309,6 +331,11 @@ namespace chemistrecipe.scene
                 Debug.Log("Saved uid \" " + _Global.playerUid + " \"");
             }
             
+        }
+
+        public void OnLocaleChange()
+        {
+
         }
 
     }

@@ -61,6 +61,9 @@ public class GlobalObject : MonoBehaviour {
         }
     }
 
-    
+    public void changeLocale(string locale)
+    {
+        _currentLocale = _localization[locale];
+    }
 
 }
