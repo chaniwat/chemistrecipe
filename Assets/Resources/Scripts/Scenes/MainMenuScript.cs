@@ -308,16 +308,28 @@ namespace chemistrecipe.scene
         }
 
         public void SubmitPlayerName(string name) {
+            if (name.Contains(" ")) {
+                name.Replace(" ", "_");
+            }
+
             if ( name.Length > 0 ) {
                 _Global.playerName = name;
+                _Global.playerUid = name;
                 Debug.Log("Saved name \" " + _Global.playerName + " \"");
             }
-            
+
+            else
+            {
+                _Global.playerName = "Default";
+                _Global.playerUid = "Default_uid";
+                Debug.Log("Default uid \" " + _Global.playerUid + " \"");
+            }
+
         }
 
         public void SubmitPlayerAlias(string alias)
         {
-            if ( alias.Length < 0) {
+            if ( alias.Length > 0) {
                 _Global.playerAlias = alias;
                 Debug.Log("Saved alias \" " + _Global.playerAlias + " \"");
             }
@@ -326,9 +338,14 @@ namespace chemistrecipe.scene
 
         public void SubmitPlayerUid(string uid)
         {
-            if (uid.Length > 0) {
+            if (uid.Length > 0)
+            {
                 _Global.playerUid = uid;
                 Debug.Log("Saved uid \" " + _Global.playerUid + " \"");
+            }
+            else {
+                _Global.playerUid = "Default_uid";
+                Debug.Log("Default uid \" " + _Global.playerUid + " \"");
             }
             
         }
