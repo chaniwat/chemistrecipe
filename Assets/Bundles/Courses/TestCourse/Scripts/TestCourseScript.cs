@@ -66,7 +66,7 @@ public class TestCourseScript : CourseScript
     {
         LocalLanguage thLocale = courseBehaviour.globalObject.localization["th"];
 
-        thLocale.setString("course.create_soap.instruction.1", "ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+        thLocale.setString("course.create_soap.instruction.1", "ทำการเทโซเดียมไฮดรอกไซด์ผสมกับน้ำ");
         thLocale.setString("course.create_soap.instruction.2", "ทำการคนให้สารผสมกัน");
         thLocale.setString("course.create_soap.instruction.3", "ทำการเทน้ำมันมะพร้าว");
         thLocale.setString("course.create_soap.instruction.4", "ทำการคนให้สารผสมกัน");

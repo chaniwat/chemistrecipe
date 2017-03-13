@@ -34,7 +34,7 @@ namespace chemistrecipe.localization
             setString("mainmenu.setting.sound", "ตั้งค่าเสียง");
             setString("mainmenu.setting.sound.volume", "ความดัง");
             setString("mainmenu.setting.language", "ภาษา");
-            setString("mainmenu.setting.game", "ตั้งค่าเกมส์");
+            setString("mainmenu.setting.game", "ตั้งค่าโปรแกรม");
             setString("mainmenu.setting.game.player", "ไอดีผู้เล่น");
             setString("mainmenu.setting.confirm", "บันทึก");
         }
@@ -44,7 +44,12 @@ namespace chemistrecipe.localization
             setString("course.stir", "คนภาชนะ");
             setString("course.fail", "การทดลองล้มเหลว");
             setString("course.finishbtn", "จบการทดลอง");
-            setString("course.restartbtn", "เริ่มการทดลองใหม่");
+            setString("course.restartbtn", "เริ่มใหม่");
+            setString("course.resumebtn", "ย้อนกลับ");
+            setString("course.instructionbtn", "วิธี/ขั้นตอน");
+            setString("course.settingbtn", "ตั้งค่า");
+            setString("course.mainmenubtn", "กลับหน้าหลัก");
+            setString("course.closetutorialbtn", "ปิด");
         }
 
     }

@@ -34,7 +34,7 @@ namespace chemistrecipe.localization
             setString("mainmenu.setting.sound", "Sound setting");
             setString("mainmenu.setting.sound.volume", "Volume");
             setString("mainmenu.setting.language", "Language");
-            setString("mainmenu.setting.game", "Game setting");
+            setString("mainmenu.setting.game", "App setting");
             setString("mainmenu.setting.game.player", "Player UID");
             setString("mainmenu.setting.confirm", "Confirm");
         }
@@ -43,8 +43,13 @@ namespace chemistrecipe.localization
         {
             setString("course.stir", "Stir");
             setString("course.fail", "Course fail");
-            setString("course.finishbtn", "Finish Course");
-            setString("course.restartbtn", "Restart Course");
+            setString("course.finishbtn", "Finish");
+            setString("course.restartbtn", "Restart");
+            setString("course.resumebtn", "Resume");
+            setString("course.instructionbtn", "Instruction");
+            setString("course.settingbtn", "Setting");
+            setString("course.mainmenubtn", "Main Menu");
+            setString("course.closetutorialbtn", "Close");
         }
 
     }
