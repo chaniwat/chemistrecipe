@@ -35,6 +35,9 @@ namespace ChemistRecipe.AR
         [Tooltip("Highlight Plane")]
         public GameObject HighlightPlaneObject;
 
+        public bool enableTextMesh = true;
+        public bool enableHighlightPlane = true;
+
         #endregion
 
         #region Internal vars
@@ -134,26 +137,35 @@ namespace ChemistRecipe.AR
             {
                 #region update materials text mesh
 
-                string updateBuffer = "";
-
-                int counter = ((FillableEquipment)attachObject).Materials.Count;
-                foreach (KeyValuePair<Experiment.Material, Volume> pair in ((FillableEquipment)attachObject).Materials)
+                if(tracking && enableTextMesh)
                 {
-                    updateBuffer += pair.Key.name;
-                    if (counter > 1)
-                    {
-                        updateBuffer += "\n";
-                        counter--;
-                    }
-                }
+                    textMesh.GetComponent<MeshRenderer>().enabled = true;
 
-                textMesh.text = updateBuffer;
+                    string updateBuffer = "";
+
+                    int counter = ((FillableEquipment)attachObject).Materials.Count;
+                    foreach (KeyValuePair<Experiment.Material, Volume> pair in ((FillableEquipment)attachObject).Materials)
+                    {
+                        updateBuffer += pair.Key.name;
+                        if (counter > 1)
+                        {
+                            updateBuffer += "\n";
+                            counter--;
+                        }
+                    }
+
+                    textMesh.text = updateBuffer;
+                }
+                else
+                {
+                    textMesh.GetComponent<MeshRenderer>().enabled = false;
+                }
 
                 #endregion
 
                 #region update hightlighttext
 
-                if(tracking)
+                if(tracking && enableHighlightPlane)
                 {
                     if (((FillableEquipment)attachObject).highlighting && !highlightFlag)
                     {
@@ -172,7 +184,6 @@ namespace ChemistRecipe.AR
                     highlightFlag = false;    
                 }
                 
-
                 #endregion
 
             }
@@ -199,6 +210,16 @@ namespace ChemistRecipe.AR
                         attachObject.transform.localPosition = Vector3.zero;
                         trackingVerticalRotation = false;
                     }
+                }
+
+                // if y > 0.5f, hide highlight plane
+                if (transform.position.y > 0.5f)
+                {
+                    enableHighlightPlane = false;
+                }
+                else
+                {
+                    enableHighlightPlane = true;
                 }
             }
         }

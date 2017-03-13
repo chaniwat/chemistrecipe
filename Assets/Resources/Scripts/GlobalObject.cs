@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using chemistrecipe.localization;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,23 @@ public class GlobalObject : MonoBehaviour {
     public string playerLevel;
     public Sprite playerAvatar;
 
+    private Dictionary<string, LocalLanguage> _localization;
+    public Dictionary<string, LocalLanguage> localization
+    {
+        get
+        {
+            return _localization;
+        }
+    }
+    private LocalLanguage _currentLocale;
+    public LocalLanguage currentLocale
+    {
+        get
+        {
+            return _currentLocale;
+        }
+    }
+
     public static GlobalObject instance;
 
     // Called when object is loaded (before start)
@@ -29,6 +47,12 @@ public class GlobalObject : MonoBehaviour {
         if (instance == null)
         {
             DontDestroyOnLoad(gameObject);
+
+            _localization = new Dictionary<string, LocalLanguage>();
+            _localization.Add("en", new EnLanguage());
+            _localization.Add("th", new ThLanguage());
+            _currentLocale = _localization["en"];
+
             instance = this;
         }
         else if (instance != this)
@@ -36,6 +60,7 @@ public class GlobalObject : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+
     
 
 }

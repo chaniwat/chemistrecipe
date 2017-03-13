@@ -24,10 +24,12 @@ namespace ChemistRecipe.UI
         public Image Cursor;
         public Button MenuButton;
         public Button FinishCourseButton;
+        public Button RestartCourseButton;
         public Button StirButton;
         public Text TimerText;
         public Text InstructionText;
         public Text EquipmentDetailText;
+        public Text FailDetailText;
 
         [Header("Menu Buttons")]
         public Button ResumeButton;
@@ -42,11 +44,98 @@ namespace ChemistRecipe.UI
 
         // Internal
         private FillableEquipment currentHitEquipment = null;
+        private bool isHoldStirButton = false;
+
+        private float accumulateHoldingStirButton = 0f;
+        private float targetHoldingStirButtonTime = 0.13f;
 
         // Use this for initialization
         void Start()
         {
             SetupUI();
+        }
+
+        private string updateInstructionText = "";
+        private string updateEquipmentText = "";
+        private string updateFailText = "";
+
+        private bool forceUpdateInstruction = false;
+        private bool forceUpdateEquipmentDetail = false;
+        private bool forceUpdateFailDetail = false;
+
+        private bool highlightInstructionText = false;
+        private float accumulateInstructionText = 0f;
+        private bool blinkState = false;
+        private float accumulateblinkInstructionText = 0f;
+
+        public void Update()
+        {
+            if(isHoldStirButton)
+            {
+                accumulateHoldingStirButton += Time.deltaTime;
+
+                while(accumulateHoldingStirButton > targetHoldingStirButtonTime)
+                {
+                    accumulateHoldingStirButton -= targetHoldingStirButtonTime;
+                    CallStirButtonAction();
+                }
+            }
+            else
+            {
+                accumulateHoldingStirButton = 0f;
+            }
+
+            if(forceUpdateInstruction)
+            {
+                InstructionText.text = updateInstructionText + " ";
+                forceUpdateInstruction = false;
+
+                highlightInstructionText = true;
+                accumulateInstructionText = 2.5f;
+                accumulateblinkInstructionText = 0.25f;
+                InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0f);
+            }
+
+            if(highlightInstructionText)
+            {
+                accumulateblinkInstructionText -= Time.deltaTime;
+
+                if(accumulateblinkInstructionText < 0f)
+                {
+                    accumulateblinkInstructionText = 0.25f;
+
+                    if(!blinkState)
+                    {
+                        InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 1f);
+                        blinkState = true;
+                    }
+                    else
+                    {
+                        InstructionText.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0f);
+                        blinkState = false;
+                    }
+                }
+
+                accumulateInstructionText -= Time.deltaTime;
+
+                if (accumulateInstructionText < 0f)
+                {
+                    highlightInstructionText = false;
+                    InstructionText.color = Color.white;
+                }
+            }
+
+            if(forceUpdateEquipmentDetail)
+            {
+                EquipmentDetailText.text = updateEquipmentText + " ";
+                forceUpdateEquipmentDetail = false;
+            }
+
+            if(forceUpdateFailDetail)
+            {
+                FailDetailText.text = updateFailText + " ";
+                forceUpdateFailDetail = false;
+            }
         }
 
         void SetupUI()
@@ -59,23 +148,23 @@ namespace ChemistRecipe.UI
             // Disable Stir & Finish Course Button
             StirButton.gameObject.SetActive(false);
             FinishCourseButton.gameObject.SetActive(false);
+            RestartCourseButton.gameObject.SetActive(false);
 
             // Hide Equipment Detail
             EquipmentDetailText.enabled = false;
             EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
 
+            // Hide Fail Detail
+            FailDetailText.enabled = false;
+            FailDetailText.GetComponentInParent<Image>().enabled = false;
+
             // Add Button action
             // Play Overlay
             MenuButton.onClick.AddListener(ShowSidebarMenu);
-            StirButton.onClick.AddListener(() =>
-            {
-                Vibration.Vibrate(50);
-                if (currentHitEquipment != null)
-                {
-                    currentHitEquipment.Stir();
-                }
-            });
+            // Stir button is set in EventTrigger         
+
             FinishCourseButton.onClick.AddListener(courseBehaviour.FinishCourse);
+            RestartCourseButton.onClick.AddListener(courseBehaviour.RestartCourse);
 
             // Sidebar Menu
             ResumeButton.onClick.AddListener(HideAllSidebar);
@@ -128,25 +217,39 @@ namespace ChemistRecipe.UI
             FinishCourseButton.gameObject.SetActive(true);
         }
 
+        public void HideFinishButton()
+        {
+            FinishCourseButton.gameObject.SetActive(false);
+        }
+
+        public void ShowRestartButton()
+        {
+            RestartCourseButton.gameObject.SetActive(true);
+        }
+
+        public void HideRestartButton()
+        {
+            RestartCourseButton.gameObject.SetActive(false);
+        }
+
         public void ShowStirButton(FillableEquipment newHitEquipment)
         {
             currentHitEquipment = newHitEquipment;
             StirButton.gameObject.SetActive(true);
-            Cursor.enabled = false;
         }
 
         public void HideStirButton()
         {
             currentHitEquipment = null;
             StirButton.gameObject.SetActive(false);
-            Cursor.enabled = true;
         }
 
         public void ChangeInstructionMessage(string text)
         {
-            InstructionText.text = "  ";
             InstructionText.text = text;
-            InstructionText.text = text + " ";
+
+            forceUpdateInstruction = true;
+            updateInstructionText = text;
         }
 
         public void ShowEquipmentDetail(string text)
@@ -155,7 +258,9 @@ namespace ChemistRecipe.UI
             EquipmentDetailText.GetComponentInParent<Image>().enabled = true;
 
             EquipmentDetailText.text = text;
-            EquipmentDetailText.text = text + " ";
+
+            forceUpdateEquipmentDetail = true;
+            updateEquipmentText = text;
         }
 
         public void HideEquipmentDetail()
@@ -163,13 +268,56 @@ namespace ChemistRecipe.UI
             EquipmentDetailText.enabled = false;
             EquipmentDetailText.GetComponentInParent<Image>().enabled = false;
 
-            EquipmentDetailText.text = "  ";
             EquipmentDetailText.text = " ";
+
+            forceUpdateEquipmentDetail = true;
+            updateEquipmentText = " ";
+        }
+
+        public void ShowFailDetail(string text)
+        {
+            FailDetailText.enabled = true;
+            FailDetailText.GetComponentInParent<Image>().enabled = true;
+
+            FailDetailText.text = text;
+
+            forceUpdateFailDetail = true;
+            updateFailText = text;
+        }
+
+        public void HideFailDetail()
+        {
+            FailDetailText.enabled = false;
+            FailDetailText.GetComponentInParent<Image>().enabled = false;
+
+            FailDetailText.text = " ";
+
+            forceUpdateFailDetail = true;
+            updateFailText = " ";
         }
 
         public void ShowTutorial() {
             HideAllCanvas();
             TutorialCanvas.enabled = true;
+        }
+
+        public void OnStirButtonDown()
+        {
+            isHoldStirButton = true;
+        }
+
+        public void OnStirButtonUp()
+        {
+            isHoldStirButton = false;
+        }
+
+        public void CallStirButtonAction()
+        {
+            Vibration.Vibrate(130);
+            if (currentHitEquipment != null)
+            {
+                currentHitEquipment.Stir();
+            }
         }
     }
 }
