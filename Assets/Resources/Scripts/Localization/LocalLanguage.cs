@@ -8,12 +8,12 @@ namespace chemistrecipe.localization
     public abstract class LocalLanguage
     {
 
-        private string _local_code;
-        public string local_code
+        private string _locale;
+        public string locale
         {
             get
             {
-                return _local_code;
+                return _locale;
             }
         }
 
@@ -21,11 +21,16 @@ namespace chemistrecipe.localization
 
         public LocalLanguage(string local_code)
         {
-            this._local_code = local_code;
+            this._locale = local_code;
         }
 
         public string getString(string key)
         {
+            if(!words.ContainsKey(key))
+            {
+                return key;
+            }
+
             return words[key];
         }
 

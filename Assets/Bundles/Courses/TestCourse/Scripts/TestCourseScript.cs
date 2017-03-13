@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using ChemistRecipe.AR;
+using chemistrecipe.localization;
 
 public class TestCourseScript : CourseScript
 {
@@ -34,6 +35,8 @@ public class TestCourseScript : CourseScript
 
     protected override void SetupCoruse()
     {
+        registerLocale();
+
         List<string> equipmentNames = new List<string>(new string[]{ "Beaker_Water", "Plate_Sodium_Hydroxide", "Bottle_Coconut_Oil" });
         
         foreach (FillableEquipment equipment in GetAllEquipment().Values)
@@ -57,8 +60,35 @@ public class TestCourseScript : CourseScript
         beakerWater = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         plateSodiumHydroxide = (FillableEquipment)GetEquipmentByObjectName("Plate_Sodium_Hydroxide");
         bottleCoconutOil = (FillableEquipment)GetEquipmentByObjectName("Bottle_Coconut_Oil");
+    }
 
-        //courseBehaviour.sceneController.ShowFinishButton();
+    private void registerLocale()
+    {
+        LocalLanguage thLocale = courseBehaviour.globalObject.localization["th"];
+
+        thLocale.setString("course.create_soap.instruction.1", "ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+        thLocale.setString("course.create_soap.instruction.2", "ทำการคนให้สารผสมกัน");
+        thLocale.setString("course.create_soap.instruction.3", "ทำการเทน้ำมันมะพร้าว");
+        thLocale.setString("course.create_soap.instruction.4", "ทำการคนให้สารผสมกัน");
+        thLocale.setString("course.create_soap.instruction.5", "หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+
+        thLocale.setString("course.create_soap.fail.1", "ไม่มีสาร Sodium Hydroxide อยู่ในบีกเกอร์น้ำ");
+        thLocale.setString("course.create_soap.fail.2", "สาร Sodium Hydroxide ไม่เพียงพอต่อการทำปฎิกิริยา");
+        thLocale.setString("course.create_soap.fail.3", "ไม่มีน้ำมันมะพร้าวอยู่ในบีกเกอร์น้ำ");
+        thLocale.setString("course.create_soap.fail.4", "น้ำมันมะพร้าวไม่เพียงพอต่อการทำปฎิกิริยา");
+
+        LocalLanguage enLocale = courseBehaviour.globalObject.localization["en"];
+
+        enLocale.setString("course.create_soap.instruction.1", "Fill Sodium Hydroxide into water");
+        enLocale.setString("course.create_soap.instruction.2", "Stir and mixed the substance");
+        enLocale.setString("course.create_soap.instruction.3", "Fill coconut oil");
+        enLocale.setString("course.create_soap.instruction.4", "Stir and mixed the substance");
+        enLocale.setString("course.create_soap.instruction.5", "After mixed, Rest it and wait utill substance is solid");
+
+        enLocale.setString("course.create_soap.fail.1", "No Sodium Hydroxide in Breaker");
+        enLocale.setString("course.create_soap.fail.2", "Not enough Sodium Hydroxide to make the reaction");
+        enLocale.setString("course.create_soap.fail.3", "No coconut oil in Breaker");
+        enLocale.setString("course.create_soap.fail.4", "Not enough coconut oil to make the reaction");
     }
 
     bool finishing = false;
@@ -152,6 +182,8 @@ public class TestCourseScript : CourseScript
 
     protected override void UpdateCoruse()
     {
+        LocalLanguage locale = courseBehaviour.globalObject.currentLocale;
+
         #region Checkpoint
 
         beakerWater.highlighting = false;
@@ -177,7 +209,7 @@ public class TestCourseScript : CourseScript
             {
                 if(!updateInstruction)
                 {
-                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทโซเดียมไฮดอรกไซด์ผสมกับน้ำ");
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.1"));
                     updateInstruction = true;
                 }                
 
@@ -186,7 +218,7 @@ public class TestCourseScript : CourseScript
                     // Check if contain
                     if (!equipment.ContainMaterial(SODIUM_HYDROXIDE))
                     {
-                        courseBehaviour.FailCourse("ไม่มีสาร Sodium Hydroxide อยู่ในบีกเกอร์น้ำ");
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.1"));
                     }
                     else if(equipment.ContainMaterial(SODIUM_HYDROXIDE) && accumulateFillSodiumHydroxide >= 15f)
                     {
@@ -195,7 +227,7 @@ public class TestCourseScript : CourseScript
                     }
                     else
                     {
-                        courseBehaviour.FailCourse("สาร Sodium Hydroxide ไม่เพียงพอต่อการทำปฎิกิริยา");
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.2"));
                     }
                 }
 
@@ -205,7 +237,7 @@ public class TestCourseScript : CourseScript
             {
                 if (!updateInstruction)
                 {
-                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.2"));
                     updateInstruction = true;
                 }
 
@@ -222,7 +254,7 @@ public class TestCourseScript : CourseScript
             {
                 if (!updateInstruction)
                 {
-                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการเทน้ำมันมะพร้าว");
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.3"));
                     updateInstruction = true;
                 }
 
@@ -231,7 +263,7 @@ public class TestCourseScript : CourseScript
                     // Check if contain
                     if (!equipment.ContainMaterial(COCONUT_OIL))
                     {
-                        courseBehaviour.FailCourse("ไม่มีน้ำมันมะพร้าวอยู่ในบีกเกอร์น้ำ");
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.3"));
                     }
                     else if (equipment.ContainMaterial(COCONUT_OIL) && accumulateFillCoconutOil >= 100f)
                     {
@@ -240,7 +272,7 @@ public class TestCourseScript : CourseScript
                     }
                     else
                     {
-                        courseBehaviour.FailCourse("น้ำมันมะพร้าวไม่เพียงพอต่อการทำปฎิกิริยา");
+                        courseBehaviour.FailCourse(locale.getString("course.create_soap.fail.4"));
                     }
                 }
 
@@ -250,7 +282,7 @@ public class TestCourseScript : CourseScript
             {
                 if (!updateInstruction)
                 {
-                    courseBehaviour.sceneController.ChangeInstructionMessage("ทำการคนให้สารผสมกัน");
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.4"));
                     updateInstruction = true;
                 }
 
@@ -268,7 +300,7 @@ public class TestCourseScript : CourseScript
             {
                 if (!updateInstruction)
                 {
-                    courseBehaviour.sceneController.ChangeInstructionMessage("หลังผสมกันแล้ว ตั้งทิ้งไว้จนสารจับตัวเป็นก้อน");
+                    courseBehaviour.sceneController.ChangeInstructionMessage(locale.getString("course.create_soap.instruction.5"));
                     updateInstruction = true;
                 }
 
@@ -303,7 +335,7 @@ public class TestCourseScript : CourseScript
         plateSodiumHydroxide.highlighting = false;
         bottleCoconutOil.highlighting = false;
 
-        courseBehaviour.sceneController.ChangeInstructionMessage("การทดลองล้มเหลว");
+        courseBehaviour.sceneController.ChangeInstructionMessage(courseBehaviour.globalObject.currentLocale.getString("course.fail");
     }
 
     #region Handle event

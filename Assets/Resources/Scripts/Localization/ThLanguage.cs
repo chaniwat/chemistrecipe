@@ -11,6 +11,9 @@ namespace chemistrecipe.localization
         public ThLanguage() : base("th")
         {
             // set text
+
+            setString("course.fail", "การทดลองล้มเหลว");
+
         }
 
     }

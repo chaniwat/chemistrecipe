@@ -11,6 +11,9 @@ namespace chemistrecipe.localization
         public EnLanguage() : base("en")
         {
             // set text
+
+            setString("course.fail", "Course fail");
+
         }
 
     }
