@@ -30,6 +30,7 @@ public class CourseResult : MonoBehaviour {
     DatabaseReference courseReference;
 
     private GlobalObject _Global;
+    public List<Score> scoreList;
 
     // Use this for initialization
     void Start () {
@@ -38,9 +39,9 @@ public class CourseResult : MonoBehaviour {
         _Global = GameObject.Find("_Global").GetComponent<GlobalObject>();
 
         gameResult = _Global.gameResult;
-
-        showResult();
+        scoreList = new List<Score>();
         createHighScorePanel();
+        showResult();
     }
 
     void showResult()
@@ -61,7 +62,6 @@ public class CourseResult : MonoBehaviour {
         timeText.GetComponent<Text>().text = formatSecondToTimePattern(gameResult.data.time);
 
         getMedal(gameResult.data.score);
-        getRank();
     }
 
     void createHighScorePanel()
@@ -72,8 +72,7 @@ public class CourseResult : MonoBehaviour {
         DatabaseReference scoreListReference = courseReference.Child("scores");
         scoreListReference.OrderByChild("score").GetValueAsync().ContinueWith(task =>
         {
-            List<Score> scoreList = new List<Score>();
-
+            
             DataSnapshot snapshot = task.Result;
             foreach (var childSnapshot in snapshot.Children)
             {
@@ -96,19 +95,24 @@ public class CourseResult : MonoBehaviour {
                 {
                     score.name = score.name.Substring(0, 8);
                 }
-                score.name += new string(' ', 8 - score.name.Length);
                 playerNameText.GetComponent<Text>().text = score.name;
                 rankItemText.GetComponent<Text>().text = "   " + startRankNumber
                                                         + "                      "
-                                                        + "      " + formatSecondToTimePattern(score.time)
+                                                        + "        " + formatSecondToTimePattern(score.time)
                                                         + "       " + score.score;
 
+                if (score.time == gameResult.data.time) {
+                    rankItemText.GetComponent<Text>().color = Color.yellow;
+                    playerNameText.GetComponent<Text>().color = Color.yellow;
+                }
+                
                 startRankNumber++;
                 if (startRankNumber == 10)
                 {
                     break;
                 }
             }
+            getRank();
         });
     }
 
@@ -144,34 +148,10 @@ public class CourseResult : MonoBehaviour {
 
     void getRank() {
         string ranknumber = "-";
-        //count from db
-        FirebaseDatabase.DefaultInstance.GetReference("courses")
-            .Child(gameResult.courseId)
-            .Child("scores").OrderByChild("score")
-            .GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    // Handle the error... (no internet?)
-                    Debug.LogError("Firebase : Something Wrong");
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    long playerPosition = 0;
-                    foreach (var child in snapshot.Children) {
-                        playerPosition++;
-                        Score data = JsonConvert.DeserializeObject<Score>(child.GetRawJsonValue());
-                        if (data.name == gameResult.data.name);
-                        {
-                            break;
-                        }
-                    }
-                    //ranknumber = (snapshot.ChildrenCount - playerPosition).ToString();
-                    ranknumber = playerPosition.ToString();
-                    rankText.GetComponent<Text>().text = ranknumber;
-                }
-            });
+        long playerPosition = 0;
+        playerPosition = scoreList.FindIndex((item) =>  item.name == gameResult.data.name) + 1; 
+        ranknumber = playerPosition.ToString();
+        rankText.GetComponent<Text>().text = ranknumber;
    }
 
     void getMedal(int newScore) {
