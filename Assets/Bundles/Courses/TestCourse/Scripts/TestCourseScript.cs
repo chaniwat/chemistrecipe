@@ -60,6 +60,8 @@ public class TestCourseScript : CourseScript
         beakerWater = (FillableEquipment)GetEquipmentByObjectName("Beaker_Water");
         plateSodiumHydroxide = (FillableEquipment)GetEquipmentByObjectName("Plate_Sodium_Hydroxide");
         bottleCoconutOil = (FillableEquipment)GetEquipmentByObjectName("Bottle_Coconut_Oil");
+
+        //courseBehaviour.sceneController.ShowFinishButton();
     }
 
     private void registerLocale()

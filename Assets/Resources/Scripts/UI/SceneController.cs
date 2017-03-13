@@ -23,13 +23,17 @@ namespace ChemistRecipe.UI
         [Header("Play Overlay")]
         public Image Cursor;
         public Button MenuButton;
-        public Button FinishCourseButton;
         public Button RestartCourseButton;
         public Button StirButton;
         public Text TimerText;
         public Text InstructionText;
         public Text EquipmentDetailText;
         public Text FailDetailText;
+
+        [Header("Result Overlay")]
+        public Canvas resultCanvas;
+        public Image resultImage;
+        public Button FinishCourseButton;
 
         [Header("Menu Buttons")]
         public Button ResumeButton;
@@ -144,10 +148,10 @@ namespace ChemistRecipe.UI
             SidebarMenuCanvas.enabled = false;
             CheckListCanvas.enabled = false;
             TutorialCanvas.enabled = false;
+            resultCanvas.enabled = false;
 
             // Disable Stir & Finish Course Button
             StirButton.gameObject.SetActive(false);
-            FinishCourseButton.gameObject.SetActive(false);
             RestartCourseButton.gameObject.SetActive(false);
 
             // Hide Equipment Detail
@@ -210,16 +214,19 @@ namespace ChemistRecipe.UI
 
             SidebarMenuCanvas.enabled = false;
             CheckListCanvas.enabled = false;
+            resultCanvas.enabled = false;
         }
 
         public void ShowFinishButton()
         {
-            FinishCourseButton.gameObject.SetActive(true);
+            HideAllCanvas();
+            resultCanvas.enabled = true;
         }
 
         public void HideFinishButton()
         {
-            FinishCourseButton.gameObject.SetActive(false);
+            TogglePlayCanvas(true);
+            resultCanvas.enabled = false;
         }
 
         public void ShowRestartButton()

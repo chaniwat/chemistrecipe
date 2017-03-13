@@ -261,14 +261,14 @@ namespace ChemistRecipe.Experiment
         /// </summary>
         void Update()
         {
-            LocalLanguage locale = globalObject.currentLocale;
-
             if (ChemistRecipeApp.isEditing)
             {
                 checkCourseScript();
             }
 
             if (!ChemistRecipeApp.isPlaying) return;
+
+            LocalLanguage locale = globalObject.currentLocale;
 
             if (!isFailState)
             {
