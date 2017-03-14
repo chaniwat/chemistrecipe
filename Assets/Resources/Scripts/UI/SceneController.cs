@@ -96,12 +96,21 @@ namespace ChemistRecipe.UI
                 {
                     accumulateHoldingStirButton = 0f;
 
-                    currentHitEquipment.stirSoundSource.Stop();
+                    if(currentHitEquipment)
+                    {
+                        currentHitEquipment.stirSoundSource.Stop();
+                    }
+
+                    if(lastHitEquipment)
+                    {
+                        lastHitEquipment.stirSoundSource.Stop();
+                    }
+                    
                 }
             }
             else
             {
-                isHoldStirButton = false;
+                // Come find me
             }
 
             if(forceUpdateInstruction)
