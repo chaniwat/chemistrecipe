@@ -92,7 +92,7 @@ public class TestCourseScript : CourseScript
         enLocale.setString("course.create_soap.fail.2", "Not enough Sodium Hydroxide to make the reaction");
         enLocale.setString("course.create_soap.fail.3", "No coconut oil in Breaker");
         enLocale.setString("course.create_soap.fail.4", "Not enough coconut oil to make the reaction");
-        thLocale.setString("course.create_soap.fail.5", "No reaction betwwen water and coconut oil");
+        enLocale.setString("course.create_soap.fail.5", "No reaction between water and coconut oil");
     }
 
     bool finishing = false;

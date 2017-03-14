@@ -181,7 +181,7 @@ namespace ChemistRecipe.Experiment
                         trackers.Add(tb.TrackableName, ti);
                     }
 
-                    // Attach object to the child of tracker (from coursescript)
+                    // Attach object to the child of tracker (from coursescript), mean that tracker used in course
                     Equipment equipment = null;
                     if (equipment = CourseScript.GetTrackerAttachObject(tb.TrackableName))
                     {
@@ -192,6 +192,9 @@ namespace ChemistRecipe.Experiment
                         ti.filpYOffset = param.filpYOffset;
                         ti.filpZOffset = param.filpZOffset;
                         equipment.transform.SetParent(tb.transform);
+
+                        ti.enableHighlightPlane = true;
+                        ti.enableTextMesh = true;
                     }
                 }
 

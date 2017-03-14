@@ -35,8 +35,8 @@ namespace ChemistRecipe.AR
         [Tooltip("Highlight Plane")]
         public GameObject HighlightPlaneObject;
 
-        public bool enableTextMesh = true;
-        public bool enableHighlightPlane = true;
+        public bool enableTextMesh = false;
+        public bool enableHighlightPlane = false;
 
         #endregion
 
@@ -57,6 +57,9 @@ namespace ChemistRecipe.AR
 
         void Start()
         {
+            textMesh.GetComponent<MeshRenderer>().enabled = false;
+            HighlightPlaneObject.GetComponent<MeshRenderer>().enabled = false;
+
             registerTrackingHandler();
             initializeObject();
         }
