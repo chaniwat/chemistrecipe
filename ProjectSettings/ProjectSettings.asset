@@ -42,9 +42,8 @@ PlayerSettings:
     duration: 2
   - logo: {fileID: 21300000, guid: 3365a8207a643b64ba791f90fba10edc, type: 3}
     duration: 2
-  - logo: {fileID: 21300000, guid: ce967c71cbca3434b80d0d65e388ba28, type: 3}
-    duration: 5
-  m_SplashScreenBackgroundLandscape: {fileID: 0}
+  m_SplashScreenBackgroundLandscape: {fileID: 1, guid: 00000000000000000000000000000000,
+    type: 0}
   m_SplashScreenBackgroundPortrait: {fileID: 0}
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}

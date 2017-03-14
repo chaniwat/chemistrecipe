@@ -47,6 +47,7 @@ namespace ChemistRecipe.UI
         public Button CloseCheckListButton;
 
         // Internal
+        private FillableEquipment lastHitEquipment = null;
         private FillableEquipment currentHitEquipment = null;
         private bool isHoldStirButton = false;
 
@@ -261,10 +262,11 @@ namespace ChemistRecipe.UI
 
         public void HideStirButton()
         {
+            lastHitEquipment = currentHitEquipment;
             currentHitEquipment = null;
             StirButton.gameObject.SetActive(false);
 
-            currentHitEquipment.stirSoundSource.Stop();
+            lastHitEquipment.stirSoundSource.Stop();
             isHoldStirButton = false;
         }
 
