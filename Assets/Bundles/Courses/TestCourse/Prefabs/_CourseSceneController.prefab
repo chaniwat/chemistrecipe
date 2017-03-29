@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1521421000479306}
+  m_IsPrefabParent: 1
+--- !u!1 &1521421000479306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4315158788628462}
+  - component: {fileID: 114617113149438996}
+  - component: {fileID: 114174992358114870}
+  m_Layer: 0
+  m_Name: _CourseSceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4315158788628462
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1521421000479306}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.00999999, y: 2.485, z: 0.22217226}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114174992358114870
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1521421000479306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deebf99def3562643a97284deb3e20a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Test Course
+  Author: Meranote
+  Version: 0.1
+  baseTrackerName: beaker1
+  trackersMapping:
+  - trackerName: bottle_big2
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: -0.5
+  - trackerName: petri_dish2
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: -0.5
+  - trackerName: petri_dish1
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: 0
+  - trackerName: beaker1
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: 0
+  - trackerName: bottle_big1
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: 0
+  - trackerName: m1
+    equipmentObject: {fileID: 0}
+    canFilp: 1
+    xOffset: 0
+    yOffset: 0
+    zOffset: 0
+  finalSoap: {fileID: 1987471972691404, guid: 2d718ecd30f75814f87e4b2ee7b6e490, type: 2}
+--- !u!114 &114617113149438996
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1521421000479306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 787d30580a3207447a9aa38911eb4f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DatasetName: chemistrecipe-testcourse
+  CourseScript: {fileID: 114174992358114870}
+  sceneController: {fileID: 0}
+  textMeshTemplate: {fileID: 102289138480872346, guid: 4c1b61b5a45acdf44841415d4a60ecf4,
+    type: 2}
+  highlightPlaneTemplate: {fileID: 1613593359494384, guid: e42a0003fe7778a42ac0720c9bcaf503,
+    type: 2}
+  DatasetExistanceStatus: 1
+  DatasetNameList:
+  - bottle_big2
+  - petri_dish2
+  - petri_dish1
+  - beaker1
+  - bottle_big1
+  - m1
+  timerText: {fileID: 0}

@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 3ac3b9a520678604ab8eaaf55841605e
+timeCreated: 1489509230
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Prompt
+  fontNames:
+  - Prompt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1c9d072486db49244b640c6a51ce87ea, type: 3}
+  - {fileID: 12800000, guid: 19c81656a9b16ea4fb5078a87ad222ff, type: 3}
+  - {fileID: 12800000, guid: 2cc270473fec6984da2620be2fa6a52a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

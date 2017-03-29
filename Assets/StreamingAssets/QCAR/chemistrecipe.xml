@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="ex_tube5" size="8.000000 8.000000" />
+    <ImageTarget name="ex_tube4" size="8.000000 8.000000" />
+    <ImageTarget name="ex_tube3" size="8.000000 8.000000" />
+    <ImageTarget name="ex_tube2" size="8.000000 8.000000" />
+    <ImageTarget name="ex_tube1" size="8.000000 8.000000" />
+    <ImageTarget name="beaker5" size="8.000000 8.035914" />
+    <ImageTarget name="beaker4" size="8.000000 8.000000" />
+    <ImageTarget name="beaker1" size="8.000000 9.665859" />
+    <ImageTarget name="beaker2" size="8.000000 8.000000" />
+    <ImageTarget name="tri-beaker1" size="8.000000 7.701334" />
+    <ImageTarget name="beaker3" size="8.000000 8.000000" />
     <ImageTarget name="m4" size="12.000000 12.000000" />
     <ImageTarget name="m3" size="12.000000 12.000000" />
     <ImageTarget name="m2" size="12.000000 12.000000" />
